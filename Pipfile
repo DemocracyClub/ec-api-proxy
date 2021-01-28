@@ -14,6 +14,7 @@ pytest-django = "*"
 pytest-flakes = "*"
 pytest-black = "*"
 pytest-env = "*"
+coveralls = ">=1.6,<3.0"
 
 [requires]
 python_version = "3.8"
@@ -25,3 +26,4 @@ allow_prereleases = true
 black = "black ."
 black-check = "black --check ."
 pytest = "pytest"
+coveralls = "coveralls"
