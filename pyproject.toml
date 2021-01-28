@@ -10,3 +10,5 @@ flakes-ignore = [
     "*.py E501"
 ]
 env = "RUN_ENV=test"
+DJANGO_SETTINGS_MODULE = "ec_api.settings.testing"
+FAIL_INVALID_TEMPLATE_VARS = "1"
