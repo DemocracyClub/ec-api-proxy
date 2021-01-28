@@ -106,3 +106,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+# Lambda: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
+# CircleCI: https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+# Make: https://docs.oracle.com/cd/E19504-01/802-5880/makeattapp-21/index.html
+def is_local_dev():
+    vars_to_check = ["AWS_LAMBDA_FUNCTION_NAME", "CI", "MAKEFLAGS"]
+    return not any(ev in os.environ for ev in vars_to_check)
+
+
+# .local.py overrides all the common settings.
+if is_local_dev():
+    try:
+        from .local import *  # noqa
+    except ImportError:
+        pass
