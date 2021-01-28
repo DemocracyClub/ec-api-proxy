@@ -121,3 +121,7 @@ dmypy.json
 
 # IDE config files
 .idea/
+
+
+# Ignore Djanog settings files
+ec_api/settings/local.py
