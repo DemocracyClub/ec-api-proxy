@@ -4,9 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+black = "==20.8b1"
 
 [dev-packages]
 pre-commit = "*"
 
 [requires]
 python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
