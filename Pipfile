@@ -15,6 +15,7 @@ pytest-flakes = "*"
 pytest-black = "*"
 pytest-env = "*"
 coveralls = ">=1.6,<3.0"
+aws-sam-cli = "*"
 
 [requires]
 python_version = "3.8"
