@@ -125,3 +125,8 @@ dmypy.json
 
 # Ignore Djanog settings files
 ec_api/settings/local.py
+
+
+# Deployment related files
+/.aws-sam/
+/lambda-layers/DependenciesLayer/requirements.txt

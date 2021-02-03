@@ -1,0 +1,47 @@
+# This file and its quirks are documented here:
+# https://github.com/aws/aws-sam-cli/blob/develop/docs/sam-config-docs.md
+version = 0.1
+
+####################################################################################
+## NB: Don't insert a "default" profile in this file! ##############################
+###### Only use named, per-environment profiles. ###################################
+###### This will help guard against accidentally targetting the wrong environment. #
+####################################################################################
+
+[SYM]
+
+[SYM.deploy]
+[SYM.deploy.parameters]
+stack_name = "ECApiApp-sym-dev"
+s3_bucket = "ec-api-deployment-artifacts-development-0342fgsd318"
+s3_prefix = "sym-dev"
+region = "eu-west-2"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+tags = 'dc-product="ec-api" dc-environment="development" dc-instance="sym-dev"'
+# These parameter overrides are *not* merged with those provided directly to the
+# `sam XXXX` CLI command: those provided at the CLI are the *only* ones used.
+parameter_overrides = """
+  AppDjangoSettingsModule=ec_api.settings.base_lambda \
+  AppSecretKey=badf00d \
+  AppIsBehindCloudFront=False \
+"""
+
+[SYM.logs]
+[SYM.logs.parameters]
+stack_name = "ECApiApp-sym-dev"
+name = "ECApiFunction"
+region = "eu-west-2"
+
+[SYM-public-access]
+[SYM-public-access.deploy]
+[SYM-public-access.deploy.parameters]
+template = "public-access-template.yaml"
+stack_name = "ECApiPublicAccess-sym-dev"
+region = "eu-west-2"
+capabilities "CAPABILITY_IAM"
+parameter_overrides = """
+  StackNameSuffix="sym-dev" \
+  CertificateArn="arn:aws:acm:us-east-1:486957117838:certificate/26ca3576-14a4-452d-b567-b286d8287308" \
+  PublicFqdn="sym-dev.ec-dev.womblelabs.co.uk" \
+"""
