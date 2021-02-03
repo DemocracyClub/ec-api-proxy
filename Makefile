@@ -15,7 +15,10 @@ clean: ## Delete any generated static asset or req.txt files and git-restore the
 collectstatic: ## Rebuild the static assets
 	python manage.py collectstatic --noinput --clear
 
-lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
+lambda-layers/DependenciesLayer:
+	mkdir -p $@
+
+lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
 	pipenv lock -r | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
 
 .PHONY: help
