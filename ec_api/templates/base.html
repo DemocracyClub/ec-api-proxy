@@ -3,10 +3,487 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EC API</title>
+    <style>
+        @charset "UTF-8";
+        @font-face {
+            font-family: "Montserrat";
+            src: url("fonts/montserrat-medium.woff2") format("woff2"), url("fonts/montserrat-medium.woff") format("woff");
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        .ds-color-black {
+            color: #403F41;
+        }
+        .ds-color-blackOpacity {
+            color: rgba(64, 63, 65, 0.2);
+        }
+        .ds-color-white {
+            color: #fff;
+        }
+        .ds-color-pinkForWhite {
+            color: #E6007C;
+        }
+        .ds-color-blueForWhite {
+            color: #007CAD;
+        }
+        .ds-color-blueForBlack {
+            color: #00B6FF;
+        }
+        .ds-color-greenForWhite {
+            color: #32841A;
+        }
+        .ds-color-greenForBlack {
+            color: #4BC427;
+        }
+        .ds-color-amber {
+            color: #FFC037;
+        }
+
+        .ds-bg-color-black {
+            background-color: #403F41;
+        }
+        .ds-bg-color-blackOpacity {
+            background-color: rgba(64, 63, 65, 0.2);
+        }
+        .ds-bg-color-white {
+            background-color: #fff;
+        }
+        .ds-bg-color-pinkForWhite {
+            background-color: #E6007C;
+        }
+        .ds-bg-color-blueForWhite {
+            background-color: #007CAD;
+        }
+        .ds-bg-color-blueForBlack {
+            background-color: #00B6FF;
+        }
+        .ds-bg-color-greenForWhite {
+            background-color: #32841A;
+        }
+        .ds-bg-color-greenForBlack {
+            background-color: #4BC427;
+        }
+        .ds-bg-color-amber {
+            background-color: #FFC037;
+        }
+
+        .ds-font-size-s1 {
+            font-size: 1rem;
+        }
+        .ds-font-size-s2 {
+            font-size: 1.25rem;
+        }
+        .ds-font-size-s3 {
+            font-size: 1.5625rem;
+        }
+        .ds-font-size-s4 {
+            font-size: 1.953125rem;
+        }
+        .ds-font-size-s5 {
+            font-size: 2.44140625rem;
+        }
+        .ds-font-size-s6 {
+            font-size: 3.0517578125rem;
+        }
+        .ds-font-size-s7 {
+            font-size: 3.8146972656rem;
+        }
+        .ds-font-size-s8 {
+            font-size: 4.768371582rem;
+        }
+
+        .ds-height-ss1 {
+            height: 0.125rem;
+        }
+        .ds-height-ss2 {
+            height: 0.25rem;
+        }
+        .ds-height-ss3 {
+            height: 0.375rem;
+        }
+        .ds-height-ss4 {
+            height: 0.5rem;
+        }
+        .ds-height-ss5 {
+            height: 0.625rem;
+        }
+        .ds-height-ss6 {
+            height: 0.75rem;
+        }
+        .ds-height-ss7 {
+            height: 0.875rem;
+        }
+        .ds-height-ss8 {
+            height: 1rem;
+        }
+
+        {
+            font-family: Montserrat, sans-serif;
+            font-weight: 500;
+            line-height: 1.125;
+            color: #403F41;
+        }
+        input,
+        button,
+        textarea,
+        select {
+            font: inherit;
+        }
+        *:focus {
+            outline: 0.25rem solid #FFC037;
+        }
+        div:focus,
+        [tabindex="-1"]:focus,
+        body:focus {
+            outline: none;
+        }
+        p, blockquote {
+            font-family: Georgia, serif;
+            font-weight: normal;
+            line-height: 1.5;
+            color: #403F41;
+        }
+        p + p {
+            margin-top: 1rem !important;
+        }
+        blockquote {
+            font-size: 1.5625rem;
+            font-style: italic;
+            border-left: 0.5rem solid #FFC037;
+            padding-left: 1rem;
+        }
+        p, li, dt, dd, blockquote,
+        h1, h2, h3, h4, h5, h6 {
+            max-width: 80ch;
+        }
+        small {
+            font-size: 1rem;
+        }
+        h1, .ds-h1 {
+            font-size: 3.8146972656rem;
+        }
+        h2, .ds-h2 {
+            font-size: 3.0517578125rem;
+        }
+        h3, .ds-h3 {
+            font-size: 2.44140625rem;
+        }
+        h4, .ds-h4 {
+            font-size: 1.953125rem;
+        }
+        h5, .ds-h5 {
+            font-size: 1.5625rem;
+        }
+        h6, .ds-h6 {
+            font-size: 0.25rem;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 500;
+        }
+        a {
+            color: #E6007C;
+            text-decoration: underline;
+        }
+        ul:not([class]), ol:not([class]) {
+            padding-left: 1.953125rem;
+        }
+        dt {
+            font-size: 1.5625rem;
+        }
+        dd {
+            font-family: Georgia, serif;
+            font-weight: normal;
+            line-height: 1.5;
+            color: #403F41;
+            margin-left: 1.5625rem;
+        }
+        dl > * + * {
+            margin-top: 0.75rem;
+        }
+        form {
+            background-color: #E4F4FB;
+        }
+        form, fieldset {
+            padding: 1.5625rem;
+        }
+        form * {
+            margin: 0;
+        }
+        fieldset {
+            border: 2px solid;
+        }
+        legend {
+            padding: 0 0.625rem;
+        }
+        form > * + *, fieldset > *:not(legend) + * {
+            margin-top: 1.953125rem;
+        }
+        .ds-field label {
+            display: block;
+        }
+        .ds-field label small {
+            display: block;
+            margin-top: 0.25rem;
+        }
+        .ds-field > * + * {
+            margin-top: 0.5rem;
+        }
+        select {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            display: block;
+        }
+        input[type=text],
+        input[type=password],
+        input[type=email],
+        select {
+            padding: 0.5rem;
+            border: 2px solid;
+            width: 100%;
+            max-width: 50ch;
+            box-shadow: inset 0.25rem 0.25rem 0 rgba(64, 63, 65, 0.2);
+        }
+        .ds-field-error {
+            color: #D91714;
+            display: block;
+        }
+        .ds-error {
+            padding: 1.25rem;
+            background-color: #D91714;
+            max-width: 50ch;
+        }
+        .ds-error, .ds-error * {
+            color: #fff;
+        }
+        .ds-error span[role=img] {
+            filter: invert(1) grayscale(1) contrast(100);
+        }
+        button[class*=ds-button] {
+            border: 0;
+            cursor: pointer;
+            color: #fff;
+            background-color: #E6007C;
+            font-size: 1.25rem;
+            padding: 0.625rem 1.25rem;
+            border-bottom: 0.375rem solid #403F41;
+        }
+        button[class*=ds-button]:hover:not([disabled]) {
+            transform: scale(1.05);
+        }
+        button[class*=ds-button]:active:not([disabled]) {
+            position: relative;
+            top: 0.375rem;
+            border-bottom: 0;
+            margin-top: 0.375rem;
+        }
+        button.ds-button-blue {
+            background-color: #007CAD;
+        }
+        button[class*=ds-button][disabled] {
+            cursor: not-allowed;
+            opacity: 0.666;
+        }
+        a.ds-cta {
+            display: inline-block;
+            color: #E6007C;
+            background-color: #fff;
+            font-size: 1.25rem;
+            padding: 0.875rem 1.25rem;
+            border: 0.25rem solid;
+            text-decoration: none;
+        }
+        a.ds-cta[href]:hover {
+            transform: scale(1.05);
+        }
+        a.ds-cta-blue {
+            color: #007CAD;
+        }
+        a.ds-cta:not([href]) {
+            opacity: 0.666;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+        .ds-card {
+            position: relative;
+            border: 1px solid rgba(64, 63, 65, 0.2);
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+        .ds-card .ds-card-link::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        .ds-card a:not(.ds-card-link) {
+            position: relative;
+            z-index: 2;
+        }
+        .ds-card-image {
+            position: relative;
+            padding-bottom: 37.5%;
+        }
+        .ds-card-image img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .ds-card-body {
+            padding: 1.25rem;
+        }
+        .ds-cluster > *,
+        .ds-cluster-right > *,
+        .ds-cluster-center > * {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: center;
+            margin: calc(0.375rem * -1);
+        }
+        .ds-cluster > * > *,
+        .ds-cluster-right > * > *,
+        .ds-cluster-center > * > * {
+            margin: 0.375rem;
+        }
+        .ds-cluster-right > * {
+            justify-content: flex-end;
+        }
+        .ds-cluster-center > * {
+            justify-content: center;
+        }
+        .ds-grid {
+            padding: 0;
+        }
+        .ds-grid > * {
+            list-style: none;
+        }
+        .ds-grid > * + * {
+            margin-top: 1.5625rem;
+        }
+        @supports (width: min(var(--minimum), 100%)) {
+            .ds-grid > * + * {
+                margin-top: 0;
+            }
+            .ds-grid {
+                display: grid;
+                grid-gap: var(--gridGap, 1.25rem);
+                --gridCellMin: 30ch;
+                grid-template-columns: repeat(auto-fit, minmax(min(var(--gridCellMin), 100%), 1fr));
+            }
+        }
+        [class*=ds-stack] > * {
+            margin: 0;
+        }
+        .ds-stack-larger > * + * {
+            margin-top: 4.768371582rem;
+        }
+        .ds-stack > * + * {
+            margin-top: 3.0517578125rem;
+        }
+        .ds-stack-smaller > * + * {
+            margin-top: 1.5625rem;
+        }
+        .ds-stack-smallest > * + * {
+            margin-top: 0.625rem;
+        }
+
+        .ds-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem;
+        }
+        .ds-header-home {
+            flex-basis: 20rem;
+            margin-right: 1.25rem;
+        }
+        .ds-header-home img {
+            width: 100%;
+            max-width: 20rem;
+            height: auto;
+        }
+        .ds-header nav {
+            margin: 1rem 0;
+        }
+        .ds-header ul {
+            padding-left: 0;
+            margin: calc(0.75rem * -1);
+        }
+        .ds-header li {
+            font-family: Montserrat, sans-serif;
+            font-weight: 500;
+            line-height: 1.125;
+            color: #403F41;
+            display: inline-block;
+            margin: 0.75rem;
+        }
+        .ds-header nav a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding: 0.5rem;
+            border-bottom: 2px solid #fff;
+        }
+        .ds-header a:hover {
+            border-bottom-color: #007CAD;
+        }
+        .ds-header [aria-current] {
+            border-bottom-color: #E6007C;
+        }
+        .ds-skip-link {
+            position: absolute;
+            top: -5rem;
+            display: inline-block;
+            padding: 1rem;
+            background-color: #fff;
+        }
+        .ds-skip-link:focus {
+            top: 0.5rem;
+            left: 0.5rem;
+        }
+        .ds-visually-hidden {
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        /*# sourceMappingURL=system.css.map */
+
+
+    </style>
   </head>
   <body>
+  <div class="ds-stack">
+    <header class="ds-header">
+      <a class="ds-skip-link" href="#main">skip to content</a>
+      <a class="ds-header-home" href="/">
+        <img src="https://DemocracyClub.github.io/design-system/images/logo.svg" alt="Democracy Club home" />
+      </a>
+      <nav class="ds-cluster">
+        <ul>
+          <li>
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="https://github.com/DemocracyClub/ec-api-proxy">Project GitHub</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+
     {% block content %}
 
     {% endblock %}
+  </div>
   </body>
 </html>
