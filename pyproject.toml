@@ -4,10 +4,10 @@ target-version = ['py38']
 
 
 [tool.pytest.ini_options]
-norecursedirs = ".git __pycache__"
+norecursedirs = ".git __pycache__ .aws-sam"
 addopts = "--ignore=*/__pycache__ --ignore=.*"
 flakes-ignore = [
-    "*.py E501"
+    "ImportStarUsage"
 ]
 env = "RUN_ENV=test"
 DJANGO_SETTINGS_MODULE = "ec_api.settings.testing"
