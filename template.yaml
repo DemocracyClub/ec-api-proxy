@@ -20,6 +20,10 @@ Parameters:
     Description: "The SENTRY_DSN environment variable passed to the app."
     Type: String
 
+  GitHash:
+    Description: "The Hash of the git commit that's deployed"
+    Type: String
+
   AppDjangoSettingsModule:
     # NB This parameter (and how it reaches the app, and how it's set in
     # developer and CI-managed deployments) is used in
@@ -70,6 +74,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref AppSecretKey
           SENTRY_DSN: !Ref AppSentryDSN
+          GIT_HASH: !Ref GitHash
           DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
           APP_IS_BEHIND_CLOUDFRONT: !Ref AppIsBehindCloudFront
       Events:

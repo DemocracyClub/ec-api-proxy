@@ -113,6 +113,7 @@ def setup_sentry(environment=None):
     if not environment:
         environment = os.environ.get("SAM_LAMBDA_CONFIG_ENV")
     SENTRY_DSN = os.environ.get("SENTRY_DSN")
+    release = os.environ.get("GIT_HASH", "unknown")
     if SENTRY_DSN and environment:
         import sentry_sdk
         from sentry_sdk.integrations.django import DjangoIntegration
@@ -125,6 +126,7 @@ def setup_sentry(environment=None):
             # If you wish to associate users to errors (assuming you are using
             # django.contrib.auth) you may enable sending PII data.
             send_default_pii=True,
+            release=release,
         )
 
 
