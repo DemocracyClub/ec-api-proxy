@@ -17,6 +17,10 @@ jobs:
     - run: &install-pipenv sudo pip install pipenv --quiet --no-input
     - run: pipenv install --dev
     - run: pipenv check # before save_cache so an insecure cache is never saved
+    - run: make lambda-layers/DependenciesLayer/requirements.txt
+    - persist_to_workspace:
+        root: ~/repo/
+        paths: [ lambda-layers/DependenciesLayer/requirements.txt ]
     - save_cache:
         when: on_success
         paths:
@@ -55,6 +59,88 @@ jobs:
       - store_test_results:
           path: test-results
 
+  sam_build:
+    docker:
+    - image: amazon/aws-sam-cli-build-image-python3.8:latest
+    working_directory: ~/repo
+    steps:
+    - checkout
+    - attach_workspace:
+        at: ~/repo/
+    - run: pip install --upgrade pip
+    - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
+    - run: make collectstatic
+    - run: sam build ${DASH_DASH_DEBUG}
+    - persist_to_workspace:
+        root: ~/repo/
+        paths: [ .aws-sam/build/ ]
+
+  sam_deploy:
+    docker:
+    - image: circleci/python:3.8.6
+    working_directory: ~/repo/
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
+      dc-django-settings-module:
+        type: string
+    environment:
+      DJANGO_SETTINGS_MODULE: "<<parameters.dc-django-settings-module>>"
+      SAM_CONFIG_FILE: samconfig.toml.d/ci-<<parameters.dc-environment>>.toml
+      SAM_LAMBDA_CONFIG_ENV: <<parameters.dc-environment>>
+      SAM_PUBLIC_CONFIG_ENV: <<parameters.dc-environment>>-public-access
+    steps:
+    - checkout
+    - attach_workspace:
+        at: ~/repo/
+    - restore_cache:
+        keys:
+        - v2-dependencies-{{ checksum "Pipfile.lock" }}
+        - v2-dependencies-default
+    - run: *install-pipenv
+
+    - run: printenv DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
+    - run: printenv SECRET_KEY | md5sum
+    - run: printenv AWS_ACCESS_KEY_ID | md5sum
+    - run:
+        name: "pipenv run sam deploy # App: Lambda + API Gateway"
+        command: |
+          pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            --config-file ~/repo/${SAM_CONFIG_FILE} \
+            --config-env $SAM_LAMBDA_CONFIG_ENV \
+            --template-file ~/repo/.aws-sam/build/template.yaml \
+            --parameter-overrides " \
+               AppDjangoSettingsModule=$DJANGO_SETTINGS_MODULE \
+               AppSecretKey='$SECRET_KEY' \
+               AppIsBehindCloudFront=True \
+               AppLogRetentionDays=60 \
+              "
+    - run:
+        name: printenv PUBLIC_FQDN CERTIFICATE_ARN
+          # These envvars are stored inside CircleCI, which helpfully masks them if they're echoed.
+        command: |
+          #
+          # NB Do *not* copy any of these string values!
+          #  -> In order to make them visible inside CircleCI, a null character
+          #  -> has been inserted between characters 1 and 2, which may have
+          #  -> unintended consequences if you copy & paste them.
+          #
+          printenv PUBLIC_FQDN CERTIFICATE_ARN | sed -E 's/^(.)(.)/\1\x00\2/'
+    - run:
+        name: "pipenv run sam deploy # Public access: CDN + DNS"
+        no_output_timeout: 20m # CloudFront can take longer than CircleCI's 10m default
+        command: |
+          pipenv run sam deploy ${DASH_DASH_DEBUG} \
+            --config-file ~/repo/${SAM_CONFIG_FILE} \
+            --config-env $SAM_PUBLIC_CONFIG_ENV \
+            --template-file ~/repo/public-access-template.yaml \
+            --parameter-overrides " \
+               StackNameSuffix=<<parameters.dc-environment>> \
+               CertificateArn=$CERTIFICATE_ARN \
+               PublicFqdn=$PUBLIC_FQDN \
+              "
+
 workflows:
   main:
     jobs:
@@ -62,3 +148,20 @@ workflows:
       - run-tests:
           requires:
           - install_and_update_dependencies # tests need installed dev package set
+
+      - sam_build:
+          requires:
+            - install_and_update_dependencies # DependenciesLayer build needs lambda-layers/DependenciesLayer/requirements.txt
+            - run-tests                            # Function build needs aggregator/apps/api/v1/templates/api_docs_rendered.html
+
+
+      - sam_deploy:
+          name: sam_deploy_staging
+          dc-environment: staging
+          dc-django-settings-module: ec_api.settings.base_lambda
+          requires:
+            - install_and_update_dependencies # SAM CLI is in the dev package set
+            - run-tests                            # staging should only deploy if tests pass
+            - sam_build                       # deploy needs .aws-sam/build/
+          context: [ deployment-staging-ec-api ]
+          filters: { branches: { only: [ main ] } }
