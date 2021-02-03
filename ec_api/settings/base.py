@@ -109,6 +109,25 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 
+def setup_sentry(environment=None):
+    if not environment:
+        environment = os.environ.get("SAM_LAMBDA_CONFIG_ENV")
+    SENTRY_DSN = os.environ.get("SENTRY_DSN")
+    if SENTRY_DSN and environment:
+        import sentry_sdk
+        from sentry_sdk.integrations.django import DjangoIntegration
+
+        sentry_sdk.init(
+            dsn=SENTRY_DSN,
+            integrations=[DjangoIntegration()],
+            traces_sample_rate=1.0,
+            environment=environment,
+            # If you wish to associate users to errors (assuming you are using
+            # django.contrib.auth) you may enable sending PII data.
+            send_default_pii=True,
+        )
+
+
 # Lambda: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
 # CircleCI: https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 # Make: https://docs.oracle.com/cd/E19504-01/802-5880/makeattapp-21/index.html

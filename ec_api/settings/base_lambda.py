@@ -34,3 +34,5 @@ AWS_S3_CUSTOM_DOMAIN = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
+
+setup_sentry()

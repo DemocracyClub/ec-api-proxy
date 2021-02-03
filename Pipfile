@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "<3.0"
 aws-wsgi = {ref = "unquote_path_strings", git = "https://github.com/DemocracyClub/awsgi.git"}
+sentry-sdk = "*"
 
 [dev-packages]
 black = "==20.8b1"
