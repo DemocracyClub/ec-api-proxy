@@ -7,6 +7,12 @@ name = "pypi"
 django = "<3.0"
 aws-wsgi = {ref = "unquote_path_strings", git = "https://github.com/DemocracyClub/awsgi.git"}
 sentry-sdk = "*"
+django-pipeline = "*"
+whitenoise = "*"
+libsass = "*"
+pip = "*"
+install = "*"
+dc-design-system = {ref = "release/0.1.0", git = "https://github.com/DemocracyClub/design-system.git"}
 
 [dev-packages]
 black = "==20.8b1"
