@@ -187,3 +187,18 @@ if is_local_dev():
         from .local import *  # noqa
     except ImportError:
         pass
+
+
+def is_running_tests():
+    if os.environ.get("RUN_ENV") == "test":
+        return True
+    if "CI" in os.environ:
+        return True
+    return False
+
+
+if is_running_tests():
+    try:
+        from .testing import *  # noqa
+    except ImportError:
+        pass
