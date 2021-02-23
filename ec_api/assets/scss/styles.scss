@@ -71,14 +71,26 @@ body {
   margin: 0;
 }
 
-.ds-header {
+@mixin container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 80em;
+
+}
+
+.header-wrapper {
   background-color: $ECDarkBlue;
+}
+
+.ds-header {
+  @include container;
   svg {
     fill: #fff;
+    margin: 0.5em 0;
   }
 
   [aria-current], nav a:hover {
-    border-bottom-color: rgb(37, 178, 211);
+    border-bottom-color: $ECEletricBlue;
   }
 
   nav a {
@@ -88,9 +100,22 @@ body {
 }
 
 .ds-page main {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 60em;
+  @include container;
   margin-top: 4.76837rem;
   padding: 0 1.25rem;
+}
+
+.sub-header {
+  background-color: $ECDarkBlue;
+  border-top: 1px $ECEletricBlue solid;
+  color: $white;
+  h2 {
+    font-size: $s4;
+    line-height: 2em;
+    vertical-align: center;
+  }
+}
+
+.container  {
+  @include container;
 }
