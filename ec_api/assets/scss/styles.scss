@@ -1,0 +1,96 @@
+@import 'partials/_fonts.scss';
+@import 'partials/_variables.scss';
+@import 'partials/_type.scss';
+@import 'partials/_forms.scss';
+@import 'partials/_description-lists.scss';
+@import 'partials/_button.scss';
+@import 'partials/_call-to-action.scss';
+@import 'partials/_details.scss';
+@import 'partials/_stack.scss';
+@import 'partials/_cluster.scss';
+@import 'partials/_grid.scss';
+@import 'partials/_sidebar.scss';
+@import 'partials/_breadcrumbs.scss';
+@import 'partials/_card.scss';
+@import 'partials/_candidate.scss';
+@import 'partials/_table.scss';
+@import 'partials/_header.scss';
+@import 'partials/_subnav.scss';
+@import 'partials/_footer.scss';
+@import 'partials/_radio.scss';
+@import 'partials/_checkbox.scss';
+@import 'partials/_select.scss';
+@import 'partials/_filter.scss';
+@import 'partials/_dark.scss';
+@import 'partials/_page.scss';
+@import 'partials/_utilities.scss';
+
+// // Generate atomic classes for documentation demos
+@import 'partials/_classes-colors.scss';
+@import 'partials/_classes-scales.scss';
+
+@import 'ec_colours.scss';
+body {
+  font-family: "helvetica", "arial", sans-serif
+}
+
+$scope: false;
+
+@mixin optional-styles {
+  @include description-lists;
+  @include button;
+  @include cta;
+  @include card;
+  @include candidate;
+  @include cluster;
+  @include grid;
+  @include stack;
+  @include breadcrumbs;
+  @include table;
+  @include header;
+  @include radio;
+  @include checkbox;
+  @include select;
+}
+
+@if $scope {
+  .ds-scope {
+    @include type;
+    @include forms;
+    @include optional-styles;
+    @include utilities;
+  }
+} @else {
+  @include type;
+  @include forms;
+  @include optional-styles;
+  @include utilities;
+}
+
+body {
+  margin: 0;
+}
+
+.ds-header {
+  background-color: $ECDarkBlue;
+  svg {
+    fill: #fff;
+  }
+
+  [aria-current], nav a:hover {
+    border-bottom-color: rgb(37, 178, 211);
+  }
+
+  nav a {
+    border-bottom-color: $ECDarkBlue;
+    color: $white;
+  }
+}
+
+.ds-page main {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 60em;
+  margin-top: 4.76837rem;
+  padding: 0 1.25rem;
+}

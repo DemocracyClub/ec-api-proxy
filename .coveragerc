@@ -1,0 +1,13 @@
+[run]
+branch = True
+source =
+    ec_api
+omit =
+    */tests/*
+    */test_*
+    */test.py
+    */tests.py
+    */apps.py
+    */migrations/*
+    ec_api/wsgi.py
+    ec_api/settings/*
