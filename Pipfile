@@ -34,5 +34,6 @@ allow_prereleases = true
 [scripts]
 black = "black ."
 black-check = "black --check ."
+collectstatic = "python manage.py collectstatic -c --noinput"
 pytest = "pytest"
 coveralls = "coveralls"

@@ -41,6 +41,7 @@ jobs:
       - run:
           command: pipenv run black-check
           name: Black
+      - run: pipenv run collectstatic
       - run:
           command: pipenv run pytest --flakes
           name: Flakes
