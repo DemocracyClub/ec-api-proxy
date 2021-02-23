@@ -46,7 +46,7 @@ jobs:
           command: pipenv run pytest --flakes
           name: Flakes
       - run:
-          command: pipenv run pytest --junitxml=test-results/junit.xml
+          command: pipenv run pytest --junitxml=test-results/junit.xml --cov
           name: Run Tests
       - run: |
           if [ -n "$COVERALLS_REPO_TOKEN" ]; then
