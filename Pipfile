@@ -25,6 +25,7 @@ pytest-env = "*"
 coveralls = ">=1.6,<3.0"
 aws-sam-cli = "*"
 pytest-cov = "==2.11.1"
+factory-boy = "*"
 
 [requires]
 python_version = "3.8"
