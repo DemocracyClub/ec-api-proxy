@@ -110,6 +110,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 AUTHENTICATION_BACKENDS = ["sesame.backends.ModelBackend"]
 SESAME_MAX_AGE = 60 * 10
 SESAME_ONE_TIME = True
+SESAME_TOKEN_NAME = "login_token"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

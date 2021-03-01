@@ -28,6 +28,8 @@ aws-sam-cli = "*"
 pytest-cov = "==2.11.1"
 factory-boy = "*"
 ipython = "*"
+pytest-mock = "*"
+ipdb = "*"
 
 [requires]
 python_version = "3.8"
