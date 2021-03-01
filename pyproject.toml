@@ -6,6 +6,7 @@ target-version = ['py38']
 [tool.pytest.ini_options]
 norecursedirs = ".git __pycache__ .aws-sam"
 addopts = "--ignore=*/__pycache__ --ignore=.*"
+python_files = "test_*.py"
 flakes-ignore = [
     "ImportStarUsage"
 ]
