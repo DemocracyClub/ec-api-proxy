@@ -106,6 +106,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "users.CustomUser"
 
+# django-sesame settings
+AUTHENTICATION_BACKENDS = ["sesame.backends.ModelBackend"]
+SESAME_MAX_AGE = 60 * 10
+SESAME_ONE_TIME = True
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
