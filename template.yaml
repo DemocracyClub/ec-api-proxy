@@ -60,6 +60,9 @@ Parameters:
     Description: "The password for the postgres user"
     Type: String
 
+  AppSamLambdaConfigEnv:
+    Description: "The lambda config environment passed to the app used to init sentry."
+    Type: String
 
 Resources:
 
@@ -93,6 +96,7 @@ Resources:
           POSTGRES_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
+          SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
       Events:
         HTTPRequests:
           Type: Api

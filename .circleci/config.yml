@@ -127,6 +127,7 @@ jobs:
                AppPostgresHost='$POSTGRES_HOST' \
                AppPostgresDatabaseName='$POSTGRES_DATABASE_NAME' \
                AppPostgresPassword='$POSTGRES_PASSWORD' \
+               AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
               "
     - run: pipenv run migratedb
     - run:
