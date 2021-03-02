@@ -15,11 +15,15 @@ else:
     USE_X_FORWARDED_HOST = False
     FORCE_SCRIPT_NAME = "/Prod"
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.dummy"}}
-
-INSTALLED_APPS.remove("django.contrib.admin")
-INSTALLED_APPS.remove("django.contrib.sessions")
-INSTALLED_APPS.remove("django.contrib.messages")
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "NAME": os.environ.get("POSTGRES_DATABASE_NAME"),
+        "USER": "postgres",
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+    }
+}
 
 AWS_S3_SECURE_URLS = False
 AWS_S3_USE_SSL = True

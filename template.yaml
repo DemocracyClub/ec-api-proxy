@@ -48,6 +48,19 @@ Parameters:
     Default: 60
     AllowedValues: [ 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653 ]
 
+  AppPostgresHost:
+    Description: "The Postgres database host for this deploy."
+    Type: String
+
+  AppPostgresDatabaseName:
+    Description: "The Postgres database name for this deploy."
+    Type: String
+
+  AppPostgresPassword:
+    Description: "The password for the postgres user"
+    Type: String
+
+
 Resources:
 
   DependenciesLayer:
@@ -77,6 +90,9 @@ Resources:
           GIT_HASH: !Ref GitHash
           DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
           APP_IS_BEHIND_CLOUDFRONT: !Ref AppIsBehindCloudFront
+          POSTGRES_HOST: !Ref AppPostgresHost
+          POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
+          POSTGRES_PASSWORD: !Ref AppPostgresPassword
       Events:
         HTTPRequests:
           Type: Api
