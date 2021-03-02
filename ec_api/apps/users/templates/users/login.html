@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1>Login</h1>
+
+  {% if success %}
+    <p>Thank you, please check your email for your magic link to log in to your account.</p>
+  {% else %}
+    <p>Please enter your registered email and we will send you a magic link URL to authenticate your account.</p>
+    <form method="post" action=".">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+    </form>
+  {% endif %}
+
+{% endblock %}

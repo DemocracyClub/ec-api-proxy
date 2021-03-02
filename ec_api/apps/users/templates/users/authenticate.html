@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1>Authenticated</h1>
+  <p>Hello {{ request.user.email }}, you have successfully authenticated and are now logged in.</p>
+
+
+{% endblock %}
