@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 django = "<3.0"
-aws-wsgi = {ref = "unquote_path_strings", git = "https://github.com/DemocracyClub/awsgi.git"}
+aws-wsgi = {ref = "a5b800373c326e75f705d400c48f7df301409724", git = "https://github.com/DemocracyClub/awsgi.git"}
 sentry-sdk = "*"
 django-pipeline = "*"
 whitenoise = "*"

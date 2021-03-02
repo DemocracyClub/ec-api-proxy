@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e02d02d07893a96d7cabb2fda6f7c0e50b4e23e49d5ae4883a3beda0ab501f80"
+            "sha256": "6fbb40c8d902e5b95683c7f2a3da9af7b05521b48403d9e0ea78ea01cbaef392"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,7 +18,7 @@
     "default": {
         "aws-wsgi": {
             "git": "https://github.com/DemocracyClub/awsgi.git",
-            "ref": "61d60b7d2fd900dcf6dd4d353fa5a54931937718"
+            "ref": "a5b800373c326e75f705d400c48f7df301409724"
         },
         "certifi": {
             "hashes": [
