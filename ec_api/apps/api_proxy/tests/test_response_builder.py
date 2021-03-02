@@ -45,7 +45,7 @@ def test_postcode_response():
 def test_postcode_split_over_councils():
     builder = PostcodeResponse().with_split_over_councils_postcode()
     assert builder.response == {
-        "address_picker": False,
+        "address_picker": True,
         "addresses": [],
         "dates": [],
         "postcode_location": {

@@ -90,6 +90,7 @@ class PostcodeResponse(CouncilContactDetailsMixin, BaseResponse):
     def with_addresses(self, number=10):
         self.address_picker = True
         # del council contacts
+        return self
 
     @property
     def get_postcode_location(self):
@@ -107,6 +108,7 @@ class PostcodeResponse(CouncilContactDetailsMixin, BaseResponse):
         This postcode is split over two or more councils
         """
         self.options["split_council"] = True
+        self.with_addresses(5)
         return self
 
     def build_response(self):
