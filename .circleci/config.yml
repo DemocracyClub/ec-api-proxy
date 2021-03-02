@@ -107,6 +107,8 @@ jobs:
     - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
     - run: printenv SECRET_KEY | md5sum
     - run: printenv AWS_ACCESS_KEY_ID | md5sum
+    - run: sudo apt update && sudo apt install postgresql-client
+    - run: PGPASSWORD=$POSTGRES_PASSWORD createdb --host $POSTGRES_HOST --username postgres $DC_DEPLOY_NAME || true
     - run:
         name: "pipenv run sam deploy # App: Lambda + API Gateway"
         command: |
@@ -125,9 +127,7 @@ jobs:
                AppPostgresDatabaseName='$DC_DEPLOY_NAME' \
                AppPostgresPassword='$POSTGRES_PASSWORD' \
               "
-    - run: sudo apt update && sudo apt install postgresql-client
-    - run: PGPASSWORD=$POSTGRES_PASSWORD createdb --host $POSTGRES_HOST --username postgres $DC_DEPLOY_NAME || true
-    - run: pipenv run migratedb
+    - run: DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE pipenv run migratedb
     - run:
         name: printenv PUBLIC_FQDN CERTIFICATE_ARN
           # These envvars are stored inside CircleCI, which helpfully masks them if they're echoed.
