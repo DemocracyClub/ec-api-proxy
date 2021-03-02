@@ -165,24 +165,26 @@ PIPELINE["SASS_ARGUMENTS"] = (
 
 
 def setup_sentry(environment=None):
-    if not environment:
-        environment = os.environ.get("SAM_LAMBDA_CONFIG_ENV")
     SENTRY_DSN = os.environ.get("SENTRY_DSN")
-    release = os.environ.get("GIT_HASH", "unknown")
-    if SENTRY_DSN and environment:
-        import sentry_sdk
-        from sentry_sdk.integrations.django import DjangoIntegration
+    if not SENTRY_DSN:
+        return
 
-        sentry_sdk.init(
-            dsn=SENTRY_DSN,
-            integrations=[DjangoIntegration()],
-            traces_sample_rate=1.0,
-            environment=environment,
-            # If you wish to associate users to errors (assuming you are using
-            # django.contrib.auth) you may enable sending PII data.
-            send_default_pii=True,
-            release=release,
-        )
+    if not environment:
+        environment = os.environ["SAM_LAMBDA_CONFIG_ENV"]
+    release = os.environ.get("GIT_HASH", "unknown")
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        environment=environment,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+        release=release,
+    )
 
 
 # Lambda: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
