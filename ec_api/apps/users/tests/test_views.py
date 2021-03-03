@@ -4,27 +4,75 @@ from django.urls import reverse
 from users.forms import LoginForm
 
 from users.tests.factories import UserFactory
-from users.views import RegisterView, LoginView
+from users.views import LoginView
 from pytest_django.asserts import assertContains
 
 User = get_user_model()
 
 
-class TestContextMixin:
+class TestLoginView:
     @pytest.fixture
-    def view_obj(self):
+    def view_obj(self, rf):
         """
-        Init an instance of RegisterView with a User object
+        Init an instance of LoginView with a User object
         """
-        view = RegisterView()
+        view = LoginView()
         view.object = User()
+        view.setup(request=rf.get("/users/login/"))
         return view
+
+    def test_form_valid_created_user(self, view_obj, mocker):
+        user = mocker.MagicMock(spec=User)
+        mocker.patch.object(
+            User.objects, "get_or_create", return_value=(user, True)
+        )
+        mocker.patch.object(view_obj, "send_login_url")
+        form = LoginForm()
+        form.cleaned_data = {"email": "email@example.com"}
+
+        response = view_obj.form_valid(form)
+
+        User.objects.get_or_create.assert_called_once_with(
+            email="email@example.com"
+        )
+        user.set_unusable_password.assert_called_once()
+        user.save.assert_called_once()
+        view_obj.send_login_url.assert_called_once_with(user=user)
+        assert response.status_code == 302
+        assert response.url == ".?success"
+
+    def test_form_valid_existing_user(self, view_obj, mocker):
+        user = mocker.MagicMock(spec=User)
+        mocker.patch.object(
+            User.objects, "get_or_create", return_value=(user, False)
+        )
+        mocker.patch.object(view_obj, "send_login_url")
+        form = LoginForm()
+        form.cleaned_data = {"email": "email@example.com"}
+
+        response = view_obj.form_valid(form)
+
+        User.objects.get_or_create.assert_called_once_with(
+            email="email@example.com"
+        )
+        user.set_unusable_password.assert_not_called()
+        user.save.assert_not_called()
+        view_obj.send_login_url.assert_called_once_with(user=user)
+        assert response.status_code == 302
+        assert response.url == ".?success"
+
+    def test_send_login_url(self, view_obj, mocker):
+        mocker.patch("users.views.get_query_string")
+        user = mocker.MagicMock(spec=User)
+        view_obj.send_login_url(user)
+
+        user.email_user.assert_called_once()
 
     @pytest.mark.parametrize(
         "url, expected",
         [
-            ("/users/register/", False),
-            ("/users/register/?success", True),
+            ("/users/login/", False),
+            ("/users/login/?success", True),
         ],
     )
     def test_get_context_data_success(self, url, expected, rf, view_obj):
@@ -37,54 +85,6 @@ class TestContextMixin:
 
     def get_success_url(self, view_obj):
         assert view_obj.get_success_url() == ".?success"
-
-
-class TestLoginView:
-    @pytest.fixture
-    def view_obj(self, rf):
-        """
-        Init an instance of RegisterView with a User object
-        """
-        view = LoginView()
-        view.object = User()
-        view.setup(request=rf.get("/users/login/"))
-        return view
-
-    def test_form_valid_user_found(self, view_obj, mocker):
-        user = User()
-        mocker.patch.object(User.objects, "get", return_value=user)
-        mocker.patch.object(view_obj, "send_login_url")
-        form = LoginForm()
-        form.cleaned_data = {"email": "email@example.com"}
-
-        response = view_obj.form_valid(form)
-
-        User.objects.get.assert_called_once_with(email="email@example.com")
-        view_obj.send_login_url.assert_called_once_with(user=user)
-        assert response.status_code == 302
-        assert response.url == ".?success"
-
-    def test_form_valid_user_not_found(self, view_obj, mocker):
-        mocker.patch.object(User.objects, "get", side_effect=User.DoesNotExist)
-        mocker.patch.object(view_obj, "send_login_url")
-        form = LoginForm()
-        form.cleaned_data = {"email": "notregistered@example.com"}
-
-        response = view_obj.form_valid(form)
-
-        User.objects.get.assert_called_once_with(
-            email="notregistered@example.com"
-        )
-        view_obj.send_login_url.assert_not_called()
-        assert response.status_code == 302
-        assert response.url == ".?success"
-
-    def test_send_login_url(self, view_obj, mocker):
-        mocker.patch("users.views.get_query_string")
-        user = mocker.MagicMock(spec=User)
-        view_obj.send_login_url(user)
-
-        user.email_user.assert_called_once()
 
 
 class TestAuthenticateView:
