@@ -30,8 +30,11 @@
 @import 'partials/_classes-scales.scss';
 
 @import 'ec_colours.scss';
+
+$familyBody: "arial", sans-serif;
+
 body {
-  font-family: "helvetica", "arial", sans-serif
+  font-family: "helvetica", "arial", sans-serif;
 }
 
 $scope: false;
