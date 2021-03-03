@@ -18,10 +18,14 @@
           <nav class="ds-cluster">
             <ul>
               <li>
-                <a href="#" aria-current="page">Home</a>
+                <a href="/" aria-current="page">Home</a>
               </li>
               <li>
-                <a href="{% url "users:register" %}">Login / Register</a>
+                {% if request.user.is_authenticated %}
+                  <a href="{% url 'users:logout' %}">Logout</a>
+                {% else %}
+                  <a href="{% url 'users:login' %}">Login / Register</a>
+                {% endif %}
               </li>
               <li>
                 <a href="https://github.com/DemocracyClub/ec-api-proxy">Project GitHub</a>
