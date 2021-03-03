@@ -21,7 +21,7 @@ def get_upstream_client():
     if isinstance(client_class, ResponseBuilderApiClient):
         return client_class
     if isinstance(client_class, str):
-        return import_string(client_class)
+        return import_string(client_class)()
 
     raise ValueError("Invalid value for API_CLIENT_CLASS")
 

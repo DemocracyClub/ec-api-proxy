@@ -45,7 +45,7 @@
         },
         "dc-design-system": {
             "git": "https://github.com/DemocracyClub/design-system.git",
-            "ref": "a8d325ee1e1eccdf8baf7d29b224ea64e91bc55f"
+            "ref": "cb49071ee3b1f940b5956d3e34c04aa48e1801b6"
         },
         "django": {
             "hashes": [
