@@ -1,3 +1,7 @@
+import binascii
+import os
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
@@ -5,6 +9,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from users.managers import CustomUserManager
+from users.mixins import TimestampMixin
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -48,3 +53,35 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         Send an email to this user.
         """
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class APIKey(TimestampMixin, models.Model):
+
+    name = models.CharField(
+        max_length=255, help_text="To help identify your key"
+    )
+    usage_reason = models.TextField(
+        help_text="Short description of the usage reason for this key"
+    )
+    key = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        to=get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="api_keys",
+    )
+
+    def __str__(self):
+        return self.name
+
+    def _generate_key(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+
+    def refresh_key(self):
+        self.key = self._generate_key()
+        self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.key = self._generate_key()
+
+        return super().save(*args, **kwargs)

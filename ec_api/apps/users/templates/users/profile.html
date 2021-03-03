@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <div class="ds-card">
+    <div class="ds-card-body">
+      <h1>Profile</h1>
+      <p>Hello, {{ request.user.email}}. From here you can manage and create new API keys.</p>
+    </div>
+  </div>
+
+  {% if api_keys %}
+    <div class="ds-card ds-padded">
+      <div class="ds-table">
+        <table>
+          <caption><h2>Your API Keys</h2></caption>
+          <tr>
+            <th>Name</th>
+            <th>Key</th>
+          </tr>
+          {% for key in api_keys %}
+            <tr>
+              <td>{{ key.name }}</td>
+              <td><code>{{ key.key }}</code></td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ds-card">
+    <div class="ds-card-body">
+      <h2>Create a new API key</h2>
+      <p>Use the form below to create a new API token</p>
+      <form method="POST" action=".">
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
+          <div class="ds-field">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+            </label>
+            {{ field }}
+            {% for error in field.errors %}
+              <small class="ds-field-error" id="{{ field.id_for_label }}-error">
+                <span role="img" aria-label="Error">❌</span>
+                {{ error }}
+              </small>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+        <div role="alert">
+          <div class="ds-error">
+            <span role="img" aria-label="Error">❌</span> {{ error }}
+          </div>
+        </div>
+        {% endfor %}
+
+        <button class="ds-button-blue" type="submit">Create key</button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

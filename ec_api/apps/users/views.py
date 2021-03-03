@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import FormView
@@ -8,7 +9,7 @@ from django.urls import reverse
 from sesame.utils import get_user, get_query_string
 
 from frontend.utils import get_domain
-from users.forms import LoginForm
+from users.forms import LoginForm, APIKeyForm
 
 User = get_user_model()
 
@@ -85,3 +86,25 @@ class AuthenticateView(TemplateView):
 
 class AuthenticateErrorView(TemplateView):
     template_name = "users/authenticate_error.html"
+
+
+class ProfileView(LoginRequiredMixin, FormView):
+    template_name = "users/profile.html"
+    form_class = APIKeyForm
+
+    def get_success_url(self):
+        return ".?success"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["api_keys"] = self.request.user.api_keys.all()
+        return context
+
+    def form_valid(self, form):
+        """
+        Build a APIKey via the form, attach the user from the request and save.
+        """
+        key = form.save(commit=False)
+        key.user = self.request.user
+        key.save()
+        return HttpResponseRedirect(self.get_success_url())

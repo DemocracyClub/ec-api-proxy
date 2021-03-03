@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from users.models import APIKey
 
 User = get_user_model()
 
@@ -19,3 +20,9 @@ class LoginForm(forms.Form):
         """
         email = self.cleaned_data["email"]
         return User.objects.normalize_email(email)
+
+
+class APIKeyForm(forms.ModelForm):
+    class Meta:
+        model = APIKey
+        fields = ["name", "usage_reason"]
