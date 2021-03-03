@@ -1,6 +1,193 @@
 import random
 
-prefixes = {
+org_prefixes = {
+    "Aberdeen",
+    "Ayr",
+    "Bedford",
+    "Berk",
+    "Buckingham",
+    "Cambridge",
+    "Carmarthen",
+    "Che",
+    "Clackmannan",
+    "Denbigh",
+    "Derby",
+    "Dunbarton",
+    "Flint",
+    "Gloucester",
+    "Hamp",
+    "Hereford",
+    "Hertford",
+    "Huntingdon",
+    "Lanark",
+    "Lanca",
+    "Leicester",
+    "Lincoln",
+    "Monmouth",
+    "Northampton",
+    "Nottingham",
+    "Oxford",
+    "Pembroke",
+    "Renfrew",
+    "Richmond",
+    "Shrop",
+    "Stafford",
+    "Warwick",
+    "Wilt",
+    "Worcester",
+    "York",
+    "Aller",
+    "Calder",
+    "Roch",
+    "Rossen",
+    "Rye",
+    "Ash",
+    "Chester",
+    "En",
+    "Hat",
+    "Lich",
+    "Mans",
+    "Shef",
+    "Wake",
+    "Ban",
+    "Basil",
+    "Croy",
+    "Hilling",
+    "Mal",
+    "Swin",
+    "Basing",
+    "Birming",
+    "Chelten",
+    "Dagen",
+    "Dur",
+    "Fare",
+    "Ful",
+    "Graves",
+    "Hors",
+    "Lewis",
+    "New",
+    "Notting",
+    "Old",
+    "Rother",
+    "Walt",
+    "Woking",
+    "Wrex",
+    "Bed",
+    "Bos",
+    "Tam",
+    "Wands",
+    "Ash",
+    "Bed",
+    "Brad",
+    "Chelms",
+    "Dart",
+    "Guild",
+    "Ox",
+    "Roch",
+    "Sal",
+    "Staf",
+    "Tel",
+    "Traf",
+    "Uttles",
+    "Wat",
+    "Brent",
+    "Charn",
+    "Sher",
+    "Aberdeen",
+    "Ayr",
+    "Bedford",
+    "Berk",
+    "Buckingham",
+    "Cambridge",
+    "Carmarthen",
+    "Che",
+    "Clackmannan",
+    "Denbigh",
+    "Derby",
+    "Dunbarton",
+    "Flint",
+    "Gloucester",
+    "Hamp",
+    "Hereford",
+    "Hertford",
+    "Huntingdon",
+    "Lanark",
+    "Lanca",
+    "Leicester",
+    "Lincoln",
+    "Monmouth",
+    "Northampton",
+    "Nottingham",
+    "Oxford",
+    "Pembroke",
+    "Renfrew",
+    "Richmond",
+    "Shrop",
+    "Stafford",
+    "Warwick",
+    "Wilt",
+    "Worcester",
+    "York",
+    "Aller",
+    "Calder",
+    "Roch",
+    "Rossen",
+    "Rye",
+    "Ash",
+    "Chester",
+    "En",
+    "Hat",
+    "Lich",
+    "Mans",
+    "Shef",
+    "Wake",
+    "Ban",
+    "Basil",
+    "Croy",
+    "Hilling",
+    "Mal",
+    "Swin",
+    "Basing",
+    "Birming",
+    "Chelten",
+    "Dagen",
+    "Dur",
+    "Fare",
+    "Ful",
+    "Graves",
+    "Hors",
+    "Lewis",
+    "New",
+    "Notting",
+    "Old",
+    "Rother",
+    "Walt",
+    "Woking",
+    "Wrex",
+    "Bed",
+    "Bos",
+    "Tam",
+    "Wands",
+    "Ash",
+    "Bed",
+    "Brad",
+    "Chelms",
+    "Dart",
+    "Guild",
+    "Ox",
+    "Roch",
+    "Sal",
+    "Staf",
+    "Tel",
+    "Traf",
+    "Uttles",
+    "Wat",
+    "Brent",
+    "Charn",
+    "Sher",
+}
+
+ward_prefixes = {
     "Saws",
     "Woodset",
     "Cocker",
@@ -576,15 +763,27 @@ prefixes = {
     "Mux",
 }
 
+org_suffixes = {
+    "shire",
+    "dale",
+    "field",
+    "stead",
+    "don",
+    "stoke",
+    "ham",
+    "worth",
+    "ford",
+    "wood",
+}
 
-suffixes = {
+ward_suffixes = {
     "ton",
     "bridge",
     "dale",
     "ham",
 }
 
-extra = {
+ward_extra = {
     "Common",
     "North",
     "South",
@@ -600,14 +799,14 @@ def get_sample(data):
 
 
 def make_ward_name(add_extra_name=True):
-    pre = get_sample(prefixes)
-    suf = get_sample(suffixes)
+    pre = get_sample(ward_prefixes)
+    suf = get_sample(ward_suffixes)
     name = "".join((pre, suf))
 
     # extras
     rand = random.randrange(1, 100)
     if rand > 0 and rand < 20:
-        name = f"{name} {get_sample(extra)}"
+        name = f"{name} {get_sample(ward_extra)}"
 
     if rand > 30 and rand < 35:
         name = f"{name}/{make_ward_name(add_extra_name=False)}"
@@ -622,6 +821,13 @@ def make_ward_name(add_extra_name=True):
     return name
 
 
+def make_org_name():
+    pre = get_sample(org_prefixes)
+    suf = get_sample(org_suffixes)
+    name = "".join((pre, suf))
+    return name
+
+
 if __name__ == "__main__":
     for i in range(20):
-        print(make_ward_name())
+        print(make_org_name(), make_ward_name())
