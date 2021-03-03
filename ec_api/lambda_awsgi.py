@@ -14,6 +14,6 @@ def lambda_handler(event, context):
             "image/png",
             "image/jpeg",
             "image/x-icon",
-            "application/font-woff2",
+            "font/woff2",
         },
     )
