@@ -3,31 +3,19 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-__all__ = ["RegisterForm", "LoginForm"]
-
-
-class RegisterForm(forms.ModelForm):
-    """
-    Registration form for a User
-    """
-
-    class Meta:
-        model = User
-        fields = ["email"]
-        error_messages = {
-            "email": {
-                "unique": "User with this email has already registered. Do you need to log in?"
-            }
-        }
-
-    def save(self, commit=True):
-        """
-        Password field is not used so we set an unusable password before saving
-        the instance
-        """
-        self.instance.set_unusable_password()
-        return super().save(commit=commit)
+__all__ = ["LoginForm"]
 
 
 class LoginForm(forms.Form):
+    """
+    Login form for a User.
+    """
+
     email = forms.EmailField(required=True)
+
+    def clean_email(self):
+        """
+        Normalize the entered email
+        """
+        email = self.cleaned_data["email"]
+        return User.objects.normalize_email(email)
