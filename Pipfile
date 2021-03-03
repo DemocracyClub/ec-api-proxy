@@ -16,7 +16,7 @@ dc-design-system = {ref = "release/0.1.0", git = "https://github.com/DemocracyCl
 django-sesame = "*"
 psycopg2-binary = "*"
 django-ses = "<2.0"
-django-rest-framework = "*"
+django-rest-framework = "3.12.2"
 uk-election-ids = "*"
 faker = "*"
 
