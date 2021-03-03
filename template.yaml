@@ -64,6 +64,10 @@ Parameters:
     Description: "The lambda config environment passed to the app used to init sentry."
     Type: String
 
+  AppDomain:
+    Description: "The domain the app is on."
+    Type: String
+
 Resources:
 
   DependenciesLayer:
@@ -97,6 +101,7 @@ Resources:
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
+          APP_DOMAIN: !Ref AppDomain
       Events:
         HTTPRequests:
           Type: Api
