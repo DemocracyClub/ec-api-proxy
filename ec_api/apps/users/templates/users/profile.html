@@ -34,20 +34,9 @@
       <p>Use the form below to create a new API token</p>
       <form method="POST" action=".">
         {% csrf_token %}
+
         {% for field in form.visible_fields %}
-          <div class="ds-field">
-            <label for="{{ field.id_for_label }}">
-              {{ field.label }}
-              {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
-            </label>
-            {{ field }}
-            {% for error in field.errors %}
-              <small class="ds-field-error" id="{{ field.id_for_label }}-error">
-                <span role="img" aria-label="Error">❌</span>
-                {{ error }}
-              </small>
-            {% endfor %}
-          </div>
+          {% include "components/forms/field.html" %}
         {% endfor %}
 
         {% for hidden in form.hidden_fields %}
@@ -55,11 +44,7 @@
         {% endfor %}
 
         {% for error in form.non_field_errors %}
-        <div role="alert">
-          <div class="ds-error">
-            <span role="img" aria-label="Error">❌</span> {{ error }}
-          </div>
-        </div>
+          {% include "components/forms/non_field_error.html" error=error }
         {% endfor %}
 
         <button class="ds-button-blue" type="submit">Create key</button>

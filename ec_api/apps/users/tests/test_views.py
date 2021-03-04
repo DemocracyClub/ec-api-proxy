@@ -1,10 +1,10 @@
 import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from users.forms import LoginForm
 
+from users.forms import LoginForm, APIKeyForm
 from users.tests.factories import UserFactory
-from users.views import LoginView
+from users.views import LoginView, ProfileView
 from pytest_django.asserts import assertContains
 
 User = get_user_model()
@@ -107,3 +107,38 @@ class TestAuthenticateView:
         assert response.status_code == 200
         assert response.wsgi_request.user is user
         assertContains(response, "<h1>Authenticated</h1>")
+
+
+class TestProfileView:
+    @pytest.fixture
+    def view_obj(self, rf, mocker):
+        request = rf.get(reverse("users:profile"))
+        request.user = mocker.MagicMock(spec=User)
+        obj = ProfileView()
+        obj.setup(request=request)
+        return obj
+
+    def test_get_success_url(self, view_obj):
+        assert view_obj.get_success_url() == ".?created"
+
+    def test_get_context_data(self, view_obj):
+        context = view_obj.get_context_data()
+
+        assert "api_keys" in context
+        assert "created" in context
+        view_obj.request.user.api_keys.all.assert_called_once()
+
+    def test_form_valid(self, view_obj, mocker):
+        form = mocker.MagicMock(spec=APIKeyForm)
+        result = view_obj.form_valid(form=form)
+
+        form.save.assert_called_once_with(commit=False)
+        assert form.save.return_value.user == view_obj.request.user
+        form.save.return_value.save.assert_called_once()
+        assert result.status_code == 302
+        assert result.url == ".?created"
+
+    def test_must_be_logged_in(self, client):
+        response = client.get(reverse("users:profile"))
+        assert response.status_code == 302
+        assert response.url == reverse("users:login")

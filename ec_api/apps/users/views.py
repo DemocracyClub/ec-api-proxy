@@ -91,13 +91,15 @@ class AuthenticateErrorView(TemplateView):
 class ProfileView(LoginRequiredMixin, FormView):
     template_name = "users/profile.html"
     form_class = APIKeyForm
+    redirect_field_name = None
 
     def get_success_url(self):
-        return ".?success"
+        return ".?created"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["api_keys"] = self.request.user.api_keys.all()
+        context["created"] = "created" in self.request.GET
         return context
 
     def form_valid(self, form):
