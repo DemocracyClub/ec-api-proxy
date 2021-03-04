@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.urls import reverse
 from users.managers import CustomUserManager
 from users.mixins import TimestampMixin
 
@@ -85,3 +86,6 @@ class APIKey(TimestampMixin, models.Model):
             self.key = self._generate_key()
 
         return super().save(*args, **kwargs)
+
+    def get_absolute_delete_url(self):
+        return reverse("users:delete-key", kwargs={"pk": self.pk})

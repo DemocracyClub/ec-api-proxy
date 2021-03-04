@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from users.forms import LoginForm, APIKeyForm
-from users.tests.factories import UserFactory
-from users.views import LoginView, ProfileView
+from users.tests.factories import UserFactory, APIKeyFactory
+from users.views import LoginView, ProfileView, DeleteAPIKeyView
 from pytest_django.asserts import assertContains
 
 User = get_user_model()
@@ -142,3 +142,29 @@ class TestProfileView:
         response = client.get(reverse("users:profile"))
         assert response.status_code == 302
         assert response.url == reverse("users:login")
+
+
+class TestDeleteAPIKeyView:
+    @pytest.fixture
+    def view_obj(self, rf):
+        url = reverse("users:delete-key", kwargs={"pk": 1})
+        request = rf.get(url)
+        obj = DeleteAPIKeyView()
+        obj.setup(request=request)
+        return obj
+
+    @pytest.mark.django_db
+    def test_get_queryset_limited_to_users_keys(self, view_obj):
+        user = UserFactory()
+        APIKeyFactory.create_batch(size=5, user=user)
+
+        another_users_key = APIKeyFactory()
+        view_obj.request.user = user
+
+        result = view_obj.get_queryset()
+        assert list(result) == list(user.api_keys.all())
+        assert another_users_key not in result
+
+    def test_get_success_url(self, view_obj):
+        result = view_obj.get_success_url()
+        assert result == reverse("users:profile")

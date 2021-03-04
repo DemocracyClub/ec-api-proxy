@@ -24,4 +24,9 @@ urlpatterns = [
         views.ProfileView.as_view(),
         name="profile",
     ),
+    path(
+        "keys/<int:pk>/delete/",
+        views.DeleteAPIKeyView.as_view(),
+        name="delete-key",
+    ),
 ]
