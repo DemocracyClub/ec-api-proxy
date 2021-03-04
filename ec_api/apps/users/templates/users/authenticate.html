@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <h1>Authenticated</h1>
-  <p>Hello {{ request.user.email }}, you have successfully authenticated and are now logged in.</p>
-
+  <h1>Something went wrong</h1>
+  <p>Your authentication token may have timed out. Please request a new magic link from the <a href="{% url 'users:login' %}">login page</a> and try again.</p>
 
 {% endblock %}

@@ -74,20 +74,16 @@ class AuthenticateView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         """
-        Attempts to get user from the request and log them in. Redirect to error
-        page if django-sesame fails to get a user from the request.
+        Attempts to get user from the request, log them in, and redirect them to
+        their profile page. Renders an error message if django-sesame fails to
+        get a user from the request.
         """
         user = get_user(request)
-        if not user:
-            return redirect("users:authenticate-error")
+        if user:
+            login(request, user)
+            return redirect("users:profile")
 
-        login(request, user)
-        # TODO should we redirect logged in user to a different page?
         return super().get(request, *args, **kwargs)
-
-
-class AuthenticateErrorView(TemplateView):
-    template_name = "users/authenticate_error.html"
 
 
 class ProfileView(LoginRequiredMixin, FormView):
