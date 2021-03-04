@@ -55,21 +55,15 @@ def test_postcode_response():
 
 def test_postcode_split_over_councils():
     builder = PostcodeResponse().with_split_over_councils_postcode()
-    assert builder.response == {
-        "address_picker": True,
-        "addresses": [],
-        "dates": [],
-        "postcode_location": {
-            "type": "Feature",
-            "properties": None,
-            "geometry": {
-                "type": "Point",
-                "coordinates": [-0.13447605, 51.489488200000004],
-            },
-        },
-        "electoral_services": None,
-        "registration": None,
-    }
+    assert len(builder.response["addresses"]) == 5
+    assert list(builder.response.keys()) == [
+        "address_picker",
+        "addresses",
+        "dates",
+        "postcode_location",
+        "electoral_services",
+        "registration",
+    ]
 
 
 def test_with_two_future_dates():

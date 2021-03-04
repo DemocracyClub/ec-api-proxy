@@ -114,6 +114,21 @@ class BallotsResponse(BaseResponse):
         return self.get_initial_response()
 
 
+class SingleAddressResponse(BaseResponse):
+    def get_initial_response(self):
+        fake_data = Faker(["en_GB"])
+        uprn = fake_data.random_number(digits=11)
+        return {
+            "address": fake_data.address(),
+            "postcode": fake_data.postcode(),
+            "slug": uprn,
+            "url": f"https://developers.democracyclub.org.uk/api/v1/address/{uprn}/",
+        }
+
+    def build_response(self):
+        return self.get_initial_response()
+
+
 class CouncilContactDetailsMixin:
     @property
     def get_electoral_services(self):
@@ -208,16 +223,12 @@ class PostcodeResponse(DatesMixin, CouncilContactDetailsMixin, BaseResponse):
     def get_initial_response(self):
         return {
             "address_picker": self.get_address_picker,
-            "addresses": self.get_addresses,
+            "addresses": [],
             "dates": self.get_dates,
             "postcode_location": self.get_postcode_location,
             "electoral_services": self.get_electoral_services,
             "registration": self.get_registration,
         }
-
-    @property
-    def get_addresses(self):
-        return []
 
     @property
     def get_address_picker(self):
@@ -227,6 +238,9 @@ class PostcodeResponse(DatesMixin, CouncilContactDetailsMixin, BaseResponse):
         self.address_picker = True
         self._response["electoral_services"] = None
         self._response["registration"] = None
+        self._response["addresses"] = [
+            SingleAddressResponse() for i in range(number)
+        ]
         return self
 
     @property
@@ -249,9 +263,7 @@ class PostcodeResponse(DatesMixin, CouncilContactDetailsMixin, BaseResponse):
         return self
 
     def build_response(self):
-        self._response = self.get_initial_response()
-        self._response["addresses"] = self.get_addresses
         self._response["dates"] = self.get_dates
         self._response["address_picker"] = self.get_address_picker
         if not self.get_address_picker:
-            assert not self.get_addresses
+            assert not self._response["addresses"]

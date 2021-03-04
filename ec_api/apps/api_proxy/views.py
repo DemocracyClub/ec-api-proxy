@@ -7,7 +7,7 @@ from api_proxy.auth import IsValidAPIUser, TokenWithGetParamAuthentication
 from api_proxy.upstream_api_client import ResponseBuilderApiClient
 
 
-def get_upstream_client():
+def get_upstream_client(request):
     """
     Allow pluggable clients to get some JSON back to the view.
 
@@ -22,7 +22,7 @@ def get_upstream_client():
     if isinstance(client_class, ResponseBuilderApiClient):
         return client_class
     if isinstance(client_class, str):
-        return import_string(client_class)()
+        return import_string(client_class)(request)
 
     raise ValueError("Invalid value for API_CLIENT_CLASS")
 
@@ -34,9 +34,11 @@ class BaseAuthenticatedAPIView(APIView):
 
 class PostcodeView(BaseAuthenticatedAPIView):
     def get(self, request, postcode, format=None):
-        """
-        Return a list of all users.
-        """
-        response = get_upstream_client().get_postcode_response(postcode)
+        response = get_upstream_client(request).get_postcode_response(postcode)
+        return Response(response)
 
+
+class UPRNView(BaseAuthenticatedAPIView):
+    def get(self, request, uprn, format=None):
+        response = get_upstream_client(request).get_uprn_response(uprn)
         return Response(response)
