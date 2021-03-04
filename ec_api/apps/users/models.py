@@ -77,15 +77,30 @@ class APIKey(TimestampMixin, models.Model):
     def _generate_key(self):
         return binascii.hexlify(os.urandom(20)).decode()
 
-    def refresh_key(self):
-        self.key = self._generate_key()
-        self.save()
-
     def save(self, *args, **kwargs):
+        """
+        On initial save generates a key
+        """
         if not self.pk:
             self.key = self._generate_key()
 
         return super().save(*args, **kwargs)
 
+    def refresh_key(self):
+        """
+        Creates a new key value and saves
+        """
+        self.key = self._generate_key()
+        self.save()
+
     def get_absolute_delete_url(self):
+        """
+        Build URL to delete the key
+        """
         return reverse("users:delete-key", kwargs={"pk": self.pk})
+
+    def get_absolute_refresh_url(self):
+        """
+        Build URL to refresh the key
+        """
+        return reverse("users:refresh-key", kwargs={"pk": self.pk})

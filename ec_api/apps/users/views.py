@@ -6,6 +6,7 @@ from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from sesame.utils import get_user, get_query_string
 
@@ -122,3 +123,16 @@ class DeleteAPIKeyView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse("users:profile")
+
+
+class RefreshAPIKeyView(LoginRequiredMixin, DetailView):
+    template_name = "users/refresh_key.html"
+    context_object_name = "key"
+
+    def get_queryset(self):
+        return self.request.user.api_keys.all()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.refresh_key()
+        return redirect("users:profile")

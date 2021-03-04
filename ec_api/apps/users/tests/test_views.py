@@ -4,7 +4,12 @@ from django.urls import reverse
 
 from users.forms import LoginForm, APIKeyForm
 from users.tests.factories import UserFactory, APIKeyFactory
-from users.views import LoginView, ProfileView, DeleteAPIKeyView
+from users.views import (
+    LoginView,
+    ProfileView,
+    DeleteAPIKeyView,
+    RefreshAPIKeyView,
+)
 from pytest_django.asserts import assertContains
 
 User = get_user_model()
@@ -168,3 +173,19 @@ class TestDeleteAPIKeyView:
     def test_get_success_url(self, view_obj):
         result = view_obj.get_success_url()
         assert result == reverse("users:profile")
+
+
+class TestRefreshAPIKeyView:
+    def test_post(self, rf, mocker):
+        key = APIKeyFactory.build(pk=1)
+        view = RefreshAPIKeyView()
+        view.request = rf.post(key.get_absolute_refresh_url())
+        mocker.patch.object(key, "refresh_key")
+        mocker.patch.object(view, "get_object", return_value=key)
+
+        response = view.post(view.request)
+
+        key.refresh_key.assert_called_once()
+        view.get_object.assert_called_once()
+        assert response.status_code == 302
+        assert response.url == reverse("users:profile")

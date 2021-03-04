@@ -29,4 +29,9 @@ urlpatterns = [
         views.DeleteAPIKeyView.as_view(),
         name="delete-key",
     ),
+    path(
+        "keys/<int:pk>/refresh/",
+        views.RefreshAPIKeyView.as_view(),
+        name="refresh-key",
+    ),
 ]

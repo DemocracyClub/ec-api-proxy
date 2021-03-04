@@ -16,12 +16,18 @@
           <tr>
             <th>Name</th>
             <th>Key</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Refresh</th>
             <th>Delete</th>
           </tr>
           {% for key in api_keys %}
             <tr>
               <td>{{ key.name }}</td>
               <td><code>{{ key.key }}</code></td>
+              <td>{{ key.created_at }}</td>
+              <td>{{ key.updated_at }}</td>
+              <td><a href="{{ key.get_absolute_refresh_url }}">Refresh</a></td>
               <td><a href="{{ key.get_absolute_delete_url }}">Delete</a></td>
             </tr>
           {% endfor %}
