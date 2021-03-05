@@ -71,6 +71,11 @@ class APIKey(TimestampMixin, models.Model):
         related_name="api_keys",
     )
 
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "API key"
+        verbose_name_plural = "API keys"
+
     def __str__(self):
         return self.name
 

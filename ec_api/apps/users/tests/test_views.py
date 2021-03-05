@@ -1,5 +1,7 @@
+from django.views.generic.edit import DeleteView
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 from django.urls import reverse
 
 from users.forms import LoginForm, APIKeyForm
@@ -44,7 +46,6 @@ class TestLoginView:
         user.save.assert_called_once()
         view_obj.send_login_url.assert_called_once_with(user=user)
         assert response.status_code == 302
-        assert response.url == ".?success"
 
     def test_form_valid_existing_user(self, view_obj, mocker):
         user = mocker.MagicMock(spec=User)
@@ -64,7 +65,6 @@ class TestLoginView:
         user.save.assert_not_called()
         view_obj.send_login_url.assert_called_once_with(user=user)
         assert response.status_code == 302
-        assert response.url == ".?success"
 
     def test_send_login_url(self, view_obj, mocker):
         mocker.patch("users.views.get_query_string")
@@ -73,23 +73,8 @@ class TestLoginView:
 
         user.email_user.assert_called_once()
 
-    @pytest.mark.parametrize(
-        "url, expected",
-        [
-            ("/users/login/", False),
-            ("/users/login/?success", True),
-        ],
-    )
-    def test_get_context_data_success(self, url, expected, rf, view_obj):
-        request = rf.get(url)
-        view_obj.setup(request=request)
-        context = view_obj.get_context_data()
-
-        assert "success" in context
-        assert context["success"] == expected
-
     def get_success_url(self, view_obj):
-        assert view_obj.get_success_url() == ".?success"
+        assert view_obj.get_success_url() == reverse("users:login")
 
 
 class TestAuthenticateView:
@@ -125,24 +110,25 @@ class TestProfileView:
         return obj
 
     def test_get_success_url(self, view_obj):
-        assert view_obj.get_success_url() == ".?created"
+        assert view_obj.get_success_url() == reverse("users:profile")
 
     def test_get_context_data(self, view_obj):
         context = view_obj.get_context_data()
 
         assert "api_keys" in context
-        assert "created" in context
         view_obj.request.user.api_keys.all.assert_called_once()
 
     def test_form_valid(self, view_obj, mocker):
         form = mocker.MagicMock(spec=APIKeyForm)
+        mocker.patch.object(messages, "success")
         result = view_obj.form_valid(form=form)
 
         form.save.assert_called_once_with(commit=False)
         assert form.save.return_value.user == view_obj.request.user
         form.save.return_value.save.assert_called_once()
         assert result.status_code == 302
-        assert result.url == ".?created"
+        assert result.url == reverse("users:profile")
+        messages.success.assert_called_once()
 
     def test_must_be_logged_in(self, client):
         response = client.get(reverse("users:profile"))
@@ -175,6 +161,18 @@ class TestDeleteAPIKeyView:
         result = view_obj.get_success_url()
         assert result == reverse("users:profile")
 
+    def test_delete(self, view_obj, mocker):
+        # give the view an object
+        view_obj.object = APIKeyFactory.build(name="Test")
+        # patch super call
+        mocker.patch.object(DeleteView, "delete")
+        # patch messages call
+        mocker.patch.object(messages, "success")
+
+        view_obj.delete(request=view_obj.request)
+        DeleteView.delete.assert_called_once()
+        messages.success.assert_called_once()
+
 
 class TestRefreshAPIKeyView:
     def test_post(self, rf, mocker):
@@ -183,6 +181,7 @@ class TestRefreshAPIKeyView:
         view.request = rf.post(key.get_absolute_refresh_url())
         mocker.patch.object(key, "refresh_key")
         mocker.patch.object(view, "get_object", return_value=key)
+        mocker.patch.object(messages, "success", return_value=key)
 
         response = view.post(view.request)
 
@@ -190,3 +189,4 @@ class TestRefreshAPIKeyView:
         view.get_object.assert_called_once()
         assert response.status_code == 302
         assert response.url == reverse("users:profile")
+        messages.success.assert_called_once()

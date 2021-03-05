@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import FormView
@@ -34,6 +36,11 @@ class LoginView(FormView):
             user.save()
 
         self.send_login_url(user=user)
+        messages.success(
+            self.request,
+            "Thank you, please check your email for your magic link to log in to your account.",
+            fail_silently=True,
+        )
         return HttpResponseRedirect(self.get_success_url())
 
     def send_login_url(self, user):
@@ -54,19 +61,11 @@ class LoginView(FormView):
         )
         return user.email_user(subject=subject, message=txt)
 
-    def get_context_data(self, **kwargs):
-        """
-        Adds success context variable
-        """
-        context = super().get_context_data(**kwargs)
-        context["success"] = "success" in self.request.GET
-        return context
-
     def get_success_url(self):
         """
-        Adds success param so that success message is displayed
+        Redirect to same page where success message will be displayed
         """
-        return ".?success"
+        return reverse("users:login")
 
 
 class AuthenticateView(TemplateView):
@@ -91,13 +90,9 @@ class ProfileView(LoginRequiredMixin, FormView):
     form_class = APIKeyForm
     redirect_field_name = None
 
-    def get_success_url(self):
-        return ".?created"
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["api_keys"] = self.request.user.api_keys.all()
-        context["created"] = "created" in self.request.GET
         return context
 
     def form_valid(self, form):
@@ -107,12 +102,21 @@ class ProfileView(LoginRequiredMixin, FormView):
         key = form.save(commit=False)
         key.user = self.request.user
         key.save()
-        return HttpResponseRedirect(self.get_success_url())
+        messages.success(self.request, f"{key.name} API key was created")
+        return super().form_valid(form=form)
+
+    def get_success_url(self):
+        return reverse("users:profile")
 
 
-class DeleteAPIKeyView(LoginRequiredMixin, DeleteView):
+class DeleteAPIKeyView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = "users/delete_key.html"
     context_object_name = "key"
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, f"{self.object.name} API key was deleted")
+        return response
 
     def get_queryset(self):
         return self.request.user.api_keys.all()
@@ -131,4 +135,9 @@ class RefreshAPIKeyView(LoginRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.refresh_key()
+        messages.success(
+            request,
+            f"{self.object.name} API key was refreshed",
+            extra_tags="refreshed",
+        )
         return redirect("users:profile")
