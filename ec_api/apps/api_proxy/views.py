@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils.module_loading import import_string
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from api_proxy.auth import IsValidAPIUser, TokenWithGetParamAuthentication
 
 from api_proxy.upstream_api_client import ResponseBuilderApiClient
 
@@ -27,8 +28,8 @@ def get_upstream_client():
 
 
 class BaseAuthenticatedAPIView(APIView):
-    # TODO: Add authentication class
-    pass
+    authentication_classes = [TokenWithGetParamAuthentication]
+    permission_classes = [IsValidAPIUser]
 
 
 class PostcodeView(BaseAuthenticatedAPIView):
