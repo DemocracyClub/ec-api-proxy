@@ -1,10 +1,15 @@
 import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from users.forms import LoginForm
 
-from users.tests.factories import UserFactory
-from users.views import LoginView
+from users.forms import LoginForm, APIKeyForm
+from users.tests.factories import UserFactory, APIKeyFactory
+from users.views import (
+    LoginView,
+    ProfileView,
+    DeleteAPIKeyView,
+    RefreshAPIKeyView,
+)
 from pytest_django.asserts import assertContains
 
 User = get_user_model()
@@ -95,15 +100,93 @@ class TestAuthenticateView:
     def tests_get_redirects_to_error(self, client, url):
         response = client.get(url, follow=True)
 
-        assert response.wsgi_request.path == "/users/authenticate/error/"
+        assert response.status_code == 200
+        assert response.wsgi_request.path == url
+        assert response.wsgi_request.user.is_authenticated is False
         assertContains(response, "<h1>Something went wrong</h1>")
 
     @pytest.mark.django_db
     def test_get_logs_in_user(self, client, mocker, url):
         user = UserFactory()
         mocker.patch("users.views.get_user", return_value=user)
-        response = client.get(url)
+        response = client.get(url, follow=True)
 
-        assert response.status_code == 200
-        assert response.wsgi_request.user is user
-        assertContains(response, "<h1>Authenticated</h1>")
+        assert response.wsgi_request.user == user
+        assertContains(response, "<h1>Profile</h1>")
+
+
+class TestProfileView:
+    @pytest.fixture
+    def view_obj(self, rf, mocker):
+        request = rf.get(reverse("users:profile"))
+        request.user = mocker.MagicMock(spec=User)
+        obj = ProfileView()
+        obj.setup(request=request)
+        return obj
+
+    def test_get_success_url(self, view_obj):
+        assert view_obj.get_success_url() == ".?created"
+
+    def test_get_context_data(self, view_obj):
+        context = view_obj.get_context_data()
+
+        assert "api_keys" in context
+        assert "created" in context
+        view_obj.request.user.api_keys.all.assert_called_once()
+
+    def test_form_valid(self, view_obj, mocker):
+        form = mocker.MagicMock(spec=APIKeyForm)
+        result = view_obj.form_valid(form=form)
+
+        form.save.assert_called_once_with(commit=False)
+        assert form.save.return_value.user == view_obj.request.user
+        form.save.return_value.save.assert_called_once()
+        assert result.status_code == 302
+        assert result.url == ".?created"
+
+    def test_must_be_logged_in(self, client):
+        response = client.get(reverse("users:profile"))
+        assert response.status_code == 302
+        assert response.url == reverse("users:login")
+
+
+class TestDeleteAPIKeyView:
+    @pytest.fixture
+    def view_obj(self, rf):
+        url = reverse("users:delete-key", kwargs={"pk": 1})
+        request = rf.get(url)
+        obj = DeleteAPIKeyView()
+        obj.setup(request=request)
+        return obj
+
+    @pytest.mark.django_db
+    def test_get_queryset_limited_to_users_keys(self, view_obj):
+        user = UserFactory()
+        APIKeyFactory.create_batch(size=5, user=user)
+
+        another_users_key = APIKeyFactory()
+        view_obj.request.user = user
+
+        result = view_obj.get_queryset()
+        assert list(result) == list(user.api_keys.all())
+        assert another_users_key not in result
+
+    def test_get_success_url(self, view_obj):
+        result = view_obj.get_success_url()
+        assert result == reverse("users:profile")
+
+
+class TestRefreshAPIKeyView:
+    def test_post(self, rf, mocker):
+        key = APIKeyFactory.build(pk=1)
+        view = RefreshAPIKeyView()
+        view.request = rf.post(key.get_absolute_refresh_url())
+        mocker.patch.object(key, "refresh_key")
+        mocker.patch.object(view, "get_object", return_value=key)
+
+        response = view.post(view.request)
+
+        key.refresh_key.assert_called_once()
+        view.get_object.assert_called_once()
+        assert response.status_code == 302
+        assert response.url == reverse("users:profile")

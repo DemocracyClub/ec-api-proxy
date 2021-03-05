@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="ds-card">
+  <div class="ds-card-body">
+    <h1>Delete {{key.name}} key</h1>
+    <form method="POST" action=".">
+      <p>Are you sure you want to delete key <code>{{ key.key }}</code>?</p>
+      {% csrf_token %}
+      <button class="ds-button-blue" type="submit">Delete key</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

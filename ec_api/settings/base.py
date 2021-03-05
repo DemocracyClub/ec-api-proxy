@@ -4,6 +4,8 @@ import dc_design_system
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
 
+from django.urls.base import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
@@ -107,6 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "users.CustomUser"
+
+LOGIN_URL = reverse_lazy("users:login")
 
 # django-sesame settings
 AUTHENTICATION_BACKENDS = ["sesame.backends.ModelBackend"]

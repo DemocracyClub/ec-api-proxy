@@ -1,0 +1,13 @@
+<div class="ds-field">
+  <label for="{{ field.id_for_label }}">
+    {{ field.label }}
+    {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+  </label>
+  {{ field }}
+  {% for error in field.errors %}
+    <small class="ds-field-error" id="{{ field.id_for_label }}-error">
+      <span role="img" aria-label="Error">❌</span>
+      {{ error }}
+    </small>
+  {% endfor %}
+</div>
