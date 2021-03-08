@@ -13,6 +13,7 @@ class TokenWithGetParamAuthentication(TokenAuthentication):
         """
         If token param is in the request GET set that as the HTTP_AUTHORIZATION header
         """
+
         token = request.GET.get(self.keyword.lower())
         if token:
             request.META["HTTP_AUTHORIZATION"] = f"{self.keyword} {token}"
