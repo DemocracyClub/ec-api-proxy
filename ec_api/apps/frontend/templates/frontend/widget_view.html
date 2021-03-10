@@ -1,0 +1,11 @@
+{%  extends "base.html" %}
+
+{% block content %}
+  <h1>Widget</h1>
+  <h2>Demo</h2>
+
+  <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-candidates="true"></div>
+  <script type="text/javascript"
+          src="{% url "widget_js" %}">
+  </script>
+{% endblock %}
