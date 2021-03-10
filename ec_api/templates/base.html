@@ -42,6 +42,18 @@
 
 
       <main id="main" class="ds-stack">
+
+        <!-- TODO make these prettier -->
+        {% if messages %}
+          <div role="alert">
+            {% for message in messages %}
+              <div class="{% if 'error' in message.tags %}ds-error{% else %}ds-padded{% endif %}">
+                <h5>{{ message }}</h5>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
         {% block content %}
 
         {% endblock %}
