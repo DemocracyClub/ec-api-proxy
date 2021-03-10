@@ -165,6 +165,11 @@ PIPELINE["SASS_ARGUMENTS"] = (
 )
 
 
+WIDGET_S3_URL = (
+    "https://ec-api-staging-widget.s3.eu-west-2.amazonaws.com/widget.js"
+)
+
+
 def setup_sentry(environment=None):
     SENTRY_DSN = os.environ.get("SENTRY_DSN")
     if not SENTRY_DSN:

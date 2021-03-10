@@ -18,7 +18,10 @@
           <nav class="ds-cluster">
             <ul>
               <li>
-                <a href="/" aria-current="page">Home</a>
+                <a href="{% url "home_view" %}">Home</a>
+              </li>
+              <li>
+                <a href="{% url "widget_view" %}">Widget</a>
               </li>
               <li>
                 {% if request.user.is_authenticated %}
