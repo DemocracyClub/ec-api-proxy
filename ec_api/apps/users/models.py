@@ -79,6 +79,7 @@ class APIKey(TimestampMixin, models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
     def _generate_key(self):
         return binascii.hexlify(os.urandom(20)).decode()
 
@@ -86,7 +87,7 @@ class APIKey(TimestampMixin, models.Model):
         """
         On initial save generates a key
         """
-        if not self.pk:
+        if not self.key:
             self.key = self._generate_key()
 
         return super().save(*args, **kwargs)
