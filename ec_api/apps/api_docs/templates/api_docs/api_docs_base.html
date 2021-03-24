@@ -1,0 +1,29 @@
+{%  extends "base.html" %}
+
+{% block subnav %}
+  <nav class="ds-subnav" aria-label="About">
+    <ul>
+      <li>
+        <a href="{% url "api_docs" %}" aria-current="true">API Overview</a>
+      </li>
+      <li>
+        <a href="">Endpoints</a>
+      </li>
+      <li>
+        <a href="">Object reference</a>
+      </li>
+      <li>
+        <a href="">Example responses</a>
+      </li>
+    </ul>
+  </nav>
+
+{% endblock %}
+
+{% block content %}
+
+{% block api_docs_content %}
+
+{% endblock %}
+
+{% endblock %}

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "dc_design_system",
     "users",
     "rest_framework",
+    "api_docs",
 ]
 
 MIDDLEWARE = [

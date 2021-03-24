@@ -49,6 +49,7 @@ $scope: false;
   @include grid;
   @include stack;
   @include breadcrumbs;
+  @include subnav;
   @include table;
   @include header;
   @include radio;
@@ -123,4 +124,18 @@ body {
 
 .container  {
   @include container;
+}
+
+
+code, pre {
+  background-color: #DDDDDD;
+  padding:3px;
+}
+
+pre {
+  display: block;
+  padding: 1em;
+  max-width: 40em;
+  overflow-x: scroll;
+  white-space: nowrap;
 }
