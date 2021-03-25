@@ -1,32 +1,95 @@
 {%  extends "api_docs/api_docs_base.html" %}
-{% load blueprint %}
+
 {% block api_docs_content %}
+  {% load pipeline %}
+  {% javascript 'mermaid' %}
+  <script>
 
-<h2>Authentication</h2>
-<div class="ds-grid">
-  <div>
-    <p>Calls to the API must be authenticated with a valid API key.</p>
-    <p>To get a key, please [log in or register]({% url "users:login" %}) and create a key.</p>
-    <p>To authenticate with a key either pass in the `auth_token` param or use the `Authorization` header</p>
+    mermaid.initialize({
+      startOnLoad:true,
+      sequence: {
+        mirrorActors: false,
+        showSequenceNumbers: true
+      }
+    });
+  </script>
+
+  <h2>Overview</h2>
+  <p>This API takes a postcode or UPRN and returns current information about
+    elections, councils, candidates and polling stations.
+  </p>
+
+  <h3>High level concepts</h3>
+  <div class="ds-grid">
+    <div>
 
 
 
+      <p>It's important to understand that this API returns <em>different types of response</em>
+        depending on the postcode entered</p>
+
+      <p>This is because some postcodes are "split" across council areas or
+        polling districts, meaning that we need more information than just a postcode
+        in order to give accurate responses.</p>
+
+      <p>The additional information we need is the exact UPRN for the property, and
+        this is provided as a [list of addresses] if we detect a split postcode.</p>
+
+    </div>
+    <div>
+      <figure>
+        <figcaption>Case 1: Results after address picker shown</figcaption>
+        <div class="mermaid">
+          sequenceDiagram
+          Client->>+API: Postcode lookup to /api/postcode/{postcode}
+          API->>+Client: Address picker with UPRNs
+          Client->>+API: UPRN lookup to /api/address/{UPRN}
+          API->>+Client: Results
+
+        </div>
+
+      </figure>
+      <figure>
+        <figcaption>Case 2: Results direct from postcode</figcaption>
+        <div class="mermaid">
+          sequenceDiagram
+          Client->>+API: Postcode lookup to /api/postcode/{postcode}
+          API->>+Client: Address picker with UPRNs
+          Client->>+API: UPRN lookup to /api/address/{UPRN}
+          API->>+Client: Results
+
+        </div>
+
+      </figure>
+
+    </div>
   </div>
-  <div class="ds-stack-smaller">
-    <figure>
-      <figcaption>Authenticate with curl</figcaption>
-    <pre>
+
+  <h2>Authentication</h2>
+  <div class="ds-grid">
+    <div>
+      <p>Calls to the API must be authenticated with a valid API key.</p>
+      <p>To get a key, please [log in or register]({% url "users:login" %}) and create a key.</p>
+      <p>To authenticate with a key either pass in the `auth_token` param or use the `Authorization` header</p>
+
+
+
+    </div>
+    <div class="ds-stack-smaller">
+      <figure>
+        <figcaption>Authenticate with curl</figcaption>
+        <pre>
     curl -X GET https://127.0.0.1:8000/api/example/ -H 'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
     </pre>
-    </figure>
-    <figure>
-      <figcaption>Authenticate with URL param</figcaption>
-    <pre>
+      </figure>
+      <figure>
+        <figcaption>Authenticate with URL param</figcaption>
+        <pre>
     curl -X GET https://127.0.0.1:8000/api/example/?auth_token=9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
     </pre>
-    </figure>
+      </figure>
+    </div>
+
+
   </div>
-
-
-</div>
 {% endblock %}

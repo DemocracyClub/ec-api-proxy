@@ -159,6 +159,12 @@ PIPELINE = {
             },
         },
     },
+    "JAVASCRIPT": {
+        "mermaid": {
+            "source_filenames": ("js/mermaid.js",),
+            "output_filename": "mermaid.js",
+        }
+    }
 }
 
 PIPELINE["SASS_ARGUMENTS"] = (
