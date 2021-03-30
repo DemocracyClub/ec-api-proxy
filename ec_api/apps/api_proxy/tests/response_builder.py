@@ -82,7 +82,11 @@ class SingleCandidateResponse(BaseResponse):
 
 class SingleBallotResponse(BaseResponse):
     def get_initial_response(self):
-        return {"ballot_paper_id": "local.stroud.2021-05-06", "candidates": []}
+        return {
+            "ballot_paper_id": "local.stroud.2021-05-06",
+            "candidates": [],
+            "candidates_verified": False,
+        }
 
     def build_response(self):
         return self.get_initial_response()
@@ -99,6 +103,11 @@ class SingleBallotResponse(BaseResponse):
     def with_random_candidates(self, count=1):
         for i in range(count):
             self._response["candidates"].append(SingleCandidateResponse())
+        return self
+
+    def with_candidates_verified(self):
+        self._response["candidates_verified"] = True
+        return self
 
 
 class BallotsResponse(BaseResponse):

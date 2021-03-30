@@ -30,16 +30,21 @@ class DCApiClient:
 
     def clean_candidates(self, candidates):
         for candidate in candidates:
-            candidate["person"].pop("email")
-            candidate["person"].pop("absolute_url")
-            candidate["person"].pop("photo_url")
+            candidate["person"].pop("email", None)
+            candidate["person"].pop("absolute_url", None)
+            candidate["person"].pop("photo_url", None)
         return candidates
 
     def clean_ballots(self, ballots):
         for ballot in ballots:
             ballot.pop("wcivf_url", None)
             ballot.pop("ballot_url", None)
-            ballot["candidates"] = self.clean_candidates(ballot["candidates"])
+            if ballot["candidates_verified"]:
+                ballot["candidates"] = self.clean_candidates(
+                    ballot["candidates"]
+                )
+            else:
+                ballot["candidates"] = []
         return ballots
 
     def clean_dates(self, raw_response):
