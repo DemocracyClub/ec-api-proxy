@@ -51,10 +51,29 @@ def test_get_postcode_no_data_with_contacts(
 
 def test_email_not_in_candiate_response(authorized_client, postcode_response):
     ballot = SingleBallotResponse()
+    ballot = ballot.with_random_candidates()
+    ballot.with_candidates_verified()
+    postcode_response.with_ballot_on_date("2021-05-06", ballot)
+
+    resp_json = authorized_client.get("/api/v1/postcode/GL51NA/").json()
+    assert len(resp_json["dates"][0]["ballots"]) == 2
+    assert resp_json["dates"][0]["ballots"][1]["candidates_verified"]
+    candidate = resp_json["dates"][0]["ballots"][1]["candidates"][0]
+    assert candidate["list_position"] is None
+    with pytest.raises(KeyError):
+        assert candidate["person"]["email"]
+    with pytest.raises(KeyError):
+        assert candidate["person"]["absolute_url"]
+    with pytest.raises(KeyError):
+        assert candidate["person"]["photo_url"]
+
+
+def test_unverified_candidates_dont_show(authorized_client, postcode_response):
+    ballot = SingleBallotResponse()
     ballot.with_random_candidates()
     postcode_response.with_ballot_on_date("2021-05-06", ballot)
     resp_json = authorized_client.get("/api/v1/postcode/GL51NA/").json()
-    candidate = resp_json["dates"][0]["ballots"][0]["candidates"][0]
+    candidate = resp_json["dates"][0]["ballots"][1]["candidates"][0]
     assert candidate["list_position"] is None
     with pytest.raises(KeyError):
         assert candidate["person"]["email"]
