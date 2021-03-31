@@ -172,6 +172,9 @@ PIPELINE["SASS_ARGUMENTS"] = (
     " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
+PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
+PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
+
 
 WIDGET_S3_URL = (
     "https://ec-api-staging-widget.s3.eu-west-2.amazonaws.com/widget.js"
