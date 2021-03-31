@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "dc_design_system",
     "users",
     "rest_framework",
+    "api_docs",
+    "apiblueprint_view",
 ]
 
 MIDDLEWARE = [
@@ -157,6 +159,12 @@ PIPELINE = {
                 "media": "screen,projection",
             },
         },
+    },
+    "JAVASCRIPT": {
+        "mermaid": {
+            "source_filenames": ("js/mermaid.js",),
+            "output_filename": "mermaid.js",
+        }
     },
 }
 

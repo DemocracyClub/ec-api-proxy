@@ -21,6 +21,9 @@
                 <a href="{% url "home_view" %}">Home</a>
               </li>
               <li>
+                <a href="{% url "api_docs" %}">API docs</a>
+              </li>
+              <li>
                 <a href="{% url "widget_view" %}">Widget</a>
               </li>
               <li>
@@ -45,7 +48,9 @@
 
 
       <main id="main" class="ds-stack">
+        {% block subnav %}
 
+        {% endblock %}
         <!-- TODO make these prettier -->
         {% if messages %}
           <div role="alert">
@@ -63,5 +68,6 @@
       </main>
 
     </div>
+    <footer><p></p></footer>
   </body>
 </html>

@@ -12,7 +12,7 @@ whitenoise = "*"
 libsass = "*"
 pip = "*"
 install = "*"
-dc-design-system = {ref = "release/0.1.0", git = "https://github.com/DemocracyClub/design-system.git"}
+dc-design-system = {ref = "0.1.1", git = "https://github.com/DemocracyClub/design-system.git"}
 django-sesame = "*"
 psycopg2-binary = "*"
 django-ses = "<2.0"
@@ -20,6 +20,7 @@ django-rest-framework = "3.12.2"
 uk-election-ids = "*"
 faker = "*"
 requests = "*"
+django-apiblueprint-view = "*"
 
 [dev-packages]
 black = "==20.8b1"
