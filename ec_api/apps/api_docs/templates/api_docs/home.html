@@ -79,17 +79,36 @@
       <figure>
         <figcaption>Authenticate with curl</figcaption>
         <pre>
-    curl -X GET https://127.0.0.1:8000/api/example/ -H 'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
+    curl -X GET https://api.electoralcommission.org.uk/api/[endpoint]/ -H 'Authorization: Token 123456'
     </pre>
       </figure>
       <figure>
         <figcaption>Authenticate with URL param</figcaption>
         <pre>
-    curl -X GET https://127.0.0.1:8000/api/example/?auth_token=9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
+    curl -X GET https://api.electoralcommission.org.uk/api/[endpoint]/?token=123456'
     </pre>
       </figure>
     </div>
-
-
   </div>
+
+
+  <h2>Errors</h2>
+  <div class="ds-grid">
+    <div>
+      <p>Errors will be reported using HTTP status codes. The body of the error will be formatted as valid JSON
+      and will give a description of the error</p>
+
+
+
+    </div>
+    <div class="ds-stack-smaller">
+      <figure>
+        <figcaption>Example error response</figcaption>
+        <pre>
+    { "detail": "Could not geocode from any source" }
+    </pre>
+      </figure>
+    </div>
+  </div>
+
 {% endblock %}

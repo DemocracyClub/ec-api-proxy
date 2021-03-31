@@ -7,13 +7,10 @@
         <a href="{% url "api_docs" %}" aria-current="true">API Overview</a>
       </li>
       <li>
-        <a href="">Endpoints</a>
+        <a href="{% url "api_docs_endpoints" %}">Endpoints</a>
       </li>
       <li>
-        <a href="">Object reference</a>
-      </li>
-      <li>
-        <a href="">Example responses</a>
+        <a href="{% url "api_docs_notes" %}">Notes</a>
       </li>
     </ul>
   </nav>
@@ -23,7 +20,7 @@
 {% block content %}
 
 {% block api_docs_content %}
-
+  {% include 'api_docs/docs_parent.html' %}
 {% endblock %}
 
 {% endblock %}
