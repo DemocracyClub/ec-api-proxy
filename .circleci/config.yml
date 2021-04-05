@@ -14,7 +14,7 @@ jobs:
         keys:
         - v2-dependencies-{{ checksum "Pipfile.lock" }}
         - v2-dependencies-default
-    - run: &install-pipenv sudo pip install -U cryptography==3.3.2 pipenv --quiet --no-input
+    - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv --quiet --no-input
     - run: pipenv install --dev
     - run: pipenv check # before save_cache so an insecure cache is never saved
     - run: make lambda-layers/DependenciesLayer/requirements.txt
@@ -189,4 +189,16 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-ec-api ]
+          filters: { branches: { only: [ main ] } }
+
+      - sam_deploy:
+          name: sam_deploy_production
+          dc-environment: production
+          dc-deploy-name: production
+          dc-django-settings-module: ec_api.settings.base_lambda
+          requires:
+            - install_and_update_dependencies # SAM CLI is in the dev package set
+            - run-tests                            # staging should only deploy if tests pass
+            - sam_build                       # deploy needs .aws-sam/build/
+          context: [ deployment-production-ec-api ]
           filters: { branches: { only: [ main ] } }
