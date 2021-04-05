@@ -131,7 +131,7 @@ body {
 
 .ds-page main {
   @include container;
-  margin-top: 4.76837rem;
+  margin-top: 2.384185rem;
   padding: 0 1.25rem;
 }
 
@@ -205,4 +205,31 @@ pre {
 .api-action-transaction {
   @extend .ds-card;
   padding:1em;
+}
+
+.phase-banner {
+  padding-top:0.5em;
+  background-color: $white;
+  strong {
+    display: inline-block;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+    color: #fff;
+    background-color: $ECEletricBlue;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    line-height: 1;
+    padding-top: 5px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+  }
+
+  .container {
+    background-color: inherit;
+  }
 }
