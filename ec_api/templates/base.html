@@ -3,7 +3,9 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8"/>
-    <title>EC API</title>
+    <title>{% block title %}
+        Election information API
+    {% endblock %}</title>
     {% load pipeline %}
     {% stylesheet 'styles' %}
   </head>
