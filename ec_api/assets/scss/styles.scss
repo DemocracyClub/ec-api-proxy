@@ -233,3 +233,13 @@ pre {
     background-color: inherit;
   }
 }
+
+
+.ds-footer {
+  border-top: none;
+  background-color: $ECDarkBlue;
+
+  & * {
+    background-color: $ECDarkBlue;
+  }
+}
