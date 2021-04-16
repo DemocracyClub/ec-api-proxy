@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.utils.module_loading import import_string
+from requests import HTTPError
+from rest_framework.exceptions import ParseError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from api_proxy.auth import IsValidAPIUser, TokenWithGetParamAuthentication
@@ -34,11 +36,25 @@ class BaseAuthenticatedAPIView(APIView):
 
 class PostcodeView(BaseAuthenticatedAPIView):
     def get(self, request, postcode, format=None):
-        response = get_upstream_client(request).get_postcode_response(postcode)
-        return Response(response)
+        try:
+            response = get_upstream_client(request).get_postcode_response(
+                postcode
+            )
+            return Response(response)
+        except HTTPError as requests_exception:
+            if str(requests_exception.response.status_code) == "400":
+                raise ParseError(detail=requests_exception.response.json())
+            else:
+                raise requests_exception
 
 
 class UPRNView(BaseAuthenticatedAPIView):
     def get(self, request, uprn, format=None):
-        response = get_upstream_client(request).get_uprn_response(uprn)
-        return Response(response)
+        try:
+            response = get_upstream_client(request).get_uprn_response(uprn)
+            return Response(response)
+        except HTTPError as requests_exception:
+            if str(requests_exception.response.status_code) == "400":
+                raise ParseError(detail=requests_exception.response.json())
+            else:
+                raise (requests_exception)
