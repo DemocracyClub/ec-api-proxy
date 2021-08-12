@@ -79,17 +79,35 @@ class TestTokenWithGetParamAuthentication:
 
         assert result == (key.user, key)
 
+    def test_cached_auth_database_calls(
+        self, django_user_model, api_key, db, django_assert_num_queries
+    ):
+        """
+        Test user and key are returned when key is authenticated
+        """
+        user = django_user_model.objects.create()
+        api_key = APIKey.objects.create(user=user)
+
+        # The first request should cause a DB hit
+        with django_assert_num_queries(2):
+            auth_obj = TokenWithGetParamAuthentication()
+            result = auth_obj.authenticate_credentials(key=api_key.key)
+
+        # The second should be cached
+        with django_assert_num_queries(0):
+            auth_obj = TokenWithGetParamAuthentication()
+            result = auth_obj.authenticate_credentials(key=api_key.key)
+
 
 class TestIsValidAPIUser:
-    @pytest.mark.parametrize("exists", [True, False])
-    def test_has_permission(self, exists, mocker):
+    @pytest.mark.parametrize("is_authenticated", [True, False])
+    def test_has_permission(self, is_authenticated, mocker):
         request = mocker.MagicMock()
-        request.user = mocker.MagicMock(spec=CustomUser)
-        request.user.api_keys.exists.return_value = exists
+        request.user = mocker.MagicMock(
+            spec=CustomUser, is_authenticated=is_authenticated
+        )
         perm_obj = IsValidAPIUser()
-
-        assert perm_obj.has_permission(request, "view") is exists
-        request.user.api_keys.exists.assert_called_once()
+        assert perm_obj.has_permission(request, "view") is is_authenticated
 
     def test_has_permission_anonymous_user(self, mocker):
         # use anonymous user so AttributeError is raised attempting to get keys
