@@ -91,12 +91,12 @@ class TestTokenWithGetParamAuthentication:
         # The first request should cause a DB hit
         with django_assert_num_queries(2):
             auth_obj = TokenWithGetParamAuthentication()
-            result = auth_obj.authenticate_credentials(key=api_key.key)
+            auth_obj.authenticate_credentials(key=api_key.key)
 
         # The second should be cached
         with django_assert_num_queries(0):
             auth_obj = TokenWithGetParamAuthentication()
-            result = auth_obj.authenticate_credentials(key=api_key.key)
+            auth_obj.authenticate_credentials(key=api_key.key)
 
 
 class TestIsValidAPIUser:
