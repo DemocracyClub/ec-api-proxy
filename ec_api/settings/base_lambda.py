@@ -44,4 +44,14 @@ AWS_S3_CUSTOM_DOMAIN = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 
+CACHE_URL = os.environ.get("CACHE_URL", None)
+if CACHE_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+            "LOCATION": f"{CACHE_URL}:11211",
+        }
+    }
+
+
 setup_sentry()
