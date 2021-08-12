@@ -25,6 +25,11 @@ urlpatterns = [
         name="refresh-key",
     ),
     path(
+        "details",
+        views.UpdateProfileDetailsView.as_view(),
+        name="add_profile_details",
+    ),
+    path(
         "",
         views.ProfileView.as_view(),
         name="profile",
