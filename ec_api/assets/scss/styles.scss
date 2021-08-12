@@ -139,7 +139,7 @@ body {
   background-color: $ECLightBlue;
   border-top: 1px $ECEletricBlue solid;
   color: $ECDarkBlue;
-  h2 {
+  h1 {
     font-size: $s4;
     line-height: 2em;
     vertical-align: center;
@@ -214,8 +214,8 @@ pre {
     display: inline-block;
     outline: 2px solid transparent;
     outline-offset: -2px;
-    color: #fff;
-    background-color: $ECEletricBlue;
+    color: #000;
+    background-color: #8CCCE3;
     letter-spacing: 1px;
     text-decoration: none;
     text-transform: uppercase;

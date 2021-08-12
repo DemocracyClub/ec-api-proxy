@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8"/>
     <title>{% block title %}
-        Election information API
+      Election information API
     {% endblock %}</title>
     {% load pipeline %}
     {% stylesheet 'styles' %}
@@ -12,43 +12,47 @@
   <body>
     <div class="ds-page">
       <div class="header-wrapper">
-        <header class="ds-header">
-          <a class="ds-skip-link" href="#main">skip to content</a>
-          <a class="ds-header-home" href="/">
-            {% include "logo.html" %}
-          </a>
-          <nav class="ds-cluster">
-            <ul>
-              <li>
-                <a href="{% url "home_view" %}">Home</a>
-              </li>
-              <li>
-                <a href="{% url "api_docs" %}">API docs</a>
-              </li>
-              <li>
-                <a href="{% url "widget_view" %}">Widget</a>
-              </li>
-              <li>
-                {% if request.user.is_authenticated %}
-                  <a href="{% url 'users:logout' %}">Logout</a>
-                {% else %}
-                  <a href="{% url 'users:login' %}">Login / Register</a>
-                {% endif %}
-              </li>
-            </ul>
-          </nav>
+        <header>
+          <div class="ds-header">
+            <a class="ds-skip-link" href="#main">skip to content</a>
+            <a class="ds-header-home" href="/">
+              {% include "logo.html" %}
+            </a>
+            <nav class="ds-cluster">
+              <ul>
+                <li>
+                  <a href="{% url "home_view" %}">Home</a>
+                </li>
+                <li>
+                  <a href="{% url "api_docs" %}">API docs</a>
+                </li>
+                <li>
+                  <a href="{% url "widget_view" %}">Widget</a>
+                </li>
+                <li>
+                  {% if request.user.is_authenticated %}
+                    <a href="{% url 'users:logout' %}">Logout</a>
+                  {% else %}
+                    <a href="{% url 'users:login' %}">Login / Register</a>
+                  {% endif %}
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div class="sub-header">
+            <div class="container">
+              <h1 class="ds-h2">Developer API</h1>
+            </div>
+            <div class="phase-banner">
+              <div class="container">
+                <p><strong>Alpha</strong>  This is a new service – your feedback will help us to improve it.  </p>
+              </div>
+            </div>
+          </div>
+
         </header>
       </div>
-      <div class="sub-header">
-        <div class="container">
-          <h2 class="">Developer API</h2>
-        </div>
-        <div class="phase-banner">
-          <div class="container">
-            <p><strong>Alpha</strong>  This is a new service – your feedback will help us to improve it.  </p>
-          </div>
-        </div>
-      </div>
+
 
 
       <main id="main" class="ds-stack">
