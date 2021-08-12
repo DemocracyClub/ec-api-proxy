@@ -39,7 +39,7 @@ class IsValidAPIUser(BasePermission):
     """
 
     def has_permission(self, request, view):
-        try:
-            return request.user.api_keys.exists()
-        except AttributeError:
-            return False
+        if request.user.is_authenticated:
+            # If we're authenticated, we always have permission
+            return True
+        return False
