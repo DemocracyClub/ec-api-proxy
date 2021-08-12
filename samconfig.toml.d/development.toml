@@ -25,6 +25,13 @@ parameter_overrides = """
   AppDjangoSettingsModule=ec_api.settings.base_lambda \
   AppSecretKey=badf00d \
   AppIsBehindCloudFront=False \
+  AppSentryDSN='' \
+  AppSamLambdaConfigEnv=dev \
+  AppDomain='' \
+  AppPostgresDatabaseName='' \
+  AppPostgresPassword='' \
+  GitHash="0000" \
+  AppPostgresHost='' \
 """
 
 [SYM.logs]
