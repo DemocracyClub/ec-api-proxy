@@ -72,12 +72,14 @@ class TestTokenWithGetParamAuthentication:
         Test user and key are returned when key is authenticated
         """
         key = mocker.MagicMock(spec=APIKey, key=api_key)
+        key.user.pk = 1
         mocker.patch.object(APIKey.objects, "get", return_value=key)
 
         auth_obj = TokenWithGetParamAuthentication()
         result = auth_obj.authenticate_credentials(key=api_key)
 
-        assert result == (key.user, key)
+        assert type(result[0]) == CustomUser
+        assert result[1] == key.key
 
     def test_cached_auth_database_calls(
         self, django_user_model, api_key, db, django_assert_num_queries
@@ -91,12 +93,12 @@ class TestTokenWithGetParamAuthentication:
         # The first request should cause a DB hit
         with django_assert_num_queries(2):
             auth_obj = TokenWithGetParamAuthentication()
-            result = auth_obj.authenticate_credentials(key=api_key.key)
+            auth_obj.authenticate_credentials(key=api_key.key)
 
         # The second should be cached
         with django_assert_num_queries(0):
             auth_obj = TokenWithGetParamAuthentication()
-            result = auth_obj.authenticate_credentials(key=api_key.key)
+            auth_obj.authenticate_credentials(key=api_key.key)
 
 
 class TestIsValidAPIUser:
