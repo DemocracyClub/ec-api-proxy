@@ -22,6 +22,7 @@ faker = "*"
 requests = "*"
 django-apiblueprint-view = "*"
 django-debug-toolbar = "*"
+python-memcached = "*"
 
 [dev-packages]
 black = "==20.8b1"
