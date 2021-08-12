@@ -4,6 +4,9 @@ import os
 ALLOWED_HOSTS = ["*"]
 DEBUG = os.environ.get("DEBUG", False)
 
+WHITENOISE_AUTOREFRESH = False
+WHITENOISE_STATIC_PREFIX = "/static/"
+
 if os.environ.get("APP_IS_BEHIND_CLOUDFRONT", False) in [
     True,
     "true",
@@ -14,6 +17,7 @@ if os.environ.get("APP_IS_BEHIND_CLOUDFRONT", False) in [
 else:
     USE_X_FORWARDED_HOST = False
     FORCE_SCRIPT_NAME = "/Prod"
+    STATIC_URL = FORCE_SCRIPT_NAME + WHITENOISE_STATIC_PREFIX
 
 DATABASES = {
     "default": {
@@ -43,5 +47,15 @@ AWS_S3_CUSTOM_DOMAIN = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
+
+CACHE_URL = os.environ.get("CACHE_URL", None)
+if CACHE_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+            "LOCATION": f"{CACHE_URL}:11211",
+        }
+    }
+
 
 setup_sentry()

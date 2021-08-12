@@ -19,6 +19,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
 
     email = models.EmailField(_("email address"), unique=True)
+    name = models.CharField(
+        max_length=255, help_text=_("Either your name or an organisation name")
+    )
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,

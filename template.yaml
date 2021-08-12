@@ -69,6 +69,14 @@ Parameters:
     Type: String
 
 Resources:
+  DjangoMemcache:
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      Engine: memcached
+      NumCacheNodes: 1
+      CacheNodeType: cache.t3.micro
+      CacheSecurityGroupNames:
+        - default
 
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -102,6 +110,7 @@ Resources:
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
+          CACHE_URL: !GetAtt DjangoMemcache.ConfigurationEndpoint.Address
       Events:
         HTTPRequests:
           Type: Api
