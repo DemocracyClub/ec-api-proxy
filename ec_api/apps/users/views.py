@@ -78,13 +78,13 @@ class AuthenticateView(TemplateView):
         get a user from the request.
         """
         user = get_user(request)
-        if user:
-            login(request, user)
-            if not user.name:
-                return redirect("users:add_profile_details")
-            return redirect("users:profile")
+        if not user:
+            return super().get(request, *args, **kwargs)
 
-        return super().get(request, *args, **kwargs)
+        login(request, user)
+        if not user.name:
+            return redirect("users:add_profile_details")
+        return redirect("users:profile")
 
 
 class UpdateProfileDetailsView(UpdateView):
