@@ -91,13 +91,26 @@ class TestAuthenticateView:
         assertContains(response, "<h1>Something went wrong</h1>")
 
     @pytest.mark.django_db
-    def test_get_logs_in_user(self, client, mocker, url):
+    def test_get_logs_in_user_redirects_to_edit_profile(
+        self, client, mocker, url
+    ):
         user = UserFactory()
         mocker.patch("users.views.get_user", return_value=user)
         response = client.get(url, follow=True)
 
         assert response.wsgi_request.user == user
-        assertContains(response, "<h1>Profile</h1>")
+        assertContains(response, "<h1>Update Profile</h1>")
+
+    @pytest.mark.django_db
+    def test_get_logs_in_user_with_name_redirects_to_profile(
+        self, client, mocker, url
+    ):
+        user = UserFactory(name="Foo Bar")
+        mocker.patch("users.views.get_user", return_value=user)
+        response = client.get(url, follow=True)
+
+        assert response.wsgi_request.user == user
+        assertContains(response, "Foo Bar")
 
 
 class TestProfileView:

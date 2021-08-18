@@ -4,7 +4,8 @@
   <div class="ds-card">
     <div class="ds-card-body">
       <h1>Profile</h1>
-      <p>Hello, {{ request.user.email}}. From here you can manage and create new API keys.</p>
+      <p>Hello, {{ request.user.name }}. From here you can manage and create new API keys.</p>
+      <p><a class="ds-cta" href="{% url "users:add_profile_details" %}">Edit profile</a></p>
     </div>
   </div>
 

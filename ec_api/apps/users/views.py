@@ -9,11 +9,11 @@ from django.views.generic.base import TemplateView
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 from sesame.utils import get_user, get_query_string
 
 from frontend.utils import get_domain
-from users.forms import LoginForm, APIKeyForm
+from users.forms import LoginForm, APIKeyForm, UserProfileForm
 
 User = get_user_model()
 
@@ -78,11 +78,24 @@ class AuthenticateView(TemplateView):
         get a user from the request.
         """
         user = get_user(request)
-        if user:
-            login(request, user)
-            return redirect("users:profile")
+        if not user:
+            return super().get(request, *args, **kwargs)
 
-        return super().get(request, *args, **kwargs)
+        login(request, user)
+        if not user.name:
+            return redirect("users:add_profile_details")
+        return redirect("users:profile")
+
+
+class UpdateProfileDetailsView(UpdateView):
+    form_class = UserProfileForm
+    template_name = "users/update_profile.html"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse("users:profile")
 
 
 class ProfileView(LoginRequiredMixin, FormView):

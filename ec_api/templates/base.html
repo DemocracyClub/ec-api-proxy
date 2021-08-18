@@ -29,15 +29,15 @@
                 <li>
                   <a href="{% url "widget_view" %}">Widget</a>
                 </li>
-                <li>
-                  {% if request.user.is_authenticated %}
-                    <a href="{% url 'users:logout' %}">Logout</a>
-                  {% else %}
-                    <a href="{% url 'users:login' %}">Login / Register</a>
-                  {% endif %}
-                </li>
+                {% if request.user.is_authenticated %}
+                  <li><a href="{% url 'users:profile' %}">Your profile</a></li>
+                  <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                {% else %}
+                  <li><a href="{% url 'users:login' %}">Login / Register</a></li>
+                {% endif %}
               </ul>
             </nav>
+
           </div>
           <div class="sub-header">
             <div class="container">
