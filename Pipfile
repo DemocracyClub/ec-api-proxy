@@ -23,6 +23,7 @@ requests = "*"
 django-apiblueprint-view = "*"
 django-debug-toolbar = "*"
 python-memcached = "*"
+werkzeug = "==2.0.2"
 
 [dev-packages]
 black = "==20.8b1"
