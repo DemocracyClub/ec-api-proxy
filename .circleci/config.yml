@@ -130,6 +130,7 @@ jobs:
                AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
                AppDomain='$PUBLIC_FQDN' \
               "
+        no_output_timeout: 30m
     - run: pipenv run migratedb
     - run:
         name: printenv PUBLIC_FQDN CERTIFICATE_ARN
