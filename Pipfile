@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "<3.0"
+django = "<4.0"
 aws-wsgi = {ref = "a5b800373c326e75f705d400c48f7df301409724", git = "https://github.com/DemocracyClub/awsgi.git"}
 sentry-sdk = "*"
 django-pipeline = "*"
@@ -15,12 +15,12 @@ install = "*"
 dc-design-system = {ref = "0.1.1", git = "https://github.com/DemocracyClub/design-system.git"}
 django-sesame = "*"
 psycopg2-binary = "*"
-django-ses = "<2.0"
-django-rest-framework = "3.12.2"
+django-ses = "*"
+django-rest-framework = "<4.0"
 uk-election-ids = "*"
 faker = "*"
 requests = "*"
-django-apiblueprint-view = "*"
+django-apiblueprint-view = "<3.0"
 django-debug-toolbar = "*"
 python-memcached = "*"
 werkzeug = "==2.0.2"
