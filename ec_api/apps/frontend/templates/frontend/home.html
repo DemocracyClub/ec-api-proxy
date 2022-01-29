@@ -5,60 +5,61 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="phase-banner">Election information API v1</h1>
-  <p>
-    Use the election information API to provide your users with all the information they need to take part in
-    elections, all in one place.
-  </p>
-  <p>
-    The API uses postcode information to give voters tailored information on where and when to vote, as well
-    as the candidates standing for elections in their area.
-  </p>
-  <p>
-    The service is run by <a href="https://democracyclub.org.uk/">Democracy Club</a>,
-    on behalf of the <a href="https://www.electoralcommission.org.uk/">Electoral Commission</a>.
-    Democracy Club is a community
-    interest company with a mission to ensure everyone has access to quality information on democratic processes,
-    particularly on elections. We work together to make sure voters have the latest information on upcoming elections.
-  </p>
-  <p>This is a new service. Share your feedback and help us shape the next version.</p>
+  <div class="ds-stack-smaller">
+    <h1 class="phase-banner">Election information API v1</h1>
+    <p>
+      Use the election information API to provide your users with all the information they need to take part in
+      elections, all in one place.
+    </p>
+    <p>
+      The API uses postcode information to give voters tailored information on where and when to vote, as well
+      as the candidates standing for elections in their area.
+    </p>
+    <p>
+      The service is run by <a href="https://democracyclub.org.uk/">Democracy Club</a>,
+      on behalf of the <a href="https://www.electoralcommission.org.uk/">Electoral Commission</a>.
+      Democracy Club is a community
+      interest company with a mission to ensure everyone has access to quality information on democratic processes,
+      particularly on elections. We work together to make sure voters have the latest information on upcoming elections.
+    </p>
+    <p>This is a new service. Share your feedback and help us shape the next version.</p>
 
-  <h2>What’s available in v1</h2>
-
-
-  <h3>Latest election name and date</h3>
-  <p>Let your users know what elections are coming up in their area. The API will show dates for every type of election,
-    from by-elections to general elections. It also tracks if an election has been cancelled.</p>
-
-  <p>Town, parish and community council elections, and referendums, are not included in this version.</p>
-
-  <h3>Electoral registration contact information</h3>
-  <p>Help your users with postal and proxy forms, or electoral registration questions. Provide them with the telephone,
-    email, and postal address for their local elections team.</p>
-
-  <p>Two addresses can be displayed for Scotland postcodes: one for the electoral registration team, and another for
-    the local council.</p>
-
-  <h3>Polling station information</h3>
-  <p>Provide users with the location of their polling station ahead of polling day, and in some cases, a map to help
-    plan their route.</p>
-
-  <p>We aim to cover every postcode in the UK, but this isn’t always possible. We ask local councils to share this data
-    with us. Unfortunately not all councils do.</p>
-
-  <p>Accuracy is also important to us. Polling station data can only be published if it contains no errors.</p>
-
-  <p>If you work at a local authority and would like to provide polling station data, please follow the
-    <a href="https://democracyclub.org.uk/projects/polling-stations/upload/">few simple
-      steps to export data from your EMS</a>.</p>
-
-  <h3>Candidate information</h3>
-  <p>Give your users a heads up on who will be on their ballot paper on polling day. The API will show the name of the
-    candidate, and the party they’re standing for.</p>
-  <h3>Not available in v1</h3>
-  <p>Welsh language support is not included in v1. We are working on this for v2.</p>
+    <h2>What’s available in v1</h2>
 
 
+    <h3>Latest election name and date</h3>
+    <p>Let your users know what elections are coming up in their area. The API will show dates for every type of election,
+      from by-elections to general elections. It also tracks if an election has been cancelled.</p>
 
+    <p>Town, parish and community council elections, and referendums, are not included in this version.</p>
+
+    <h3>Electoral registration contact information</h3>
+    <p>Help your users with postal and proxy forms, or electoral registration questions. Provide them with the telephone,
+      email, and postal address for their local elections team.</p>
+
+    <p>Two addresses can be displayed for Scotland postcodes: one for the electoral registration team, and another for
+      the local council.</p>
+
+    <h3>Polling station information</h3>
+    <p>Provide users with the location of their polling station ahead of polling day, and in some cases, a map to help
+      plan their route.</p>
+
+    <p>We aim to cover every postcode in the UK, but this isn’t always possible. We ask local councils to share this data
+      with us. Unfortunately not all councils do.</p>
+
+    <p>Accuracy is also important to us. Polling station data can only be published if it contains no errors.</p>
+
+    <p>If you work at a local authority and would like to provide polling station data, please follow the
+      <a href="https://democracyclub.org.uk/projects/polling-stations/upload/">few simple
+        steps to export data from your EMS</a>.</p>
+
+    <h3>Candidate information</h3>
+    <p>Give your users a heads up on who will be on their ballot paper on polling day. The API will show the name of the
+      candidate, and the party they’re standing for.</p>
+    <h3>Not available in v1</h3>
+    <p>Welsh language support is not included in v1. We are working on this for v2.</p>
+
+
+  </div>
 
 {% endblock %}
