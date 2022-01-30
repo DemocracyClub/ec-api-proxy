@@ -190,7 +190,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-ec-api ]
-          filters: { branches: { only: [ reduce-sentry-transactions, main ] } }
+          filters: { branches: { only: [ /stage-deploy-.*/, main ] } }
 
       - sam_deploy:
           name: sam_deploy_production
