@@ -20,4 +20,4 @@ class WidgetJSView(View):
     def get(self, request, *args, **kwargs):
         req = requests.get(WIDGET_S3_URL)
         req.raise_for_status()
-        return HttpResponse(req.text)
+        return HttpResponse(req.text, content_type="application/javascript")
