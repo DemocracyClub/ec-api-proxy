@@ -1,11 +1,124 @@
 {%  extends "base.html" %}
 
 {% block content %}
-  <h1>Widget</h1>
+  <h1>Election Widget</h1>
   <h2>Demo</h2>
-
-  <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-candidates="true"></div>
-  <script type="text/javascript"
+  <p>You can add the Electoral Commission’s election look up widget to any website.</p>
+  <figure>
+    <div id="widget-area">
+      <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-candidates="true">
+      </div>
+      <script type="text/javascript"
           src="{% url "widget_js" %}">
-  </script>
+      </script>
+    </div>
+  </figure>
+
+  <p>First, choose from the options below and hit ‘Generate’.</p>
+  <form id="widget-options">
+    <fieldset>
+      <legend>Widget options</legend>
+      <div class="ds-stack-smallest">
+
+        <label for="no-lang" class="ds-field-radio">
+          <input type="radio" name="language" id="no-lang" value="no-lang" checked="checked">
+          <span>In English only</span>
+        </label>
+        <label for="en" class="ds-field-radio">
+          <input type="radio" name="language" id="en" value="en">
+          <span>With language toggle (Default English)</span>
+        </label>
+
+        <label for="cy" class="ds-field-radio">
+          <input type="radio" name="language" id="cy" value="cy">
+          <span>With language toggle (Default Welsh)</span>
+        </label>
+      </div>
+    </fieldset>
+    <button type="submit" class="ds-button">Generate</button>
+  </form>
+
+  <p>Then, use the code to embed the widget in your website.</p>
+  <div id="code-area">
+  <pre><code>
+  &lt;noscript&gt;
+    &lt;a href="https://www.electoralcommission.org.uk/i-am-a/voter/your-election-information">
+      Find election information at
+      &lt;span aria-label="The Electoral Commision">
+      electoralcommission.org.uk&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/noscript&gt;
+
+  &lt;div id="dc_wdiv" aria-live="polite" role="region"
+    data-candidates="true"&gt;
+  &lt;/div&gt;
+  &lt;script type="text/javascript" src="https://api.electoralcommission.org.uk/widget/widget.js"&gt;
+  &lt;/script&gt;
+  </code></pre>
+  </div>
+
+  <script>
+      var form = document.querySelector('#widget-options');
+      if (form) {
+        form.addEventListener('submit', handleWidgetOptions);
+      }
+
+      function handleWidgetOptions(event) {
+        event.preventDefault();
+        createWidgetVersion(form.elements.language.value);
+      }
+
+      function getEmbedCode(customAttributes) {
+        return '<pre><code>&lt;noscript&gt;\n' +
+          '&lt;a href=&quot;https://www.electoralcommission.org.uk/i-am-a/voter/your-election-information&quot;&gt;Find election information at\n' +
+          '&lt;span aria-label=&quot;The Electoral Commission&quot;&gt;electoralcommission.org.uk&lt;/span&gt;&lt;/a&gt;' +
+          '&lt;/noscript&gt;\n' +
+          '&lt;div id="dc_wdiv" ' + customAttributes + '&gt;&lt;/div&gt;\n' +
+          '&lt;script type="text/javascript"\n' +
+          '  src="https://api.electoralcommission.org.uk/widget/widget.js"&gt;\n' +
+          '&lt;/script&gt;\n' +
+          '</code></pre>\n';
+      }
+
+      function makeAttributeList(language) {
+        var attrs = '';
+        if ((language === 'en') || (language === 'cy')) {
+          attrs = 'data-language="' + language + '" ';
+        }
+        return attrs + 'aria-live="polite" role="region" data-candidates="true"';
+      }
+
+      function makeWidget(language) {
+        var div = document.createElement('div');
+        div.setAttribute('id', 'dc_wdiv');
+        if ((language === 'en') || (language === 'cy')) {
+          div.setAttribute('data-language', language);
+        }
+        div.setAttribute('aria-live', 'polite');
+        div.setAttribute('role', 'region');
+        div.setAttribute('data-candidates', 'true');
+        return div;
+      }
+
+      function makeScript() {
+        var script = document.createElement('script');
+        script.type = "text/javascript";
+        script.src = "https://api.electoralcommission.org.uk/widget/widget.js";
+        return script;
+      }
+
+      function createWidgetVersion(language) {
+        debugger
+        var widgetArea = document.querySelector('#widget-area');
+        var codeArea = document.querySelector('#code-area');
+        var widget = makeWidget(language);
+        var script = makeScript();
+        var embedCode = getEmbedCode(makeAttributeList(language));
+        widgetArea.innerHTML = '';
+        widgetArea.appendChild(widget);
+        widgetArea.appendChild(script);
+        codeArea.innerHTML = embedCode;
+      }
+    </script>
+
 {% endblock %}
