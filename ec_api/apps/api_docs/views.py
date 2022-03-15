@@ -10,6 +10,10 @@ class APIDocsHome(TemplateView):
     template_name = "api_docs/home.html"
 
 
+class APIDocsConcepts(TemplateView):
+    template_name = "api_docs/concepts.html"
+
+
 class BaseAPIDocsBlueprintView(ApiBlueprintView):
     blueprint_base = os.path.join(
         settings.BASE_DIR, "apps/api_docs/blueprints/"

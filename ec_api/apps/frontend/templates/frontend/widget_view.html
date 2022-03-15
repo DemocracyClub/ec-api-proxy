@@ -1,9 +1,22 @@
 {%  extends "base.html" %}
 
 {% block content %}
-  <h1>Election Widget</h1>
-  <h2>Demo</h2>
-  <p>You can add the Electoral Commission’s election look up widget to any website.</p>
+  <h1 class="phase-banner">Election Widget</h1>
+  <p>
+    Embed our free lookup widget on your website, and give your users access to postcode specific information about
+    voting in their area. By entering their postcode, your users can quickly access information on the following:
+  </p>
+  <ul>
+  <li>Upcoming elections, including the election type and date</li>
+  <li>Polling station information, including address</li>
+  <li>Candidate information</li>
+  <li>Contact details for electoral services teams at local councils, and electoral registration offices in
+    Scotland – useful for submitting postal or proxy vote application forms
+  </li>
+  </ul>
+  <p>You can add the Electoral Commission’s election lookup widget to any website.</p>
+  <p>Here’s how the lookup widget will look on your site. Feel free to test it by entering a
+    postcode, bearing in mind that we add data in the run up to the polls.</p>
   <figure>
     <div id="widget-area">
       <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-candidates="true">
@@ -17,7 +30,7 @@
   <p>First, choose from the options below and hit ‘Generate’.</p>
   <form id="widget-options">
     <fieldset>
-      <legend>Widget options</legend>
+      <legend>Lookup widget options</legend>
       <div class="ds-stack-smallest">
 
         <label for="no-lang" class="ds-field-radio">
@@ -38,7 +51,7 @@
     <button type="submit" class="ds-button">Generate</button>
   </form>
 
-  <p>Then, use the code to embed the widget in your website.</p>
+  <p>Then, use the code to embed the lookup widget in your website.</p>
   <div id="code-area">
   <pre><code>
   &lt;noscript&gt;
@@ -120,5 +133,4 @@
         codeArea.innerHTML = embedCode;
       }
     </script>
-
 {% endblock %}
