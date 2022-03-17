@@ -60,6 +60,10 @@ Parameters:
     Description: "The password for the postgres user"
     Type: String
 
+  AppWidgetS3URL:
+    Description: "The URL to the widget JS"
+    Type: String
+
   AppSamLambdaConfigEnv:
     Description: "The lambda config environment passed to the app used to init sentry."
     Type: String
@@ -108,6 +112,7 @@ Resources:
           POSTGRES_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
+          WIDGET_S3_URL: !Ref AppWidgetS3URL
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
           CACHE_URL: !GetAtt DjangoMemcache.ConfigurationEndpoint.Address

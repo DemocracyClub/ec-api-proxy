@@ -179,8 +179,9 @@ PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 
 
-WIDGET_S3_URL = (
-    "https://ec-api-staging-widget.s3.eu-west-2.amazonaws.com/widget.js"
+WIDGET_S3_URL = os.environ.get(
+    "WIDGET_S3_URL",
+    "https://ec-api-staging-widget.s3.eu-west-2.amazonaws.com/widget.js",
 )
 
 
