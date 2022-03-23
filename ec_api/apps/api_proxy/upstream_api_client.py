@@ -33,11 +33,13 @@ class DCApiClient:
             candidate["person"].pop("email", None)
             candidate["person"].pop("absolute_url", None)
             candidate["person"].pop("photo_url", None)
+            candidate["person"].pop("leaflets", None)
         return candidates
 
     def clean_ballots(self, ballots):
         for ballot in ballots:
             ballot.pop("wcivf_url", None)
+            ballot.pop("hustings", None)
             ballot.pop("ballot_url", None)
             if ballot["candidates_verified"]:
                 ballot["candidates"] = self.clean_candidates(
