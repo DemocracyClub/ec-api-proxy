@@ -186,6 +186,7 @@ class DatesMixin:
                 # TODO: polling station builder here
                 "polling_station_known": False,
                 "custom_finder": None,
+                "advance_voting_station": None,
                 "report_problem_url": None,
                 "station": None,
             },
