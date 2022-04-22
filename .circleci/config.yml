@@ -6,7 +6,7 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-    - image: circleci/python:3.8.6
+    - image: circleci/python:3.8.12
     working_directory: ~/repo
     steps:
     - checkout
@@ -16,6 +16,7 @@ jobs:
         - v2-dependencies-default
     - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv pip==21.1 --quiet --no-input
     - run: pipenv install --dev
+    - run: pip install -U poetry
     - run: pipenv check # before save_cache so an insecure cache is never saved
     - run: make lambda-layers/DependenciesLayer/requirements.txt
     - persist_to_workspace:
@@ -29,7 +30,7 @@ jobs:
 
   run-tests:
     docker:
-    - image: circleci/python:3.8.6
+    - image: circleci/python:3.8.12
     working_directory: ~/repo
     steps:
       - checkout
@@ -69,6 +70,7 @@ jobs:
     - attach_workspace:
         at: ~/repo/
     - run: pip install --upgrade pip
+    - run: pip install aws-sam-cli==1.43.0
     - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
     - run: make collectstatic
     - run: sam build ${DASH_DASH_DEBUG}
@@ -78,7 +80,7 @@ jobs:
 
   sam_deploy:
     docker:
-    - image: circleci/python:3.8.6
+    - image: circleci/python:3.8.12
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -128,6 +130,7 @@ jobs:
                AppPostgresDatabaseName='$POSTGRES_DATABASE_NAME' \
                AppPostgresPassword='$POSTGRES_PASSWORD' \
                AppWidgetS3URL='$WIDGET_S3_URL' \
+               AppDCAPIToken='$DC_API_TOKEN' \
                AppSamLambdaConfigEnv='$SAM_LAMBDA_CONFIG_ENV' \
                AppDomain='$PUBLIC_FQDN' \
               "
