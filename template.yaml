@@ -64,6 +64,10 @@ Parameters:
     Description: "The URL to the widget JS"
     Type: String
 
+  AppDCAPIToken:
+    Description: "Token for the DC API"
+    Type: String
+
   AppSamLambdaConfigEnv:
     Description: "The lambda config environment passed to the app used to init sentry."
     Type: String
@@ -113,6 +117,7 @@ Resources:
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
           WIDGET_S3_URL: !Ref AppWidgetS3URL
+          DC_API_TOKEN: !Ref AppDCAPIToken
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
           CACHE_URL: !GetAtt DjangoMemcache.ConfigurationEndpoint.Address
