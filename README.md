@@ -10,16 +10,11 @@
 
 This section assumes a working python 3.8 environment with Pipenv installed.
 
-To install the project requirements:
-
-`pipenv install`
-
-For a developer install (or for running tests):
-
-`pipenv install --dev`
-
-Now create a `local.py` file in `ec_api/settings/`. Copy
-`ec_api/settings/local.py.example` to get started.
+* `cp ec_api/settings/local.py.example ec_api/settings/local.py`
+* Install Python dependencies: `pipenv install --dev`
+* Run the test suite: `pytest`
+* Run lint checks: `pytest --flakes`
+* Auto-format: `black .`
 
 ## Pre-commit
 
