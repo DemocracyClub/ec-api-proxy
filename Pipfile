@@ -16,7 +16,6 @@ dc-design-system = {ref = "0.1.1", git = "https://github.com/DemocracyClub/desig
 django-sesame = "*"
 psycopg2-binary = "*"
 django-ses = "*"
-django-rest-framework = "<4.0"
 uk-election-ids = "*"
 faker = "*"
 requests = "*"
@@ -24,6 +23,7 @@ django-apiblueprint-view = "<3.0"
 django-debug-toolbar = "*"
 python-memcached = "*"
 werkzeug = "==2.0.2"
+djangorestframework = "*"
 
 [dev-packages]
 black = "==22.3.0"
