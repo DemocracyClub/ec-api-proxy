@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@0.2.1
+  codecov: codecov/codecov@3.2.4
 
 jobs:
   install_and_update_dependencies:
@@ -54,6 +55,8 @@ jobs:
           destination: test-results
       - store_test_results:
           path: test-results
+      - codecov/upload:
+          file:  /home/circleci/repo/test-results/junit.xml
 
   sam_build:
     docker:
@@ -162,8 +165,6 @@ jobs:
           sentry-cli releases --org democracy-club-gp new $CIRCLE_SHA1 --project ec-api
           sentry-cli releases --org democracy-club-gp set-commits --auto $CIRCLE_SHA1
           sentry-cli releases --org democracy-club-gp finalize $CIRCLE_SHA1
-
-
 
 workflows:
   main:
