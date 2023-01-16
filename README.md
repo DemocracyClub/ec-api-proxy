@@ -24,3 +24,6 @@ code standard issues before committing them.
 Install the hooks with:
 
 `pre-commit install`
+
+
+[![codecov](https://codecov.io/gh/DemocracyClub/ec-api-proxy/branch/hotfix/dependency-upgrades/graph/badge.svg?token=M9VDGSYISQ)](https://codecov.io/gh/DemocracyClub/ec-api-proxy)
