@@ -46,9 +46,11 @@ INSTALLED_APPS = [
     "api_docs",
     "apiblueprint_view",
     "debug_toolbar",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -122,6 +124,13 @@ AUTHENTICATION_BACKENDS = ["sesame.backends.ModelBackend"]
 SESAME_MAX_AGE = 60 * 10
 SESAME_ONE_TIME = True
 SESAME_TOKEN_NAME = "login_token"
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_METHODS = [
+    "GET",
+    "OPTIONS",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
