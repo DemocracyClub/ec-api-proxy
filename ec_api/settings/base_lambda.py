@@ -31,7 +31,6 @@ DATABASES = {
 
 DC_API_TOKEN = os.environ.get("DC_API_TOKEN")
 
-
 EMAIL_BACKEND = "django_ses.SESBackend"
 AWS_SES_REGION_NAME = "eu-west-2"
 AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
