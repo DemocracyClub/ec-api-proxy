@@ -71,6 +71,7 @@ Resources:
               - Authorization
               - Origin
               - Referer
+          ResponseHeadersPolicyId: 5cc3b908-e619-4b99-88e5-2cf7f45965bd
           ViewerProtocolPolicy: "redirect-to-https"
 
         CacheBehaviors:
