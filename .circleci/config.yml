@@ -67,7 +67,7 @@ jobs:
     - attach_workspace:
         at: ~/repo/
     - run: pip install --upgrade pip
-    - run: pip install aws-sam-cli==1.43.0
+    - run: pip install aws-sam-cli==1.79.0
     - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
     - run: make collectstatic
     - run: sam build ${DASH_DASH_DEBUG}
@@ -103,7 +103,7 @@ jobs:
         - v2-dependencies-{{ checksum "Pipfile.lock" }}
         - v2-dependencies-default
     - run: *install-pipenv
-    - run: pip install aws-sam-cli==1.43.0
+    - run: pip install aws-sam-cli==1.79.0
 
     - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE SAM_LAMBDA_CONFIG_ENV SAM_PUBLIC_CONFIG_ENV
     - run: printenv SECRET_KEY | md5sum
