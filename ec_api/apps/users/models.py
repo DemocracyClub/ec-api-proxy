@@ -60,7 +60,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class APIKey(TimestampMixin, models.Model):
-
     name = models.CharField(
         max_length=255, help_text="To help identify your key"
     )

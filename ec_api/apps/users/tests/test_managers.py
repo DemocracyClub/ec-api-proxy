@@ -16,7 +16,6 @@ class TestCustomUserManager:
         assert bool(user.pk) is True
 
     def test_create_superuser(self):
-
         superuser = CustomUser.objects.create_superuser(
             email="example@email.com",
             password=fake.password(),

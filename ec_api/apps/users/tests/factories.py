@@ -6,7 +6,6 @@ fake = Faker()
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-
     email = factory.Faker("email")
 
     class Meta:
@@ -14,7 +13,6 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class APIKeyFactory(factory.django.DjangoModelFactory):
-
     name = factory.Faker("sentence")
     usage_reason = factory.Faker("paragraph")
     user = factory.SubFactory(UserFactory)

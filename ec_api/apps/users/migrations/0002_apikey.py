@@ -8,7 +8,6 @@ import users.mixins
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0001_initial"),
     ]
