@@ -46,7 +46,7 @@ region = "eu-west-2"
 template = "public-access-template.yaml"
 stack_name = "ECApiPublicAccess-sym-dev"
 region = "eu-west-2"
-capabilities "CAPABILITY_IAM"
+capabilities = "CAPABILITY_IAM"
 parameter_overrides = """
   StackNameSuffix="sym-dev" \
   CertificateArn="arn:aws:acm:us-east-1:486957117838:certificate/26ca3576-14a4-452d-b567-b286d8287308" \
