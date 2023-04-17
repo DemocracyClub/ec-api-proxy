@@ -6,6 +6,9 @@ Parameters:
   StackNameSuffix:
     Description: "The suffix (automatically prefixed with 'ECApi-') constructing the name of the CloudFormation Stack that created the API Gateway & Lambda function to which this Stack will attach TLS, CDN, and DNS."
     Type: String
+  ECStarletteApi:
+    Description: "Starlette API"
+    Type: String
 
   CertificateArn:
     Type: String

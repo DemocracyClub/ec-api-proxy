@@ -8,7 +8,6 @@ Globals:
   Api:
     BinaryMediaTypes:
       - "*/*"
-      - "*/*"
 
 Parameters:
 
@@ -139,6 +138,35 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${ECApiFunction}
       RetentionInDays: !Ref AppLogRetentionDays
+
+  ECAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: APIAuthFunction
+        Authorizers:
+          APIAuthFunction:
+            FunctionArn: !GetAtt APIAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              QueryStrings:
+                - token
+              ReauthorizeEvery: 3600
+
+  APIAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
+      CodeUri: ./api_endpoints/api_auth
+      Handler: handler.lambda_handler
+      Environment:
+        Variables:
+          POSTGRES_HOST: !Ref AppPostgresHost
+          POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
+          POSTGRES_PASSWORD: !Ref AppPostgresPassword
+      Runtime: python3.8
+
 
 Outputs:
   ECApiFqdn:
