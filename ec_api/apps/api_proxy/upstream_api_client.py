@@ -6,6 +6,8 @@ import requests
 from django.conf import settings
 from rest_framework.reverse import reverse
 
+session = requests.Session()
+
 
 class DCApiClient:
     def __init__(self, request):
@@ -16,7 +18,7 @@ class DCApiClient:
             params = {}
         params["auth_token"] = settings.DC_API_TOKEN
         url = f"{settings.DC_API_URL}/{path}"
-        req = requests.get(url, params=params)
+        req = session.get(url, params=params)
         req.raise_for_status()
         return req.json()
 
