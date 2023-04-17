@@ -76,15 +76,6 @@ Parameters:
     Type: String
 
 Resources:
-  DjangoMemcache:
-    Type: AWS::ElastiCache::CacheCluster
-    Properties:
-      Engine: memcached
-      NumCacheNodes: 1
-      CacheNodeType: cache.t3.micro
-      CacheSecurityGroupNames:
-        - default
-
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -119,7 +110,6 @@ Resources:
           DC_API_TOKEN: !Ref AppDCAPIToken
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
-          CACHE_URL: !GetAtt DjangoMemcache.ConfigurationEndpoint.Address
       Events:
         HTTPRequests:
           Type: Api
@@ -143,6 +133,10 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
+      Cors:
+        AllowMethods: "'GET'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
       Auth:
         DefaultAuthorizer: APIAuthFunction
         Authorizers:
@@ -166,7 +160,32 @@ Resources:
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
       Runtime: python3.8
-
+  V1VotingInformationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
+      CodeUri: ./api_endpoints/v1_postcode_lookup/
+      Handler: app.handler
+      AutoPublishAlias: live
+      Runtime: python3.8
+      MemorySize: 512
+      Environment:
+        Variables:
+          SENTRY_DSN: !Ref AppSentryDSN
+          DC_API_TOKEN: !Ref AppDCAPIToken
+      Events:
+        PostcodeRequests:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ECAPI
+            Path: /api/v1/postcode/{proxy+}
+            Method: GET
+        AddressRequests:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ECAPI
+            Path: /api/v1/address/{proxy+}
+            Method: GET
 
 Outputs:
   ECApiFqdn:
@@ -174,3 +193,8 @@ Outputs:
     Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFqdn" ] ]
+  ECStarletteApi:
+    Description: "API Gateway endpoint FQDN for EC Starlette API function"
+    Value: !Sub "${ECAPI}.execute-api.${AWS::Region}.amazonaws.com"
+    Export:
+      Name: !Join [ ":", [ !Ref "AWS::StackName", "ECStarletteApiFqdn" ] ]
