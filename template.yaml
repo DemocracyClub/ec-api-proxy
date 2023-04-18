@@ -137,16 +137,16 @@ Resources:
         AllowMethods: "'GET'"
         AllowOrigin: "'*'"
         MaxAge: "'600'"
-#      Auth:
-#        DefaultAuthorizer: APIAuthFunction
-#        Authorizers:
-#          APIAuthFunction:
-#            FunctionArn: !GetAtt APIAuthFunction.Arn
-#            FunctionPayloadType: REQUEST
-#            Identity:
-#              QueryStrings:
-#                - token
-#              ReauthorizeEvery: 3600
+      Auth:
+        DefaultAuthorizer: APIAuthFunction
+        Authorizers:
+          APIAuthFunction:
+            FunctionArn: !GetAtt APIAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              QueryStrings:
+                - token
+              ReauthorizeEvery: 3600
 
 
   APIAuthFunction:
