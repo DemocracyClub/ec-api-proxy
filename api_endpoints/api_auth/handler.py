@@ -13,9 +13,13 @@ cur = conn.cursor(cursor_factory=pg_extras.RealDictCursor)
 
 
 def lambda_handler(event, context):
-    if "token" not in event["queryStringParameters"]:
+    api_key = None
+    if "token" in event["queryStringParameters"]:
+        api_key = event["queryStringParameters"]["token"]
+
+    if not api_key:
         raise Exception("Unauthorized")
-    api_key = event["queryStringParameters"].get("token", None)
+
     authentication = {"data": {"auth_token": api_key}}
 
     cur.execute(

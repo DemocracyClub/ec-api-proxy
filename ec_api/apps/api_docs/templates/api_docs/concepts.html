@@ -72,19 +72,13 @@
   <div class="ds-grid">
     <div>
       <p>Calls to the API must be authenticated with a valid API key.</p>
-      <p>To get a key, please [log in or register]({% url "users:login" %}) and create a key.</p>
-      <p>To authenticate with a key either pass in the `auth_token` param or use the `Authorization` header</p>
+      <p>To get a key, please <a href="{% url "users:login" %}">log in or register</a> and create a key.</p>
+      <p>To authenticate with a key pass in the <code>token</code> parameter.</p>
 
 
 
     </div>
     <div class="ds-stack-smaller">
-      <figure>
-        <figcaption>Authenticate with curl</figcaption>
-        <pre>
-    curl -X GET https://api.electoralcommission.org.uk/api/[endpoint]/ -H 'Authorization: Token 123456'
-    </pre>
-      </figure>
       <figure>
         <figcaption>Authenticate with URL param</figcaption>
         <pre>
