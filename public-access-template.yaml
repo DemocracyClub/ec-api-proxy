@@ -13,6 +13,9 @@ Parameters:
   PublicFqdn:
     Type: String
 
+  AuthHeaderToQueryStringARN:
+    Type: String
+
 Resources:
   APIResponsePolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
@@ -47,6 +50,9 @@ Resources:
         RemoveHeadersConfig:
           Items:
             - Header: Vary
+
+
+
   CloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'
     Properties:
@@ -117,6 +123,9 @@ Resources:
         - AllowedMethods: [ GET, HEAD, OPTIONS ]
           PathPattern: api/*
           TargetOriginId: StarletteAPI
+          LambdaFunctionAssociations:
+            - EventType: 'viewer-request'
+              LambdaFunctionARN: !Ref AuthHeaderToQueryStringARN
           ForwardedValues:
             QueryString: true
             Cookies:

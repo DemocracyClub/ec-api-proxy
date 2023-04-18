@@ -92,6 +92,7 @@ jobs:
       SAM_CONFIG_FILE: samconfig.toml.d/ci-<<parameters.dc-environment>>.toml
       SAM_LAMBDA_CONFIG_ENV: <<parameters.dc-environment>>
       SAM_PUBLIC_CONFIG_ENV: <<parameters.dc-environment>>-public-access
+      SAM_LAMBDA_FUNCTION_CONFIG_ENV: <<parameters.dc-environment>>-cloudfront-lambda-functions
       DC_DEPLOY_NAME: <<parameters.dc-deploy-name>>
       POSTGRES_DATABASE_NAME: <<parameters.dc-deploy-name>>
     steps:
@@ -135,6 +136,13 @@ jobs:
         no_output_timeout: 30m
     - run: pipenv run migratedb
     - run:
+        name: "sam deploy lambda@edge function"
+        command: |
+          pipenv run sam deploy \
+            --config-file ~/repo/${SAM_CONFIG_FILE} \
+            --config-env $SAM_LAMBDA_FUNCTION_CONFIG_ENV
+
+    - run:
         name: printenv PUBLIC_FQDN CERTIFICATE_ARN
           # These envvars are stored inside CircleCI, which helpfully masks them if they're echoed.
         command: |
@@ -157,6 +165,7 @@ jobs:
                StackNameSuffix=<<parameters.dc-environment>> \
                CertificateArn=$CERTIFICATE_ARN \
                PublicFqdn=$PUBLIC_FQDN \
+               AuthHeaderToQueryStringARN=`python .circleci/get_cf_export_value.py AuthHeaderToQueryString` \
               "
     - run:
         name: "Publish a new Sentry Release"

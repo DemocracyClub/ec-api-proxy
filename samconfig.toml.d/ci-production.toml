@@ -34,9 +34,26 @@ region = "eu-west-2"
 [production-public-access]
 [production-public-access.deploy]
 [production-public-access.deploy.parameters]
+s3_bucket = "ec-api-deployment-artifacts-production-6jfsds0gj3f"
 template = "public-access-template.yaml"
 stack_name = "ECApiPublicAccess-production"
 region = "eu-west-2"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+tags = "dc-product=\"ec-api\" dc-environment=\"production\""
+progressbar = false
+fail_on_empty_changeset = false
+force_upload = true
+# Using a "parameter_overrides" setting here would block using CI envvars, as only
+# one overrides source is used and this source doesn't pass through shell interpolation.
+
+[production-cloudfront-lambda-functions]
+[production-cloudfront-lambda-functions.deploy]
+[production-cloudfront-lambda-functions.deploy.parameters]
+template = "cloudfront-lambda-functions.yaml"
+s3_bucket = "ec-api-cloudfront-functions-production-6jfsds0gj3f"
+stack_name = "ECApiCloudFrontFunctions-production"
+region = "us-east-1"
 confirm_changeset = false
 capabilities = "CAPABILITY_IAM"
 tags = "dc-product=\"ec-api\" dc-environment=\"production\""
