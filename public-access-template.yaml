@@ -14,14 +14,45 @@ Parameters:
     Type: String
 
 Resources:
-
+  APIResponsePolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: API-Response-Policy
+        Comment: CORS and other headers for the API
+        SecurityHeadersConfig:
+          ContentSecurityPolicy:
+            ContentSecurityPolicy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'
+            Override: false
+          ContentTypeOptions: # You don't need to specify a value for 'X-Content-Type-Options'.
+            # Simply including it in the template sets its value to 'nosniff'.
+            Override: false
+          FrameOptions:
+            FrameOption: DENY
+            Override: false
+          ReferrerPolicy:
+            ReferrerPolicy: same-origin
+            Override: false
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 63072000
+            IncludeSubdomains: true
+            Preload: true
+            Override: false
+          XSSProtection:
+            ModeBlock: true # You can set ModeBlock to 'true' OR set a value for ReportUri, but not both
+            Protection: true
+            Override: false
+        ServerTimingHeadersConfig:
+          Enabled: false
+        RemoveHeadersConfig:
+          Items:
+            - Header: Vary
   CloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'
     Properties:
       DistributionConfig:
         Comment: 'Cloudfront Distribution pointing to Lambda origin'
         Origins:
-
           - Id: Static
             DomainName:
               Fn::ImportValue: !Sub "ECApiApp-${StackNameSuffix}:ECApiFqdn"
@@ -49,7 +80,15 @@ Resources:
                 HeaderValue: !Ref PublicFqdn
               - HeaderName: X-Forwarded-Proto
                 HeaderValue: https
-
+          - Id: StarletteAPI
+            DomainName:
+              Fn::ImportValue: !Sub "ECApiApp-${StackNameSuffix}:ECStarletteApiFqdn"
+            OriginPath: "/Prod"
+            CustomOriginConfig:
+              OriginProtocolPolicy: "https-only"
+            OriginCustomHeaders:
+              - HeaderName: X-Forwarded-Host
+                HeaderValue: !Ref PublicFqdn
         Enabled: true
         HttpVersion: 'http2'
         Aliases:
@@ -71,10 +110,24 @@ Resources:
               - Authorization
               - Origin
               - Referer
-          ResponseHeadersPolicyId: "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
+          ResponseHeadersPolicyId: "eaab4381-ed33-4a86-88ca-d9558dc6cd63"
           ViewerProtocolPolicy: "redirect-to-https"
 
         CacheBehaviors:
+        - AllowedMethods: [ GET, HEAD, OPTIONS ]
+          PathPattern: api/*
+          TargetOriginId: StarletteAPI
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+            Headers:
+              - Authorization
+          ViewerProtocolPolicy: "redirect-to-https"
+          MinTTL: '50'
+          DefaultTTL: '60'
+          MaxTTL: '60'
+          ResponseHeadersPolicyId: !Ref APIResponsePolicy
         - AllowedMethods: [ GET, HEAD, OPTIONS ]
           PathPattern: static/*
           TargetOriginId: Static

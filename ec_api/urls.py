@@ -8,7 +8,6 @@ urlpatterns = [
     path("user/", include("users.urls")),
     path("", include("frontend.urls")),
     path("docs/", include("api_docs.urls")),
-    path("api/", include("api_proxy.urls")),
     # Debug only
     path("__debug__/", include(debug_toolbar.urls)),
 ]
