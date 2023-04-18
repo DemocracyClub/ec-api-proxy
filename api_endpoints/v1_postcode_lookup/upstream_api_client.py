@@ -3,6 +3,7 @@ Consumes the devs.DC API and optionally cleans data for reuse
 
 """
 import os
+from json import JSONDecodeError
 
 import requests
 from starlette.requests import Request
@@ -15,6 +16,15 @@ DC_API_URL = os.environ.get(
 )
 
 
+class DevsDCException(Exception):
+    def __init__(self, response: requests.Response):
+        try:
+            self.message = response.json()
+        except JSONDecodeError:
+            self.message = {"error": "Unknown error"}
+        self.status = response.status_code
+
+
 class DCApiClient:
     def get_response_from_upstream(self, path, api_key, params=None):
         if not params:
@@ -22,7 +32,8 @@ class DCApiClient:
         params["auth_token"] = api_key
         url = f"{DC_API_URL}/{path}"
         req = session.get(url, params=params)
-        req.raise_for_status()
+        if req.status_code >= 400:
+            raise DevsDCException(req)
         return req.json()
 
     def _get_raw_postcode_response(self, postcode, api_key):

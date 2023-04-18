@@ -8,7 +8,7 @@ from starlette.routing import Route
 
 from middleware import MIDDLEWARE
 from utils import init_sentry
-from upstream_api_client import DCApiClient
+from upstream_api_client import DCApiClient, DevsDCException
 
 client = DCApiClient()
 
@@ -17,13 +17,19 @@ init_sentry()
 
 def get_postcode_response(request: Request):
     postcode = request.path_params["postcode"]
-    response = client.get_postcode_response(request, postcode)
+    try:
+        response = client.get_postcode_response(request, postcode)
+    except DevsDCException as error:
+        return JSONResponse(error.message, error.status)
     return JSONResponse(response)
 
 
 def get_address_response(request: Request):
     uprn = request.path_params["uprn"]
-    response = client.get_uprn_response(request, uprn)
+    try:
+        response = client.get_uprn_response(request, uprn)
+    except DevsDCException as error:
+        return JSONResponse(error.message, error.status)
     return JSONResponse(response)
 
 
