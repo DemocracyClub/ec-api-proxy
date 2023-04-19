@@ -133,9 +133,10 @@ Resources:
             Headers:
               - Authorization
           ViewerProtocolPolicy: "redirect-to-https"
-          MinTTL: '50'
-          DefaultTTL: '60'
-          MaxTTL: '60'
+          MinTTL: '0'
+          DefaultTTL: '0'
+          MaxTTL: '0'
+          Compress: true
           ResponseHeadersPolicyId: !Ref APIResponsePolicy
         - AllowedMethods: [ GET, HEAD, OPTIONS ]
           PathPattern: static/*
