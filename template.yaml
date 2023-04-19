@@ -137,16 +137,17 @@ Resources:
         AllowMethods: "'GET'"
         AllowOrigin: "'*'"
         MaxAge: "'600'"
-#      Auth:
-#        DefaultAuthorizer: APIAuthFunction
-#        Authorizers:
-#          APIAuthFunction:
-#            FunctionArn: !GetAtt APIAuthFunction.Arn
-#            FunctionPayloadType: REQUEST
-#            Identity:
-#              QueryStrings:
-#                - token
-#              ReauthorizeEvery: 3600
+      Auth:
+        DefaultAuthorizer: APIAuthFunction
+        Authorizers:
+          APIAuthFunction:
+            FunctionArn: !GetAtt APIAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              QueryStrings:
+                - token
+              ReauthorizeEvery: 3600
+
 
   APIAuthFunction:
     Type: AWS::Serverless::Function
@@ -154,6 +155,7 @@ Resources:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/api_auth
       Handler: handler.lambda_handler
+      AutoPublishAlias: live
       Environment:
         Variables:
           POSTGRES_HOST: !Ref AppPostgresHost

@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "EC API public access: TLS, CDN, DNS"
+
+Resources:
+  AuthHeaderToQueryStringFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
+      CodeUri: ./api_endpoints/lambda_edge/auth_header_to_query
+      Handler: handler.lambda_handler
+      Runtime: python3.8
+      AutoPublishAlias: live
+
+Outputs:
+  AuthHeaderToQueryStringFunctionVersion:
+    Description: The version ARN of the ID of the AuthHeaderToQueryStringFunction
+    Value: !Ref AuthHeaderToQueryStringFunction.Version
+    Export:
+      Name: "AuthHeaderToQueryString"
