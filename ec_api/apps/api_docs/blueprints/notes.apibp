@@ -35,31 +35,20 @@ e.g: identification requirements, or a cancelled poll.
 
 #### ID Requirements
 
-All voters in Northern Ireland must present photo ID to vote at a polling station.
+Some UK elections require ID in order to vote in person.
 
-Additionally, there have been several trials in England
-to test introducing ID requirements more widely.
-API responses for a postcode or address in an authority where identification
-is required will include this information in the `notifications` array. e.g:
+This is defined at the ballot level, as it's possible for some ballots to require ID and some not to. In this case the
+user must be told about the requirements, even if not all ballots require them.
 
-<pre><code>{
-...
-  "notifications": [
-    {
-      "url": "http://www.eoni.org.uk/Vote/Voting-at-a-polling-place",
-      "title": "You need to show photographic ID to vote in this election",
-      "detail": "Voters in Northern Ireland are required to show one form of photo ID, like a passport or driving licence.",
-      "type": "voter_id"
-    }
-  ]
-}
-</code></pre>
+The ballot has a `requires_voter_id` key that will be one of the following values:
 
-This information will be provided in all responses from the
-`/address` and `/postcode` API endpoints,
-even if we are not able to provide a polling station result.
-We encourage our API consumers to provide users in these areas with
-information about the pilots.
+* `EFA-2002`: ID required under the _Electoral Fraud (Northern Ireland) Act 2002_
+* `EA-2022`: ID required under the _Elections Act 2022_
+* `pilot-2018`: 2018 voter ID pilot scheme (historic elections only)
+* `pilot-2019`: 2019 voter ID pilot scheme (historic elections only)
+
+If the `requires_voter_id` is not null then users must be told that they are required to bring ID. The exact ID
+requirements change depending on the value. This should be taken into account when writing copy that is shown to users.
 
 #### Cancelled Polls
 
