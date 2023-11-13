@@ -1,8 +1,7 @@
+from apiblueprint_view import dm, parser
+from apiblueprint_view.views import BASE_STYLES
 from django import template
 from django.template.loader import render_to_string
-
-from apiblueprint_view import parser, dm
-from apiblueprint_view.views import BASE_STYLES
 
 register = template.Library()
 

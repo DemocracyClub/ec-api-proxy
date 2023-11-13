@@ -1,9 +1,10 @@
+import contextlib
 import os
-import dc_design_system
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
 
+import dc_design_system
 from django.urls.base import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -96,7 +97,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 domain = os.environ.get("APP_DOMAIN")
 DEFAULT_FROM_EMAIL = f"no-reply@{domain}"
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -124,7 +124,6 @@ AUTHENTICATION_BACKENDS = ["sesame.backends.ModelBackend"]
 SESAME_MAX_AGE = 60 * 10
 SESAME_ONE_TIME = True
 SESAME_TOKEN_NAME = "login_token"
-
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = [
@@ -181,12 +180,11 @@ PIPELINE = {
 }
 
 PIPELINE["SASS_ARGUMENTS"] = (
-    " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
 PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
 PIPELINE["JS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
-
 
 WIDGET_S3_URL = os.environ.get(
     "WIDGET_S3_URL",
@@ -233,10 +231,8 @@ def is_local_dev():
 
 # .local.py overrides all the common settings.
 if is_local_dev():
-    try:
+    with contextlib.suppress(ImportError):
         from .local import *  # noqa
-    except ImportError:
-        pass
 
 
 def is_running_tests():
@@ -248,7 +244,5 @@ def is_running_tests():
 
 
 if is_running_tests():
-    try:
+    with contextlib.suppress(ImportError):
         from .testing import *  # noqa
-    except ImportError:
-        pass

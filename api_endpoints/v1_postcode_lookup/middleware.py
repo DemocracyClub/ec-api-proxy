@@ -39,6 +39,7 @@ class SimpleCORS:
             await send(message)
 
         await self.app(scope, receive, send_with_cors_headers)
+        return None
 
 
 class APIGatewayAuthenticatorContextMiddleware:

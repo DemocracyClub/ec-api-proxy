@@ -41,15 +41,15 @@ jobs:
           - v2-dependencies-default
       - run: *install-pipenv
       - run:
-          command: pipenv run black-check
-          name: Black
+          name: Ruff
+          command: pipenv run ruff .
+      - run:
+          name: Ruff format
+          command: pipenv run ruff format .
       - run: pipenv run collectstatic
       - run:
-          command: pipenv run pytest --flakes
-          name: Flakes
-      - run:
-          command: pipenv run pytest --junitxml=test-results/junit.xml --cov
           name: Run Tests
+          command: pipenv run pytest --junitxml=test-results/junit.xml --cov --ruff
       - store_artifacts:
           path: test-results
           destination: test-results

@@ -37,16 +37,14 @@ class DCApiClient:
         return req.json()
 
     def _get_raw_postcode_response(self, postcode, api_key):
-        json = self.get_response_from_upstream(
+        return self.get_response_from_upstream(
             f"/api/v1/postcode/{postcode}", api_key
         )
-        return json
 
     def _get_raw_uprn_response(self, uprn, api_key):
-        json = self.get_response_from_upstream(
+        return self.get_response_from_upstream(
             f"/api/v1/address/{uprn}", api_key
         )
-        return json
 
     def clean_candidates(self, candidates):
         for candidate in candidates:
@@ -82,8 +80,7 @@ class DCApiClient:
 
     def clean_postcode_response(self, request, raw_response):
         raw_response = self.clean_dates(request, raw_response)
-        raw_response = self.clean_addresses(request, raw_response)
-        return raw_response
+        return self.clean_addresses(request, raw_response)
 
     def get_api_key(self, request: Request):
         return request.scope.get("api_user", DC_API_TOKEN)
@@ -91,8 +88,7 @@ class DCApiClient:
     def clean_uprn_response(self, request, raw_response):
         # At the moment, cleaning a UPRN response is the same as a postcode
         # response
-        raw_response = self.clean_postcode_response(request, raw_response)
-        return raw_response
+        return self.clean_postcode_response(request, raw_response)
 
     def get_postcode_response(self, request, postcode):
         raw_response = self._get_raw_postcode_response(

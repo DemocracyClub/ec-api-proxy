@@ -1,14 +1,13 @@
 import os
 
 from mangum import Mangum
+from middleware import MIDDLEWARE
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.routing import Route
-
-from middleware import MIDDLEWARE
-from utils import init_sentry
 from upstream_api_client import DCApiClient, DevsDCException
+from utils import init_sentry
 
 client = DCApiClient()
 

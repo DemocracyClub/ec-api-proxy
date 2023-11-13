@@ -1,6 +1,5 @@
 import pytest
 from faker import Faker
-
 from users.models import CustomUser
 
 fake = Faker()

@@ -1,18 +1,17 @@
-from django.views.generic.edit import DeleteView
 import pytest
-from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.urls import reverse
-
-from users.forms import LoginForm, APIKeyForm
-from users.tests.factories import UserFactory, APIKeyFactory
+from django.views.generic.edit import DeleteView
+from pytest_django.asserts import assertContains
+from users.forms import APIKeyForm, LoginForm
+from users.tests.factories import APIKeyFactory, UserFactory
 from users.views import (
+    DeleteAPIKeyView,
     LoginView,
     ProfileView,
-    DeleteAPIKeyView,
     RefreshAPIKeyView,
 )
-from pytest_django.asserts import assertContains
 
 User = get_user_model()
 

@@ -48,7 +48,7 @@ AWS_S3_CUSTOM_DOMAIN = (
     f"{AWS_STORAGE_BUCKET_NAME}.s3-website.{AWS_S3_REGION_NAME}.amazonaws.com"
 )
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
+STATIC_ROOT = os.path.join(BASE_DIR, "static_files")  # noqa: F405
 
 CACHE_URL = os.environ.get("CACHE_URL", None)
 if CACHE_URL:
@@ -60,4 +60,4 @@ if CACHE_URL:
     }
 
 
-setup_sentry()
+setup_sentry()  # noqa: F405

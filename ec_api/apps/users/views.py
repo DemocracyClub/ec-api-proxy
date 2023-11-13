@@ -1,19 +1,18 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic import FormView
-from django.views.generic.base import TemplateView
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.views.generic import FormView
+from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
-from sesame.utils import get_user, get_query_string
-
 from frontend.utils import get_domain
-from users.forms import LoginForm, APIKeyForm, UserProfileForm
+from sesame.utils import get_query_string, get_user
+from users.forms import APIKeyForm, LoginForm, UserProfileForm
 
 User = get_user_model()
 
