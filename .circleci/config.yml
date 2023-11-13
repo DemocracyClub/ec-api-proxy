@@ -7,15 +7,15 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-    - image: circleci/python:3.10
+    - image: cimg/python:3.10
     working_directory: ~/repo
     steps:
     - checkout
     - restore_cache:
         keys:
-        - v2-dependencies-{{ checksum "Pipfile.lock" }}
-        - v2-dependencies-default
-    - run: &install-pipenv sudo pip install -U urllib3 cryptography==3.3.2 pipenv pip==21.1 --quiet --no-input
+        - v3-dependencies-{{ checksum "Pipfile.lock" }}
+        - v3-dependencies-default
+    - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
     - run: pipenv install --dev
     - run: pip install -U poetry
     - run: pipenv check # before save_cache so an insecure cache is never saved
@@ -27,18 +27,18 @@ jobs:
         when: on_success
         paths:
         - ~/.local/share/virtualenvs/
-        key: v2-dependencies-{{ checksum "Pipfile.lock" }}
+        key: v3-dependencies-{{ checksum "Pipfile.lock" }}
 
   run-tests:
     docker:
-    - image: circleci/python:3.10
+    - image: cimg/python:3.10
     working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v2-dependencies-{{ checksum "Pipfile.lock" }}
-          - v2-dependencies-default
+          - v3-dependencies-{{ checksum "Pipfile.lock" }}
+          - v3-dependencies-default
       - run: *install-pipenv
       - run:
           name: Ruff
@@ -60,7 +60,7 @@ jobs:
 
   sam_build:
     docker:
-    - image: amazon/aws-sam-cli-build-image-python3.10:latest
+    - image: public.ecr.aws/sam/build-python3.10:latest
     working_directory: ~/repo
     steps:
     - checkout
@@ -76,7 +76,7 @@ jobs:
 
   sam_deploy:
     docker:
-    - image: circleci/python:3.10
+    - image: cimg/python:3.10
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -100,8 +100,8 @@ jobs:
         at: ~/repo/
     - restore_cache:
         keys:
-        - v2-dependencies-{{ checksum "Pipfile.lock" }}
-        - v2-dependencies-default
+        - v3-dependencies-{{ checksum "Pipfile.lock" }}
+        - v3-dependencies-default
     - run: *install-pipenv
     - run: pip install aws-sam-cli
 
