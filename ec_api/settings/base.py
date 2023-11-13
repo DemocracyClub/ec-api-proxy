@@ -180,7 +180,7 @@ PIPELINE = {
 }
 
 PIPELINE["SASS_ARGUMENTS"] = (
-    " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
 PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"
