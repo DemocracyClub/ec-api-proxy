@@ -7,7 +7,7 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-    - image: circleci/python:3.8.12
+    - image: circleci/python:3.10
     working_directory: ~/repo
     steps:
     - checkout
@@ -31,7 +31,7 @@ jobs:
 
   run-tests:
     docker:
-    - image: circleci/python:3.8.12
+    - image: circleci/python:3.10
     working_directory: ~/repo
     steps:
       - checkout
@@ -60,7 +60,7 @@ jobs:
 
   sam_build:
     docker:
-    - image: amazon/aws-sam-cli-build-image-python3.8:latest
+    - image: amazon/aws-sam-cli-build-image-python3.10:latest
     working_directory: ~/repo
     steps:
     - checkout
@@ -76,7 +76,7 @@ jobs:
 
   sam_deploy:
     docker:
-    - image: circleci/python:3.8.12
+    - image: circleci/python:3.10
     working_directory: ~/repo/
     parameters:
       dc-environment:
