@@ -1,4 +1,4 @@
 sentry-sdk[starlette]==1.19.1
 starlette==0.26.1
 mangum==0.17.0
-requests==2.28.2
+requests==2.31.0
