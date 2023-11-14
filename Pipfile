@@ -26,6 +26,7 @@ djangorestframework = "*"
 certifi = ">2022.9.24"
 django-cors-headers = "*"
 typing-extensions = ">=3.7.4"
+dc-logging-utils = {file = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz"}
 
 [dev-packages]
 pre-commit = "*"
@@ -50,7 +51,6 @@ python_version = "3.10"
 allow_prereleases = true
 
 [scripts]
-
 collectstatic = "python manage.py collectstatic -c --noinput"
 pytest = "pytest"
 coveralls = "coveralls"

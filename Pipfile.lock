@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e60827fbd05293d39cd361c1155ca5f036bc1391e75c43367cf37fc59140e7fa"
+            "sha256": "9dad81918ac05c4d01c2f2636c44b04e9c276b7a068d94607e84152146c5a70d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -43,6 +43,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==1.32.4"
+        },
+        "cachetools": {
+            "hashes": [
+                "sha256:086ee420196f7b2ab9ca2db2520aca326318b68fe5ba8bc4d49cca91add450f2",
+                "sha256:861f35a13a451f94e301ce2bec7cac63e881232ccce7ed67fab9b5df4d3beaa1"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==5.3.2"
         },
         "certifi": {
             "hashes": [
@@ -210,6 +218,9 @@
         "dc-design-system": {
             "git": "https://github.com/DemocracyClub/design-system.git",
             "ref": "09bcc3eb4eccc189b3a19d91dae5b777be52f253"
+        },
+        "dc-logging-utils": {
+            "file": "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz"
         },
         "django": {
             "hashes": [
@@ -733,7 +744,7 @@
                 "sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330",
                 "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"
             ],
-            "markers": "python_version < '3.11' and python_version >= '3.7'",
+            "markers": "python_version > '3.6' and python_version < '3.11'",
             "version": "==5.1.1"
         },
         "distlib": {
