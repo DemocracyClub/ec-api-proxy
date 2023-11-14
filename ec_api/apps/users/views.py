@@ -125,10 +125,8 @@ class DeleteAPIKeyView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = "users/delete_key.html"
     context_object_name = "key"
 
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        messages.success(request, f"{self.object.name} API key was deleted")
-        return response
+    def get_success_message(self, cleaned_data):
+        return f"{self.object.name} API key was deleted"
 
     def get_queryset(self):
         return self.request.user.api_keys.all()
