@@ -59,7 +59,7 @@ class DCApiClient:
             ballot.pop("wcivf_url", None)
             ballot.pop("hustings", None)
             ballot.pop("ballot_url", None)
-            if ballot["candidates_verified"]:
+            if ballot.get("candidates_verified", False):
                 ballot["candidates"] = self.clean_candidates(
                     ballot["candidates"]
                 )
