@@ -209,6 +209,6 @@ workflows:
             - install_and_update_dependencies # SAM CLI is in the dev package set
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
-            - sam_deploy_staging
+            #- sam_deploy_staging
           context: [ deployment-production-ec-api ]
           filters: { branches: { only: [ main ] } }
