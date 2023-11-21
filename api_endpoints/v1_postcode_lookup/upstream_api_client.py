@@ -83,7 +83,7 @@ class DCApiClient:
         return self.clean_addresses(request, raw_response)
 
     def get_api_key(self, request: Request):
-        return request.scope.get("api_user", DC_API_TOKEN)
+        return DC_API_TOKEN
 
     def clean_uprn_response(self, request, raw_response):
         # At the moment, cleaning a UPRN response is the same as a postcode

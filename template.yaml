@@ -63,10 +63,6 @@ Parameters:
     Description: "The URL to the widget JS"
     Type: String
 
-  AppDCAPIToken:
-    Description: "Token for the DC API"
-    Type: String
-
   AppSamLambdaConfigEnv:
     Description: "The lambda config environment passed to the app used to init sentry."
     Type: String
@@ -78,6 +74,11 @@ Parameters:
   AppLoggerArn:
     Default: AppLoggerArn
     Description: "The ARN of the Lambda function to log to"
+    Type: AWS::SSM::Parameter::Value<String>
+
+  DevsDCApiKey:
+    Default: DevsDCApiKey
+    Description: "The API to use to authenticate to devs.DC"
     Type: AWS::SSM::Parameter::Value<String>
 
 Resources:
@@ -112,7 +113,6 @@ Resources:
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
           WIDGET_S3_URL: !Ref AppWidgetS3URL
-          DC_API_TOKEN: !Ref AppDCAPIToken
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
           LOGGER_ARN: !Ref AppLoggerArn
@@ -180,7 +180,7 @@ Resources:
       Environment:
         Variables:
           SENTRY_DSN: !Ref AppSentryDSN
-          DC_API_TOKEN: !Ref AppDCAPIToken
+          DC_API_TOKEN: !Ref DevsDCApiKey
           LOGGER_ARN: !Ref AppLoggerArn
       Events:
         PostcodeRequests:
