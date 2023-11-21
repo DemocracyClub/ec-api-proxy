@@ -28,6 +28,7 @@ def get_postcode_response(request: Request):
         postcode=postcode,
         dc_product=POSTCODE_LOGGER.dc_product.ec_api,
         calls_devs_dc_api=True,
+        api_key=request.scope["api_user"],
     )
     POSTCODE_LOGGER.log(entry)
 
