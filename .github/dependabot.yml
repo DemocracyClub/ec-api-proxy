@@ -13,3 +13,7 @@ updates:
     - dependency-name: django
       versions:
       - 4.x
+    groups:
+      python-packages:
+        patterns:
+          - "*"

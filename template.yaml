@@ -75,6 +75,11 @@ Parameters:
     Description: "The domain the app is on."
     Type: String
 
+  AppLoggerArn:
+    Default: AppLoggerArn
+    Description: "The ARN of the Lambda function to log to"
+    Type: AWS::SSM::Parameter::Value<String>
+
 Resources:
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -110,6 +115,7 @@ Resources:
           DC_API_TOKEN: !Ref AppDCAPIToken
           SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
           APP_DOMAIN: !Ref AppDomain
+          LOGGER_ARN: !Ref AppLoggerArn
       Events:
         HTTPRequests:
           Type: Api

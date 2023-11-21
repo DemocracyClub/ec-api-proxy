@@ -1,5 +1,6 @@
 import os
 
+from dc_logging_client import DCWidePostcodeLoggingClient
 from mangum import Mangum
 from middleware import MIDDLEWARE
 from starlette.applications import Starlette
@@ -13,9 +14,22 @@ client = DCApiClient()
 
 init_sentry()
 
+if logger_arn := os.environ.get("LOGGER_ARN"):
+    POSTCODE_LOGGER = DCWidePostcodeLoggingClient(function_arn=logger_arn)
+else:
+    POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
+
 
 def get_postcode_response(request: Request):
     postcode = request.path_params["postcode"]
+
+    # Log this request
+    POSTCODE_LOGGER.entry_class(
+        postcode=postcode,
+        dc_product=POSTCODE_LOGGER.dc_product.ec_api,
+        calls_devs_dc_api=True,
+    )
+
     try:
         response = client.get_postcode_response(request, postcode)
     except DevsDCException as error:

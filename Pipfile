@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "<4.0"
+django = "<5.0"
 aws-wsgi = {ref = "a5b800373c326e75f705d400c48f7df301409724", git = "https://github.com/DemocracyClub/awsgi.git"}
 sentry-sdk = "*"
 django-pipeline = "*"
@@ -26,11 +26,13 @@ djangorestframework = "*"
 certifi = ">2022.9.24"
 django-cors-headers = "*"
 typing-extensions = ">=3.7.4"
+dc-logging-utils = {file = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz"}
 
 [dev-packages]
 pre-commit = "*"
 pytest = "*"
 pytest-django = "*"
+pytest-ruff = "*"
 pytest-env = "<=0.8.1"
 coveralls = ">=3.1.1"
 pytest-cov = "<=4.0.0"
@@ -38,7 +40,7 @@ factory-boy = "*"
 ipython = "*"
 pytest-mock = "*"
 ipdb = "*"
-pytest-socket = "==0.5.1"
+pytest-socket = "==0.6.0"
 wheel = ">0.37.0"
 ruff = "==0.1.5"
 
@@ -49,7 +51,6 @@ python_version = "3.10"
 allow_prereleases = true
 
 [scripts]
-
 collectstatic = "python manage.py collectstatic -c --noinput"
 pytest = "pytest"
 coveralls = "coveralls"

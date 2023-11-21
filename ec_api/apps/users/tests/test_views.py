@@ -2,7 +2,6 @@ import pytest
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.views.generic.edit import DeleteView
 from pytest_django.asserts import assertContains
 from users.forms import APIKeyForm, LoginForm
 from users.tests.factories import APIKeyFactory, UserFactory
@@ -173,17 +172,20 @@ class TestDeleteAPIKeyView:
         result = view_obj.get_success_url()
         assert result == reverse("users:profile")
 
-    def test_delete(self, view_obj, mocker):
+    @pytest.mark.django_db
+    def test_delete(self, view_obj, admin_client, admin_user):
         # give the view an object
         view_obj.object = APIKeyFactory.build(name="Test")
-        # patch super call
-        mocker.patch.object(DeleteView, "delete")
-        # patch messages call
-        mocker.patch.object(messages, "success")
+        view_obj.object.user = admin_user
+        view_obj.object.user.save()
+        view_obj.object.save()
 
-        view_obj.delete(request=view_obj.request)
-        DeleteView.delete.assert_called_once()
-        messages.success.assert_called_once()
+        response = admin_client.post(
+            reverse("users:delete-key", kwargs={"pk": view_obj.object.pk}),
+            follow=True,
+        )
+        assert response.status_code == 200
+        assert "<h5>Test API key was deleted</h5>" in str(response.content)
 
 
 class TestRefreshAPIKeyView:

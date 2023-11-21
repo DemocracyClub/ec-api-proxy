@@ -7,9 +7,6 @@ target-version = ['py38']
 norecursedirs = ".git __pycache__ .aws-sam"
 addopts = "--ignore=*/__pycache__ --ignore=.* --disable-socket"
 python_files = "test_*.py"
-flakes-ignore = [
-    "ImportStarUsage"
-]
 env = "RUN_ENV=test"
 DJANGO_SETTINGS_MODULE = "ec_api.settings.testing"
 FAIL_INVALID_TEMPLATE_VARS = "1"

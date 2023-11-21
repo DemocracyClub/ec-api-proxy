@@ -140,8 +140,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -150,7 +148,11 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (root("assets"),)
 STATIC_ROOT = root("static")
-STATICFILES_STORAGE = "pipeline.storage.PipelineManifestStorage"
+
+STORAGES = {
+    "staticfiles": {"BACKEND": "pipeline.storage.PipelineManifestStorage"}
+}
+
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -180,7 +182,7 @@ PIPELINE = {
 }
 
 PIPELINE["SASS_ARGUMENTS"] = (
-    " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
+        " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 )
 
 PIPELINE["CSS_COMPRESSOR"] = "pipeline.compressors.NoopCompressor"

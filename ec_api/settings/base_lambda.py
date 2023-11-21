@@ -35,7 +35,6 @@ EMAIL_BACKEND = "django_ses.SESBackend"
 AWS_SES_REGION_NAME = "eu-west-2"
 AWS_SES_REGION_ENDPOINT = "email.eu-west-2.amazonaws.com"
 
-
 AWS_S3_SECURE_URLS = False
 AWS_S3_USE_SSL = True
 AWS_S3_REGION_NAME = "eu-west-2"
@@ -49,15 +48,5 @@ AWS_S3_CUSTOM_DOMAIN = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")  # noqa: F405
-
-CACHE_URL = os.environ.get("CACHE_URL", None)
-if CACHE_URL:
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
-            "LOCATION": f"{CACHE_URL}:11211",
-        }
-    }
-
 
 setup_sentry()  # noqa: F405
