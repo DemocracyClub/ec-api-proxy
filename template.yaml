@@ -181,6 +181,7 @@ Resources:
         Variables:
           SENTRY_DSN: !Ref AppSentryDSN
           DC_API_TOKEN: !Ref AppDCAPIToken
+          LOGGER_ARN: !Ref AppLoggerArn
       Events:
         PostcodeRequests:
           Type: Api
