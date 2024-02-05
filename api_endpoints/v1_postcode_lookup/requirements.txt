@@ -1,5 +1,5 @@
 sentry-sdk[starlette]==1.19.1
-starlette==0.26.1
+starlette==0.36.2
 mangum==0.17.0
 requests==2.31.0
 https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz
