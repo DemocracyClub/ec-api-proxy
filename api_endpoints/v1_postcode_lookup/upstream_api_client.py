@@ -30,6 +30,7 @@ class DCApiClient:
         if not params:
             params = {}
         params["auth_token"] = api_key
+        params["include_current"] = 1
         url = f"{DC_API_URL}/{path}"
         req = session.get(url, params=params)
         if req.status_code >= 400:
