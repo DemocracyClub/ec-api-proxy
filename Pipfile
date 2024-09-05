@@ -10,8 +10,6 @@ sentry-sdk = "*"
 django-pipeline = "*"
 whitenoise = "*"
 libsass = "*"
-pip = "*"
-install = "*"
 dc-design-system = {ref = "0.1.1", git = "https://github.com/DemocracyClub/design-system.git"}
 django-sesame = "*"
 psycopg2-binary = "*"
