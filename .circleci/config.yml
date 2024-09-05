@@ -16,7 +16,7 @@ jobs:
         - v3-dependencies-{{ checksum "Pipfile.lock" }}
         - v3-dependencies-default
     - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
-    - run: pipenv install --dev
+    - run: pipenv sync --dev
     - run: pip install -U poetry
     - run: pipenv check # before save_cache so an insecure cache is never saved
     - run: make lambda-layers/DependenciesLayer/requirements.txt
