@@ -26,6 +26,7 @@ typing-extensions = ">=3.7.4"
 dc-logging-utils = {file = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz"}
 urllib3 = "<2"
 setuptools = "*"
+djhtml = "==3.0.6"
 
 [dev-packages]
 pre-commit = "*"
