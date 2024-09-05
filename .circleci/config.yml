@@ -40,11 +40,11 @@ jobs:
           - v3-dependencies-default
       - run: *install-pipenv
       - run:
-          name: Ruff
-          command: pipenv run ruff .
+          name: Ruff Check
+          command: pipenv run ruff check .
       - run:
           name: Ruff format
-          command: pipenv run ruff format .
+          command: pipenv run ruff format . --check
       - run: pipenv run collectstatic
       - run:
           name: Run Tests
