@@ -45,6 +45,7 @@ jobs:
       - run:
           name: Ruff format
           command: pipenv run ruff format . --check
+      - run: pipenv run pipenv verify
       - run: pipenv run collectstatic
       - run:
           name: Run Tests
