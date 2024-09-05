@@ -11,10 +11,17 @@
 This section assumes a working python 3.8 environment with Pipenv installed.
 
 * `cp ec_api/settings/local.py.example ec_api/settings/local.py`
-* Install Python dependencies: `pipenv install --dev`
+* Install Python dependencies:
+    * `pipenv install --dev`
+    * `pip install -r api_endpoints/v1_postcode_lookup/requirements.txt`
 * Run the test suite: `pytest`
 * Run lint checks: `ruff .`
 * Auto-format: `ruff format .`
+
+## Run application
+
+- Frontend: `./mange.py runserver`
+- API: `pipenv run start`
 
 ## Pre-commit
 
