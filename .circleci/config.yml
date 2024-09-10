@@ -13,8 +13,8 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - v4-dependencies-{{ checksum "Pipfile.lock" }}
-        - v4-dependencies-default
+        - v5-dependencies-{{ checksum "Pipfile.lock" }}
+        - v5-dependencies-default
     - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
     - run: pipenv sync --dev
     - run: pipenv check # before save_cache so an insecure cache is never saved
@@ -26,7 +26,7 @@ jobs:
         when: on_success
         paths:
         - ~/.local/share/virtualenvs/
-        key: v4-dependencies-{{ checksum "Pipfile.lock" }}
+        key: v5-dependencies-{{ checksum "Pipfile.lock" }}
 
   run-tests:
     docker:
@@ -36,8 +36,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "Pipfile.lock" }}
-          - v4-dependencies-default
+          - v5-dependencies-{{ checksum "Pipfile.lock" }}
+          - v5-dependencies-default
       - run: *install-pipenv
       - run:
           name: Ruff Check
@@ -101,8 +101,8 @@ jobs:
         at: ~/repo/
     - restore_cache:
         keys:
-        - v4-dependencies-{{ checksum "Pipfile.lock" }}
-        - v4-dependencies-default
+        - v5-dependencies-{{ checksum "Pipfile.lock" }}
+        - v5-dependencies-default
     - run: *install-pipenv
     - run: pip install aws-sam-cli
 
