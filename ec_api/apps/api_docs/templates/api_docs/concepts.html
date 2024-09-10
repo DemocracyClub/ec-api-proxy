@@ -43,11 +43,11 @@
       <figure>
         <figcaption>Case 1: Results after address picker shown</figcaption>
         <div class="mermaid">
-                    sequenceDiagram
-                    Client->>+API: Postcode lookup to /api/postcode/{postcode}
-                    API->>+Client: Address picker with UPRNs
-                    Client->>+API: UPRN lookup to /api/address/{UPRN}
-                    API->>+Client: Results
+          sequenceDiagram
+          Client->>+API: Postcode lookup to /api/postcode/{postcode}
+          API->>+Client: Address picker with UPRNs
+          Client->>+API: UPRN lookup to /api/address/{UPRN}
+          API->>+Client: Results
 
         </div>
 
@@ -55,11 +55,11 @@
       <figure>
         <figcaption>Case 2: Results direct from postcode</figcaption>
         <div class="mermaid">
-                    sequenceDiagram
-                    Client->>+API: Postcode lookup to /api/postcode/{postcode}
-                    API->>+Client: Address picker with UPRNs
-                    Client->>+API: UPRN lookup to /api/address/{UPRN}
-                    API->>+Client: Results
+          sequenceDiagram
+          Client->>+API: Postcode lookup to /api/postcode/{postcode}
+          API->>+Client: Address picker with UPRNs
+          Client->>+API: UPRN lookup to /api/address/{UPRN}
+          API->>+Client: Results
 
         </div>
 

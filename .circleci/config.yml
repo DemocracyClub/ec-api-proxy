@@ -7,17 +7,16 @@ orbs:
 jobs:
   install_and_update_dependencies:
     docker:
-    - image: cimg/python:3.10
+    - image: cimg/python:3.12
     working_directory: ~/repo
     steps:
     - checkout
     - restore_cache:
         keys:
-        - v3-dependencies-{{ checksum "Pipfile.lock" }}
-        - v3-dependencies-default
+        - v4-dependencies-{{ checksum "Pipfile.lock" }}
+        - v4-dependencies-default
     - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
-    - run: pipenv install --dev
-    - run: pip install -U poetry
+    - run: pipenv sync --dev
     - run: pipenv check # before save_cache so an insecure cache is never saved
     - run: make lambda-layers/DependenciesLayer/requirements.txt
     - persist_to_workspace:
@@ -27,25 +26,27 @@ jobs:
         when: on_success
         paths:
         - ~/.local/share/virtualenvs/
-        key: v3-dependencies-{{ checksum "Pipfile.lock" }}
+        key: v4-dependencies-{{ checksum "Pipfile.lock" }}
 
   run-tests:
     docker:
-    - image: cimg/python:3.10
+    - image: cimg/python:3.12
     working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v3-dependencies-{{ checksum "Pipfile.lock" }}
-          - v3-dependencies-default
+          - v4-dependencies-{{ checksum "Pipfile.lock" }}
+          - v4-dependencies-default
       - run: *install-pipenv
       - run:
-          name: Ruff
-          command: pipenv run ruff .
+          name: Ruff Check
+          command: pipenv run ruff check .
       - run:
           name: Ruff format
-          command: pipenv run ruff format .
+          command: pipenv run ruff format . --check
+      - run: pipenv run djhtml --check .
+      - run: pipenv run pipenv verify
       - run: pipenv run collectstatic
       - run:
           name: Run Tests
@@ -60,13 +61,13 @@ jobs:
 
   sam_build:
     docker:
-    - image: public.ecr.aws/sam/build-python3.10:latest
+    - image: public.ecr.aws/sam/build-python3.12:latest
     working_directory: ~/repo
     steps:
     - checkout
     - attach_workspace:
         at: ~/repo/
-    - run: pip install --upgrade pip
+    - run: pip install --upgrade pip setuptools
     - run: pip install -r lambda-layers/DependenciesLayer/requirements.txt
     - run: make collectstatic
     - run: sam build ${DASH_DASH_DEBUG}
@@ -76,7 +77,7 @@ jobs:
 
   sam_deploy:
     docker:
-    - image: cimg/python:3.10
+    - image: cimg/python:3.12
     working_directory: ~/repo/
     parameters:
       dc-environment:
@@ -100,8 +101,8 @@ jobs:
         at: ~/repo/
     - restore_cache:
         keys:
-        - v3-dependencies-{{ checksum "Pipfile.lock" }}
-        - v3-dependencies-default
+        - v4-dependencies-{{ checksum "Pipfile.lock" }}
+        - v4-dependencies-default
     - run: *install-pipenv
     - run: pip install aws-sam-cli
 

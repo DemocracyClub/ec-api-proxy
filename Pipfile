@@ -10,8 +10,6 @@ sentry-sdk = "*"
 django-pipeline = "*"
 whitenoise = "*"
 libsass = "*"
-pip = "*"
-install = "*"
 dc-design-system = {ref = "0.1.1", git = "https://github.com/DemocracyClub/design-system.git"}
 django-sesame = "*"
 psycopg2-binary = "*"
@@ -22,12 +20,13 @@ requests = "*"
 django-apiblueprint-view = "<3.0"
 django-debug-toolbar = "*"
 python-memcached = "*"
-djangorestframework = "*"
 certifi = ">2022.9.24"
 django-cors-headers = "*"
 typing-extensions = ">=3.7.4"
 dc-logging-utils = {file = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz"}
 urllib3 = "<2"
+setuptools = "*"
+djhtml = "==3.0.6"
 
 [dev-packages]
 pre-commit = "*"
@@ -44,9 +43,10 @@ ipdb = "*"
 pytest-socket = "==0.6.0"
 wheel = ">0.37.0"
 ruff = "==0.1.6"
+uvicorn = "==0.30.6"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"
 
 [pipenv]
 allow_prereleases = true
@@ -56,3 +56,4 @@ collectstatic = "python manage.py collectstatic -c --noinput"
 pytest = "pytest"
 coveralls = "coveralls"
 migratedb = "python manage.py migrate --noinput"
+start = "bash -c \"(cd api_endpoints/v1_postcode_lookup/ && uvicorn app:app --reload)\""

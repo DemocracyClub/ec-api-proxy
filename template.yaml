@@ -87,9 +87,9 @@ Resources:
     Properties:
       ContentUri: ./lambda-layers/DependenciesLayer/
       CompatibleRuntimes:
-        - python3.10
+        - python3.12
     Metadata:
-      BuildMethod: python3.10
+      BuildMethod: python3.12
     RetentionPolicy: Delete
 
   ECApiFunction:
@@ -100,7 +100,7 @@ Resources:
       Handler: ec_api.lambda_awsgi.lambda_handler
       Layers:
         - !Ref DependenciesLayer
-      Runtime: python3.10
+      Runtime: python3.12
       MemorySize: 1024
       Environment:
         Variables:
@@ -167,7 +167,7 @@ Resources:
           POSTGRES_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
-      Runtime: python3.10
+      Runtime: python3.12
   V1VotingInformationFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -175,7 +175,7 @@ Resources:
       CodeUri: ./api_endpoints/v1_postcode_lookup/
       Handler: app.handler
       AutoPublishAlias: live
-      Runtime: python3.10
+      Runtime: python3.12
       MemorySize: 512
       Environment:
         Variables:

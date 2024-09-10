@@ -7,12 +7,12 @@
     voting in their area. By entering their postcode, your users can quickly access information on the following:
   </p>
   <ul>
-  <li>Upcoming elections, including the election type and date</li>
-  <li>Polling station information, including address</li>
-  <li>Candidate information</li>
-  <li>Contact details for electoral services teams at local councils, and electoral registration offices in
-    Scotland – useful for submitting postal or proxy vote application forms
-  </li>
+    <li>Upcoming elections, including the election type and date</li>
+    <li>Polling station information, including address</li>
+    <li>Candidate information</li>
+    <li>Contact details for electoral services teams at local councils, and electoral registration offices in
+      Scotland – useful for submitting postal or proxy vote application forms
+    </li>
   </ul>
   <p>You can add the Electoral Commission’s election lookup widget to any website.</p>
   <p>Here’s how the lookup widget will look on your site. Feel free to test it by entering a
@@ -22,7 +22,7 @@
       <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-candidates="true">
       </div>
       <script type="text/javascript"
-          src="{% url "widget_js" %}">
+              src="{% url "widget_js" %}">
       </script>
     </div>
   </figure>
@@ -71,66 +71,66 @@
   </div>
 
   <script>
-      var form = document.querySelector('#widget-options');
-      if (form) {
-        form.addEventListener('submit', handleWidgetOptions);
-      }
+    var form = document.querySelector('#widget-options');
+    if (form) {
+      form.addEventListener('submit', handleWidgetOptions);
+    }
 
-      function handleWidgetOptions(event) {
-        event.preventDefault();
-        createWidgetVersion(form.elements.language.value);
-      }
+    function handleWidgetOptions(event) {
+      event.preventDefault();
+      createWidgetVersion(form.elements.language.value);
+    }
 
-      function getEmbedCode(customAttributes) {
-        return '<pre><code>&lt;noscript&gt;\n' +
-          '&lt;a href=&quot;https://www.electoralcommission.org.uk/i-am-a/voter/your-election-information&quot;&gt;Find election information at\n' +
-          '&lt;span aria-label=&quot;The Electoral Commission&quot;&gt;electoralcommission.org.uk&lt;/span&gt;&lt;/a&gt;' +
-          '&lt;/noscript&gt;\n' +
-          '&lt;div id="dc_wdiv" ' + customAttributes + '&gt;&lt;/div&gt;\n' +
-          '&lt;script type="text/javascript"\n' +
-          '  src="https://api.electoralcommission.org.uk/widget/widget.js"&gt;\n' +
-          '&lt;/script&gt;\n' +
-          '</code></pre>\n';
-      }
+    function getEmbedCode(customAttributes) {
+      return '<pre><code>&lt;noscript&gt;\n' +
+      '&lt;a href=&quot;https://www.electoralcommission.org.uk/i-am-a/voter/your-election-information&quot;&gt;Find election information at\n' +
+      '&lt;span aria-label=&quot;The Electoral Commission&quot;&gt;electoralcommission.org.uk&lt;/span&gt;&lt;/a&gt;' +
+      '&lt;/noscript&gt;\n' +
+      '&lt;div id="dc_wdiv" ' + customAttributes + '&gt;&lt;/div&gt;\n' +
+      '&lt;script type="text/javascript"\n' +
+      '  src="https://api.electoralcommission.org.uk/widget/widget.js"&gt;\n' +
+      '&lt;/script&gt;\n' +
+      '</code></pre>\n';
+    }
 
-      function makeAttributeList(language) {
-        var attrs = '';
-        if ((language === 'en') || (language === 'cy')) {
-          attrs = 'data-language="' + language + '" ';
-        }
-        return attrs + 'aria-live="polite" role="region" data-candidates="true"';
+    function makeAttributeList(language) {
+      var attrs = '';
+      if ((language === 'en') || (language === 'cy')) {
+        attrs = 'data-language="' + language + '" ';
       }
+      return attrs + 'aria-live="polite" role="region" data-candidates="true"';
+    }
 
-      function makeWidget(language) {
-        var div = document.createElement('div');
-        div.setAttribute('id', 'dc_wdiv');
-        if ((language === 'en') || (language === 'cy')) {
-          div.setAttribute('data-language', language);
-        }
-        div.setAttribute('aria-live', 'polite');
-        div.setAttribute('role', 'region');
-        div.setAttribute('data-candidates', 'true');
-        return div;
+    function makeWidget(language) {
+      var div = document.createElement('div');
+      div.setAttribute('id', 'dc_wdiv');
+      if ((language === 'en') || (language === 'cy')) {
+        div.setAttribute('data-language', language);
       }
+      div.setAttribute('aria-live', 'polite');
+      div.setAttribute('role', 'region');
+      div.setAttribute('data-candidates', 'true');
+      return div;
+    }
 
-      function makeScript() {
-        var script = document.createElement('script');
-        script.type = "text/javascript";
-        script.src = "https://api.electoralcommission.org.uk/widget/widget.js";
-        return script;
-      }
+    function makeScript() {
+      var script = document.createElement('script');
+      script.type = "text/javascript";
+      script.src = "https://api.electoralcommission.org.uk/widget/widget.js";
+      return script;
+    }
 
-      function createWidgetVersion(language) {
-        debugger
-        var widgetArea = document.querySelector('#widget-area');
-        var codeArea = document.querySelector('#code-area');
-        var widget = makeWidget(language);
-        var script = makeScript();
-        var embedCode = getEmbedCode(makeAttributeList(language));
-        widgetArea.innerHTML = '';
-        widgetArea.appendChild(widget);
-        widgetArea.appendChild(script);
-        codeArea.innerHTML = embedCode;
-      }
-    </script>
+    function createWidgetVersion(language) {
+      debugger
+      var widgetArea = document.querySelector('#widget-area');
+      var codeArea = document.querySelector('#code-area');
+      var widget = makeWidget(language);
+      var script = makeScript();
+      var embedCode = getEmbedCode(makeAttributeList(language));
+      widgetArea.innerHTML = '';
+      widgetArea.appendChild(widget);
+      widgetArea.appendChild(script);
+      codeArea.innerHTML = embedCode;
+    }
+  </script>
 {% endblock %}
