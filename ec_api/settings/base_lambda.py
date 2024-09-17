@@ -1,7 +1,7 @@
 from .base import *  # noqa
 import os
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [os.environ.get("APP_DOMAIN")]
 DEBUG = os.environ.get("DEBUG", False)
 
 WHITENOISE_AUTOREFRESH = False
