@@ -16,10 +16,7 @@ jobs:
         - v6-dependencies-{{ checksum "Pipfile.lock" }}
         - v6-dependencies-default
     - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
-    - run: pipenv --version
-    - run: pip list
-    - run: pipenv run pip list
-    - run: pipenv sync --dev --verbose
+    - run: pipenv sync --dev
     - run: pipenv check # before save_cache so an insecure cache is never saved
     - run: make lambda-layers/DependenciesLayer/requirements.txt
     - persist_to_workspace:
