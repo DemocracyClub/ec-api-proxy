@@ -80,7 +80,6 @@
             + (object)
                 + `ballot_paper_id`: `local.cardiff.pontprennauold-st-mellons.2017-05-04` (string) - Identifier for this ballot
                 + `ballot_title`: `Cardiff local election Pontprennau/Old St. Mellons` (string) - Friendly name for this ballot
-                + `ballot_url`: `https://developers.democracyclub.org.uk/api/v1/local.cardiff.pontprennauold-st-mellons.2017-05-04/` (string) - API link for more detailed info about this ballot from the /elections endpoint
                 + `poll_open_date`: `2017-05-04` (string) - Polling day for this ballot  (ISO 8601)
                 + `elected_role`: `Local Councillor` (string) - Name of the role the winner(s) of this election will assume
                 + metadata: (object, nullable) - Object containing information about special conditions for the user to be aware about (e.g: cancelled elections, voter id pilot). (details TBC)
@@ -88,6 +87,11 @@
                 + cancellation_reason: `null` (CancellationReason, nullable) - If a ballot has been cancelled, this key may hold a codified reason for that ballot's cancellation
                 + `replaced_by`: (string, nullable) - If a ballot has been cancelled (cancelled = true) and rescheduled for a later date, this key will hold the ballot_paper_id of the ballot that replaces it.
                 + replaces: (string, nullable) - If this ballot replaces another cancelled ballot, this key will hold the ballot_paper_id of the ballot that it replaces.
+                + `requires_voter_id`: `EA-2022` (enum[string], nullable) - The type of voter ID required in order to vote in this election. Nullable, or one of Electoral Fraud (Northern Ireland) Act 2002, Elections Act 2022 or one of the pilots.
+                    + `EFA-2002`
+                    + `EA-2022`
+                    + `pilot-2018`
+                    + `pilot-2019`
                 + `election_id`: `local.cardiff.2017-05-04` (string) - Identifier for this ballot's parent election group
                 + `election_name`: `Cardiff local election` (string) - Friendly name for this ballot's parent election group
                 + `post_name`: `Pontprennau/Old St. Mellons` (string) - Name of the division or post the winner(s) of this election will represent
@@ -103,10 +107,13 @@
                         + party: (object)
                             + `party_id`: `party:90` (string)
                             + `party_name`: `Liberal Democrats` (string)
+                        + previous_party_affiliations: (array[object], fixed-type, nullable)
+                            + (object)
+                                + `party_id`: `party:90` (string)
+                                + `party_name`: `Liberal Democrats` (string)
                         + person: (object)
                             + `ynr_id`: `23417` (number)
                             + name: `David Keigwin` (string)
-                            + `absolute_url`: `https://whocanivotefor.co.uk/person/23417/david-keigwin` (string) - Link for more (human-readable) information about this candidate
                             + `email`: `dave@example.com` (string, nullable) - Email address for this candidate, if we hold it
                             + `photo_url`: (string, nullable) - URL for a photo of this candidate, if we hold one
                     + (object)
@@ -117,10 +124,8 @@
                         + person: (object)
                             + `ynr_id`: `8071` (number)
                             + name: `Joel Williams` (string)
-                            + `absolute_url`: `https://whocanivotefor.co.uk/person/8071/joel-williams` (string) - Link for more (human-readable) information about this candidate
                             + `email`: (string, nullable) - Email address for this candidate, if we hold it
                             + `photo_url`: `https://static-candidates.democracyclub.org.uk/media/images/images/8071.png` (string, nullable) - URL for a photo of this candidate, if we hold one
-                + `wcivf_url`: `https://whocanivotefor.co.uk/elections/local.cardiff.2017-05-04/post-UTE:W05000900/pontprennauold-st-mellons` - Link for more (human-readable) information about this ballot
 + `electoral_services` (ElectoralServices, nullable) - Contact details for the user's local Electoral Services team. If we do not know the user's polling station, this can be used to provide contact info for their local council. This may be `null` if we are not able to determine the user's council.
 + `registration` (Registration, nullable) - Sometimes the contact information for registration and proxy voting is different to the electoral services contact details. Use these if they exist and your users might have questions about voter registration. If this key is null, assume the electoral services contact details can be used for electoral registration related enquiries.
 + `postcode_location` (PostcodeLocation) - A [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a [Point object](https://tools.ietf.org/html/rfc7946#section-3.1.2) describing the centroid of the input postcode. If providing a map or directions for a polling station journey, use this as the start point. This may be `null` if we are not able to accurately geocode.
