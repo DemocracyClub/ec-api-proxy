@@ -27,6 +27,7 @@ dc-logging-utils = {file = "https://github.com/DemocracyClub/dc_logging/archive/
 urllib3 = "<2"
 setuptools = "*"
 djhtml = "==3.0.6"
+dc-django-utils = {file = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.tar.gz"}
 
 [dev-packages]
 pre-commit = "*"
