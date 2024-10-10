@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "dc_utils.middleware.BasicAuthMiddleware",
 ]
 
 ROOT_URLCONF = "ec_api.urls"
@@ -117,6 +118,12 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "users.CustomUser"
 
 LOGIN_URL = reverse_lazy("users:login")
+
+# Allowlist of URLs that should be ignored by dc_utils BasicAuthMiddleware
+BASIC_AUTH_ALLOWLIST = [
+    "/api",
+    "/api/*",
+]
 
 # django-sesame settings
 AUTHENTICATION_BACKENDS = ["sesame.backends.ModelBackend"]
