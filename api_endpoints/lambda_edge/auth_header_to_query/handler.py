@@ -33,7 +33,7 @@ def lambda_handler(event, context):
     # Parse request querystring to get dictionary/json
     params = {k: v[0] for k, v in parse_qs(request["querystring"]).items()}
     # The header value is in the format of:
-    # {lower_case_header_name: [{"key": "Title_Case_Header_Name": "value": "value"}]}
+    # {lower_case_header_name: [{"key": "Title_Case_Header_Name", "value": "value"}]}
     # And the authorization header value is "Token api_key"
     token = token_header[0]["value"].split(" ")[-1]
     params["token"] = token
