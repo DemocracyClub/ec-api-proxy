@@ -26,7 +26,6 @@ parameter_overrides = """
   AppSecretKey=badf00d \
   AppIsBehindCloudFront=False \
   AppSentryDSN='' \
-  AppSamLambdaConfigEnv=dev \
   AppDomain='' \
   AppPostgresDatabaseName='' \
   AppPostgresPassword='' \
