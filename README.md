@@ -20,7 +20,7 @@ This section assumes a working python 3.12 environment with Pipenv installed.
 
 ## Run application
 
-- Frontend: `./mange.py runserver`
+- Frontend: `./manage.py runserver`
 - API: `pipenv run start`
 
 ## Pre-commit
