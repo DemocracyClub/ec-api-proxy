@@ -9,7 +9,7 @@ Resources:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/lambda_edge/auth_header_to_query
       Handler: handler.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.12
       AutoPublishAlias: live
 
 Outputs:

@@ -3,12 +3,12 @@
 
 ## Install requirements
 
-* Python 3.8
+* Python 3.12
 * Pipenv (`pip install Pipenv`)
 
 ## Installation
 
-This section assumes a working python 3.8 environment with Pipenv installed.
+This section assumes a working python 3.12 environment with Pipenv installed.
 
 * `cp ec_api/settings/local.py.example ec_api/settings/local.py`
 * Install Python dependencies:
@@ -20,7 +20,7 @@ This section assumes a working python 3.8 environment with Pipenv installed.
 
 ## Run application
 
-- Frontend: `./mange.py runserver`
+- Frontend: `./manage.py runserver`
 - API: `pipenv run start`
 
 ## Pre-commit
