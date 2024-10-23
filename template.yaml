@@ -1,5 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
+Transform:
+  - AWS::LanguageExtensions
+  - AWS::Serverless-2016-10-31
 Description: "EC API app: Lambda, API Gateway"
 
 Globals:
@@ -82,6 +84,11 @@ Parameters:
     Description: "The API to use to authenticate to devs.DC"
     Type: AWS::SSM::Parameter::Value<String>
 
+Conditions:
+  UseBasicAuth: !Or
+    - !Equals [ !Ref DCEnvironment, development ]
+    - !Equals [ !Ref DCEnvironment, staging ]
+
 Resources:
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -92,6 +99,60 @@ Resources:
     Metadata:
       BuildMethod: python3.12
     RetentionPolicy: Delete
+
+  ECApiFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: [ ECApiFunction ]
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ECApiFunction}
+      RetentionInDays: !Ref AppLogRetentionDays
+
+  ECAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
+      Auth:
+        DefaultAuthorizer: !If [ UseBasicAuth, "FrontendAuthFunction", !Ref AWS::NoValue]
+        Authorizers:
+          APIAuthFunction:
+            FunctionArn: !GetAtt APIAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              QueryStrings:
+                - token
+              ReauthorizeEvery: 3600
+          FrontendAuthFunction:
+            FunctionArn: !GetAtt FrontendAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - Authorization
+              ReauthorizeEvery: 3600
+
+  APIAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
+      CodeUri: ./api_endpoints/api_auth
+      Handler: handler.lambda_handler
+      Environment:
+        Variables:
+          POSTGRES_HOST: !Ref AppPostgresHost
+          POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
+          POSTGRES_PASSWORD: !Ref AppPostgresPassword
+      Runtime: python3.12
+
+  FrontendAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
+      CodeUri: ./ec_api/
+      Handler: lambda_frontend_auth.lambda_handler
+      Runtime: python3.12
 
   ECApiFunction:
     Type: AWS::Serverless::Function
@@ -129,53 +190,12 @@ Resources:
             Path: /
             Method: ANY
 
-  ECApiFunctionLogGroup:
-    Type: AWS::Logs::LogGroup
-    DependsOn: [ ECApiFunction ]
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${ECApiFunction}
-      RetentionInDays: !Ref AppLogRetentionDays
-
-  ECAPI:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      Cors:
-        AllowMethods: "'GET'"
-        AllowOrigin: "'*'"
-        MaxAge: "'600'"
-      Auth:
-        DefaultAuthorizer: APIAuthFunction
-        Authorizers:
-          APIAuthFunction:
-            FunctionArn: !GetAtt APIAuthFunction.Arn
-            FunctionPayloadType: REQUEST
-            Identity:
-              QueryStrings:
-                - token
-              ReauthorizeEvery: 3600
-
-
-  APIAuthFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
-      CodeUri: ./api_endpoints/api_auth
-      Handler: handler.lambda_handler
-      AutoPublishAlias: live
-      Environment:
-        Variables:
-          POSTGRES_HOST: !Ref AppPostgresHost
-          POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
-          POSTGRES_PASSWORD: !Ref AppPostgresPassword
-      Runtime: python3.12
   V1VotingInformationFunction:
     Type: AWS::Serverless::Function
     Properties:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/v1_postcode_lookup/
       Handler: app.handler
-      AutoPublishAlias: live
       Runtime: python3.12
       MemorySize: 512
       Environment:
@@ -188,12 +208,16 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ECAPI
+            Auth:
+              Authorizer: APIAuthFunction
             Path: /api/v1/postcode/{proxy+}
             Method: GET
         AddressRequests:
           Type: Api
           Properties:
             RestApiId: !Ref ECAPI
+            Auth:
+              Authorizer: APIAuthFunction
             Path: /api/v1/address/{proxy+}
             Method: GET
 
