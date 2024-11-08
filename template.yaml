@@ -227,6 +227,13 @@ Outputs:
     Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFqdn" ] ]
+
+  ECApiFqdnNewValue:
+    Description: "API Gateway endpoint FQDN for EC API function"
+    Value: !Sub "${ECAPI}.execute-api.${AWS::Region}.amazonaws.com"
+    Export:
+      Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFqdnNewValue" ] ]
+
   ECStarletteApi:
     Description: "API Gateway endpoint FQDN for EC Starlette API function"
     Value: !Sub "${ECAPI}.execute-api.${AWS::Region}.amazonaws.com"
