@@ -183,11 +183,13 @@ Resources:
         HTTPRequests:
           Type: Api
           Properties:
+            RestApiId: !Ref ECAPI
             Path: /{proxy+}
             Method: ANY
         HTTPRequestRoots:
           Type: Api
           Properties:
+            RestApiId: !Ref ECAPI
             Path: /
             Method: ANY
 
@@ -225,7 +227,7 @@ Resources:
 Outputs:
   ECApiFqdn:
     Description: "API Gateway endpoint FQDN for EC API function"
-    Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
+    Value: !Sub "${ECAPI}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFqdn" ] ]
 
