@@ -198,7 +198,7 @@ workflows:
             - run-tests                            # staging should only deploy if tests pass
             - sam_build                       # deploy needs .aws-sam/build/
           context: [ deployment-staging-ec-api ]
-          filters: { branches: { only: [ /stage-deploy-.*/, main ] } }
+          filters: { branches: { only: [ /stage-deploy-.*/, main, frontend-lambda-authorizer-for-staging ] } }
 
       - sam_deploy:
           name: sam_deploy_production
