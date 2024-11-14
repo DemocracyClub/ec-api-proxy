@@ -162,7 +162,6 @@ Resources:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/api_auth
       Handler: handler.lambda_handler
-      AutoPublishAlias: live
       Environment:
         Variables:
           POSTGRES_HOST: !Ref AppPostgresHost
@@ -175,7 +174,6 @@ Resources:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/v1_postcode_lookup/
       Handler: app.handler
-      AutoPublishAlias: live
       Runtime: python3.12
       MemorySize: 512
       Environment:
