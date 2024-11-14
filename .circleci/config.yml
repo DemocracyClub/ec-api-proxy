@@ -91,7 +91,6 @@ jobs:
       DJANGO_SETTINGS_MODULE: "<<parameters.dc-django-settings-module>>"
       SAM_CONFIG_FILE: samconfig.toml.d/ci-<<parameters.dc-environment>>.toml
       DC_ENVIRONMENT: <<parameters.dc-environment>>
-      SAM_PUBLIC_CONFIG_ENV: <<parameters.dc-environment>>-public-access
       SAM_LAMBDA_FUNCTION_CONFIG_ENV: <<parameters.dc-environment>>-cloudfront-lambda-functions
       DC_DEPLOY_NAME: <<parameters.dc-deploy-name>>
       POSTGRES_DATABASE_NAME: <<parameters.dc-deploy-name>>
@@ -106,7 +105,7 @@ jobs:
     - run: *install-pipenv
     - run: pip install aws-sam-cli
 
-    - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT SAM_PUBLIC_CONFIG_ENV
+    - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT
     - run: printenv SECRET_KEY | md5sum
     - run: printenv AWS_ACCESS_KEY_ID | md5sum
     - run: sudo apt update && sudo apt install postgresql-client
@@ -158,7 +157,6 @@ jobs:
         command: |
           pipenv run sam deploy ${DASH_DASH_DEBUG} \
             --config-file ~/repo/${SAM_CONFIG_FILE} \
-            --config-env $SAM_PUBLIC_CONFIG_ENV \
             --template-file ~/repo/public-access-template.yaml \
             --parameter-overrides " \
                StackNameSuffix=<<parameters.dc-environment>> \
