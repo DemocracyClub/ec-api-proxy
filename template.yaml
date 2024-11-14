@@ -155,7 +155,6 @@ Resources:
                 - token
               ReauthorizeEvery: 3600
 
-
   APIAuthFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -168,6 +167,7 @@ Resources:
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
       Runtime: python3.12
+
   V1VotingInformationFunction:
     Type: AWS::Serverless::Function
     Properties:
