@@ -1,5 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
+Transform:
+  - AWS::LanguageExtensions
+  - AWS::Serverless-2016-10-31
 Description: "EC API app: Lambda, API Gateway"
 
 Globals:
@@ -82,6 +84,11 @@ Parameters:
     Description: "The API to use to authenticate to devs.DC"
     Type: AWS::SSM::Parameter::Value<String>
 
+Conditions:
+  UseBasicAuth: !Or
+    - !Equals [ !Ref DCEnvironment, development ]
+    - !Equals [ !Ref DCEnvironment, staging ]
+
 Resources:
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -121,6 +128,7 @@ Resources:
         HTTPRequests:
           Type: Api
           Properties:
+            RestApiId: !Ref FrontendAPI
             Path: /{proxy+}
             Method: ANY
         HTTPRequestRoots:
@@ -146,7 +154,26 @@ Resources:
         AllowMethods: "'GET'"
         AllowOrigin: "'*'"
         MaxAge: "'600'"
+      Auth:
+        DefaultAuthorizer: !If [ UseBasicAuth, "FrontendAuthFunction", !Ref AWS::NoValue]
+        Authorizers:
+          FrontendAuthFunction:
+            FunctionArn: !GetAtt FrontendAuthFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - Authorization
+              ReauthorizeEvery: 3600
 
+  BasicAuthGatewayResponse:
+    Condition: UseBasicAuth
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.www-authenticate: "'Basic realm=\"Restricted\"'"
+      ResponseType: UNAUTHORIZED
+      RestApiId: !Ref FrontendAPI
+      StatusCode: '401'
 
   ECAPI:
     Type: AWS::Serverless::Api
@@ -166,6 +193,14 @@ Resources:
               QueryStrings:
                 - token
               ReauthorizeEvery: 3600
+
+  FrontendAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
+      CodeUri: ./ec_api/
+      Handler: lambda_frontend_auth.lambda_handler
+      Runtime: python3.12
 
   APIAuthFunction:
     Type: AWS::Serverless::Function
@@ -208,12 +243,6 @@ Resources:
             Method: GET
 
 Outputs:
-  ECApiFqdn:
-    Description: "API Gateway endpoint FQDN for EC API function"
-    Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
-    Export:
-      Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFqdn" ] ]
-
   ECApiFrontendFqdn:
     Description: "API Gateway endpoint FQDN for EC API function"
     Value: !Sub "${FrontendAPI}.execute-api.${AWS::Region}.amazonaws.com"
