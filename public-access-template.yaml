@@ -61,7 +61,7 @@ Resources:
         Origins:
           - Id: Static
             DomainName:
-              Fn::ImportValue: !Sub "ECApiApp-${StackNameSuffix}:ECApiFqdn"
+              Fn::ImportValue: !Sub "ECApiApp-${StackNameSuffix}:ECApiFrontendFqdn"
             OriginPath: "/Prod"
             CustomOriginConfig:
               OriginProtocolPolicy: "https-only"
@@ -77,7 +77,7 @@ Resources:
 
           - Id: Dynamic
             DomainName:
-              Fn::ImportValue: !Sub "ECApiApp-${StackNameSuffix}:ECApiFqdn"
+              Fn::ImportValue: !Sub "ECApiApp-${StackNameSuffix}:ECApiFrontendFqdn"
             OriginPath: "/Prod"
             CustomOriginConfig:
               OriginProtocolPolicy: "https-only"

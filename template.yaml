@@ -63,9 +63,10 @@ Parameters:
     Description: "The URL to the widget JS"
     Type: String
 
-  AppSamLambdaConfigEnv:
-    Description: "The lambda config environment passed to the app used to init sentry."
-    Type: String
+  DCEnvironment:
+    Default: DC_ENVIRONMENT
+    Description: "The DC_ENVIRONMENT environment variable"
+    Type: AWS::SSM::Parameter::Value<String>
 
   AppDomain:
     Description: "The domain the app is on."
@@ -113,7 +114,7 @@ Resources:
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
           WIDGET_S3_URL: !Ref AppWidgetS3URL
-          SAM_LAMBDA_CONFIG_ENV: !Ref AppSamLambdaConfigEnv
+          DC_ENVIRONMENT: !Ref DCEnvironment
           APP_DOMAIN: !Ref AppDomain
           LOGGER_ARN: !Ref AppLoggerArn
       Events:
@@ -125,6 +126,7 @@ Resources:
         HTTPRequestRoots:
           Type: Api
           Properties:
+            RestApiId: !Ref FrontendAPI
             Path: /
             Method: ANY
 
@@ -134,6 +136,17 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${ECApiFunction}
       RetentionInDays: !Ref AppLogRetentionDays
+
+  FrontendAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      AlwaysDeploy: True
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
+
 
   ECAPI:
     Type: AWS::Serverless::Api
@@ -154,27 +167,25 @@ Resources:
                 - token
               ReauthorizeEvery: 3600
 
-
   APIAuthFunction:
     Type: AWS::Serverless::Function
     Properties:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/api_auth
       Handler: handler.lambda_handler
-      AutoPublishAlias: live
       Environment:
         Variables:
           POSTGRES_HOST: !Ref AppPostgresHost
           POSTGRES_DATABASE_NAME: !Ref AppPostgresDatabaseName
           POSTGRES_PASSWORD: !Ref AppPostgresPassword
       Runtime: python3.12
+
   V1VotingInformationFunction:
     Type: AWS::Serverless::Function
     Properties:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/v1_postcode_lookup/
       Handler: app.handler
-      AutoPublishAlias: live
       Runtime: python3.12
       MemorySize: 512
       Environment:
@@ -202,6 +213,13 @@ Outputs:
     Value: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
     Export:
       Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFqdn" ] ]
+
+  ECApiFrontendFqdn:
+    Description: "API Gateway endpoint FQDN for EC API function"
+    Value: !Sub "${FrontendAPI}.execute-api.${AWS::Region}.amazonaws.com"
+    Export:
+      Name: !Join [ ":", [ !Ref "AWS::StackName", "ECApiFrontendFqdn" ] ]
+
   ECStarletteApi:
     Description: "API Gateway endpoint FQDN for EC Starlette API function"
     Value: !Sub "${ECAPI}.execute-api.${AWS::Region}.amazonaws.com"
