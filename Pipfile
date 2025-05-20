@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==4.2.16"
+django = "==4.2.21"
 aws-wsgi = {ref = "a5b800373c326e75f705d400c48f7df301409724", git = "https://github.com/DemocracyClub/awsgi.git"}
-sentry-sdk = "*"
+sentry-sdk = "==2.28.0"
 django-pipeline = "*"
 whitenoise = "*"
 libsass = "*"
@@ -16,11 +16,11 @@ psycopg2-binary = "*"
 django-ses = "*"
 uk-election-ids = "*"
 faker = "*"
-requests = "*"
-django-apiblueprint-view = "<3.0"
+requests = "==2.32.3"
+django-apiblueprint-view = "==2.5.1"
 django-debug-toolbar = "*"
 python-memcached = "*"
-certifi = ">2022.9.24"
+certifi = "==2025.4.26"
 django-cors-headers = "*"
 typing-extensions = ">=3.7.4"
 dc-logging-utils = {file = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.2.tar.gz"}

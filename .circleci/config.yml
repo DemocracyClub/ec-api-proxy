@@ -17,7 +17,7 @@ jobs:
         - v7-dependencies-default
     - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
     - run: pipenv sync --dev
-    - run: pipenv check # before save_cache so an insecure cache is never saved
+    - run: pipenv check --auto-install # before save_cache so an insecure cache is never saved
     - run: make lambda-layers/DependenciesLayer/requirements.txt
     - persist_to_workspace:
         root: ~/repo/
