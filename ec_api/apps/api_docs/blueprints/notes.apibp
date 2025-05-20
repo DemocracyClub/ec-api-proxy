@@ -42,7 +42,7 @@ requirements change depending on the value. This should be taken into account wh
 
 #### Cancelled Polls
 
-Sometimes a scheduled poll may be cancelled. This is usuaully either because
+Sometimes a scheduled poll may be cancelled or rescheduled. This is usually either because
 the election is uncontested or due to death of a candidate.
 
 When a single ballot is cancelled, a `cancellation_reason` will be added to the response. The values are:
