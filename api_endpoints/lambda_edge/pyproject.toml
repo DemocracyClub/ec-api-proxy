@@ -1,0 +1,10 @@
+[project]
+name = "lambda-edge"
+version = "0.0.0"
+description = "API endpoint for converting auth header to a querystring param"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = []
+
+[tool.uv]
+package = false

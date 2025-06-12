@@ -4,24 +4,21 @@
 ## Install requirements
 
 * Python 3.12
-* Pipenv (`pip install Pipenv`)
+* [uv](https://docs.astral.sh/uv/)
 
 ## Installation
 
 This section assumes a working python 3.12 environment with Pipenv installed.
 
 * `cp ec_api/settings/local.py.example ec_api/settings/local.py`
-* Install Python dependencies:
-    * `pipenv install --dev`
-    * `pip install -r api_endpoints/v1_postcode_lookup/requirements.txt`
+* Install Python dependencies: `uv sync --all-groups --all-packages`
 * Run the test suite: `pytest`
 * Run lint checks: `ruff .`
 * Auto-format: `ruff format .`
 
 ## Run application
 
-- Frontend: `./manage.py runserver`
-- API: `pipenv run start`
+- `./scripts/startapp.sh`
 
 ## Pre-commit
 

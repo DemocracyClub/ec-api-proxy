@@ -5,7 +5,7 @@ export DJANGO_SETTINGS_MODULE?=ec_api.settings.base_lambda
 export APP_IS_BEHIND_CLOUDFRONT?=False
 
 .PHONY: all
-all: clean collectstatic lambda-layers/DependenciesLayer/requirements.txt ## Rebuild everything this Makefile knows how to build
+all: clean collectstatic lambda-layers/DependenciesLayer/requirements.txt api_endpoints/api_auth/requirements.txt api_endpoints/v1_postcode_lookup/requirements.txt ## Rebuild everything this Makefile knows how to build
 
 .PHONY: clean
 clean: ## Delete any generated static asset or req.txt files and git-restore the rendered API documentation file
@@ -18,8 +18,14 @@ collectstatic: ## Rebuild the static assets
 lambda-layers/DependenciesLayer:
 	mkdir -p $@
 
-lambda-layers/DependenciesLayer/requirements.txt: Pipfile Pipfile.lock lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
-	pipenv requirements | sed "s/^-e //" >lambda-layers/DependenciesLayer/requirements.txt
+lambda-layers/DependenciesLayer/requirements.txt: pyproject.toml uv.lock lambda-layers/DependenciesLayer ## Update the requirements.txt file used to build this Lambda function's DependenciesLayer
+	uv export --no-hashes --no-dev > lambda-layers/DependenciesLayer/requirements.txt
+
+api_endpoints/api_auth/requirements.txt:
+	uv export --no-hashes --package api_auth > api_endpoints/api_auth/requirements.txt
+
+api_endpoints/v1_postcode_lookup/requirements.txt:
+	uv export --no-hashes --package v1_postcode_lookup > api_endpoints/v1_postcode_lookup/requirements.txt
 
 .PHONY: help
 # gratuitously adapted from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
