@@ -4,6 +4,11 @@ orbs:
   python: circleci/python@0.2.1
   codecov: codecov/codecov@3.2.4
 
+commands:
+  install_uv:
+    steps:
+      - run: pip install --upgrade uv">=0.5.12,<0.6.0"
+
 jobs:
   install_and_update_dependencies:
     docker:
@@ -13,20 +18,26 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - v7-dependencies-{{ checksum "Pipfile.lock" }}
+        - v7-dependencies-{{ checksum "uv.lock" }}
         - v7-dependencies-default
-    - run: &install-pipenv pip install -U pipenv pip --quiet --no-input
-    - run: pipenv sync --dev
-    - run: pipenv check --auto-install # before save_cache so an insecure cache is never saved
+    - install_uv
+    - run: uv sync --dev --no-python-downloads
     - run: make lambda-layers/DependenciesLayer/requirements.txt
+    - run: make api_endpoints/api_auth/requirements.txt
+    - run: make api_endpoints/v1_postcode_lookup/requirements.txt
+    - run: uv cache prune --ci
     - persist_to_workspace:
         root: ~/repo/
-        paths: [ lambda-layers/DependenciesLayer/requirements.txt ]
+        paths:
+          - lambda-layers/DependenciesLayer/requirements.txt
+          - api_endpoints/api_auth/requirements.txt
+          - api_endpoints/v1_postcode_lookup/requirements.txt
     - save_cache:
         when: on_success
         paths:
-        - ~/.local/share/virtualenvs/
-        key: v7-dependencies-{{ checksum "Pipfile.lock" }}
+          - ./.venv
+          - $HOME/.cache/uv
+        key: v7-dependencies-{{ checksum "uv.lock" }}
 
   run-tests:
     docker:
@@ -36,21 +47,23 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v7-dependencies-{{ checksum "Pipfile.lock" }}
+          - v7-dependencies-{{ checksum "uv.lock" }}
           - v7-dependencies-default
-      - run: *install-pipenv
+      - install_uv
       - run:
           name: Ruff Check
-          command: pipenv run ruff check .
+          command: uv run ruff check .
       - run:
           name: Ruff format
-          command: pipenv run ruff format . --check
-      - run: pipenv run djhtml --check .
-      - run: pipenv run pipenv verify
-      - run: pipenv run collectstatic
+          command: uv run ruff format . --check
+      - run: git ls-files '*.html' | xargs uv run djhtml --check
+      - run: uv lock --locked
+      - run: uv run python manage.py check
+      - run: uv run python manage.py makemigrations --check
+      - run: uv run python manage.py collectstatic --noinput --clear
       - run:
           name: Run Tests
-          command: pipenv run pytest --junitxml=test-results/junit.xml --cov --ruff
+          command: uv run pytest --junitxml=test-results/junit.xml --cov --ruff
       - store_artifacts:
           path: test-results
           destination: test-results
@@ -100,9 +113,9 @@ jobs:
         at: ~/repo/
     - restore_cache:
         keys:
-        - v7-dependencies-{{ checksum "Pipfile.lock" }}
+        - v7-dependencies-{{ checksum "uv.lock" }}
         - v7-dependencies-default
-    - run: *install-pipenv
+    - install_uv
     - run: pip install aws-sam-cli
 
     - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT
@@ -111,9 +124,9 @@ jobs:
     - run: sudo apt update && sudo apt install postgresql-client
     - run: PGPASSWORD=$POSTGRES_PASSWORD createdb --host $POSTGRES_HOST --username postgres $POSTGRES_DATABASE_NAME || true
     - run:
-        name: "pipenv run sam deploy # App: Lambda + API Gateway"
+        name: "sam deploy # App: Lambda + API Gateway"
         command: |
-          pipenv run sam deploy ${DASH_DASH_DEBUG} \
+          sam deploy ${DASH_DASH_DEBUG} \
             --config-file ~/repo/${SAM_CONFIG_FILE} \
             --config-env $DC_ENVIRONMENT \
             --template-file ~/repo/.aws-sam/build/template.yaml \
@@ -132,11 +145,11 @@ jobs:
                AppDomain='$PUBLIC_FQDN' \
               "
         no_output_timeout: 30m
-    - run: pipenv run migratedb
+    - run: uv run python manage.py migrate --noinput
     - run:
         name: "sam deploy lambda@edge function"
         command: |
-          pipenv run sam deploy \
+          sam deploy \
             --config-file ~/repo/${SAM_CONFIG_FILE} \
             --config-env $SAM_LAMBDA_FUNCTION_CONFIG_ENV
 
@@ -152,10 +165,10 @@ jobs:
           #
           printenv PUBLIC_FQDN CERTIFICATE_ARN | sed -E 's/^(.)(.)/\1\x00\2/'
     - run:
-        name: "pipenv run sam deploy # Public access: CDN + DNS"
+        name: "sam deploy # Public access: CDN + DNS"
         no_output_timeout: 20m # CloudFront can take longer than CircleCI's 10m default
         command: |
-          pipenv run sam deploy ${DASH_DASH_DEBUG} \
+          sam deploy ${DASH_DASH_DEBUG} \
             --config-file ~/repo/${SAM_CONFIG_FILE} \
             --config-env ${DC_ENVIRONMENT}-public-access \
             --template-file ~/repo/public-access-template.yaml \
