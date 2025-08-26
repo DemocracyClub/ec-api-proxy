@@ -11,6 +11,19 @@ Resources:
       Handler: handler.lambda_handler
       Runtime: python3.12
       AutoPublishAlias: live
+      DeadLetterQueue:
+        Type: SQS
+        TargetArn: !GetAtt MyDLQ.Arn
+      ReservedConcurrentExecutions: 100
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-xxx
+        SubnetIds:
+          - subnet-xxx
+  MyDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId: alias/aws/sqs
 
 Outputs:
   AuthHeaderToQueryStringFunctionVersion:
