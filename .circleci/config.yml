@@ -18,8 +18,8 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - v7-dependencies-{{ checksum "uv.lock" }}
-        - v7-dependencies-default
+        - v8-dependencies-{{ checksum "uv.lock" }}
+        - v8-dependencies-default
     - install_uv
     - run: uv sync --dev --no-python-downloads
     - run: make lambda-layers/DependenciesLayer/requirements.txt
@@ -35,9 +35,8 @@ jobs:
     - save_cache:
         when: on_success
         paths:
-          - ./.venv
           - $HOME/.cache/uv
-        key: v7-dependencies-{{ checksum "uv.lock" }}
+        key: v8-dependencies-{{ checksum "uv.lock" }}
 
   run-tests:
     docker:
@@ -47,8 +46,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v7-dependencies-{{ checksum "uv.lock" }}
-          - v7-dependencies-default
+          - v8-dependencies-{{ checksum "uv.lock" }}
+          - v8-dependencies-default
       - install_uv
       - run:
           name: Ruff Check
@@ -113,8 +112,8 @@ jobs:
         at: ~/repo/
     - restore_cache:
         keys:
-        - v7-dependencies-{{ checksum "uv.lock" }}
-        - v7-dependencies-default
+        - v8-dependencies-{{ checksum "uv.lock" }}
+        - v8-dependencies-default
     - install_uv
     - run: pip install aws-sam-cli
 
