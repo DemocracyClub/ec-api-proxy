@@ -48,7 +48,7 @@ dc-design-system = {git = "https://github.com/DemocracyClub/design-system.git", 
 dc-logging-utils = { git = "https://github.com/DemocracyClub/dc_logging.git", tag = "1.0.2" }
 
 [tool.uv]
-required-version = "<0.6.0"
+required-version = "==0.8.*"
 package = false
 
 [tool.uv.workspace]
