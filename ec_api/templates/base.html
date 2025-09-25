@@ -18,7 +18,7 @@
             <a class="ds-header-home" href="/">
               {% include "logo.html" %}
             </a>
-            <nav class="ds-cluster">
+            <nav>
               <ul>
                 <li>
                   <a href="{% url "home_view" %}">Home</a>
@@ -31,7 +31,12 @@
                 </li>
                 {% if request.user.is_authenticated %}
                   <li><a href="{% url 'users:profile' %}">Your profile</a></li>
-                  <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                  <li>
+                    <form class="ds-logout" id="logout-form" method="post" action="{% url 'users:logout' %}">
+                      {% csrf_token %}
+                      <button type="submit">Logout</button>
+                    </form>
+                  </li>
                 {% else %}
                   <li><a href="{% url 'users:login' %}">Login / Register</a></li>
                 {% endif %}
