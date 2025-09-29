@@ -1,3 +1,4 @@
+@import 'partials/_switcher.scss';
 @import 'partials/_fonts.scss';
 @import 'partials/_variables.scss';
 @import 'partials/_type.scss';
@@ -14,6 +15,7 @@
 @import 'partials/_card.scss';
 @import 'partials/_candidate.scss';
 @import 'partials/_table.scss';
+@import 'partials/_language.scss';
 @import 'partials/_header.scss';
 @import 'partials/_subnav.scss';
 @import 'partials/_footer.scss';
@@ -21,10 +23,14 @@
 @import 'partials/_checkbox.scss';
 @import 'partials/_select.scss';
 @import 'partials/_filter.scss';
+@import 'partials/_status.scss';
 @import 'partials/_codeblock.scss';
 @import 'partials/_dark.scss';
 @import 'partials/_page.scss';
+@import 'partials/_map-leaflet.scss';
 @import 'partials/_utilities.scss';
+@import 'partials/_logo.scss';
+@import 'partials/_logout.scss';
 
 // // Generate atomic classes for documentation demos
 @import 'partials/_classes-colors.scss';
@@ -32,6 +38,7 @@
 
 @import 'ec_colours.scss';
 
+$familyMain: "helvetica", "arial", sans-serif;
 $familyBody: "arial", sans-serif;
 
 body {
@@ -41,6 +48,7 @@ body {
 $scope: false;
 
 @mixin optional-styles {
+  @include switcher;
   @include description-lists;
   @include button;
   @include cta;
@@ -52,15 +60,19 @@ $scope: false;
   @include candidate;
   @include breadcrumbs;
   @include table;
+  @include language;
   @include header;
   @include subnav;
   @include footer;
   @include radio;
   @include checkbox;
-  @include page;
   @include select;
   @include filter;
+  @include status;
   @include codeblock;
+  @include map-leaflet;
+  @include logo;
+  @include logout;
 }
 
 @if $scope {
@@ -109,6 +121,10 @@ body {
 
 .ds-header {
   @include container;
+
+  background-color: $ECDarkBlue;
+  margin-bottom: 0;
+
   svg {
     fill: #fff;
     margin: 1.25em 0;
@@ -122,6 +138,16 @@ body {
   nav a {
     border-bottom-color: $ECDarkBlue;
     color: $white;
+  }
+
+  form.ds-logout button {
+    font-family: $familyMain;
+    color: $white;
+    border-bottom-color: $ECDarkBlue;
+  }
+
+  [aria-current], form.ds-logout button:hover {
+    border-bottom-color: $ECEletricBlue;
   }
 }
 
@@ -143,6 +169,7 @@ body {
     font-size: $s4;
     line-height: 2em;
     vertical-align: center;
+    color: $ECDarkBlue;
   }
 }
 

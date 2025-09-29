@@ -148,36 +148,15 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = (root("assets"),)
 STATIC_ROOT = root("static")
 
-STORAGES = {
-    "staticfiles": {"BACKEND": "pipeline.storage.PipelineManifestStorage"}
-}
 
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "pipeline.finders.PipelineFinder",
-    "pipeline.finders.CachedFileFinder",
-)
+from dc_utils.settings.pipeline import *  # noqa
+from dc_utils.settings.pipeline import get_pipeline_settings  # noqa
 
-PIPELINE = {
-    "COMPILERS": ("pipeline.compilers.sass.SASSCompiler",),
-    "SASS_BINARY": "pysassc",
-    "CSS_COMPRESSOR": "pipeline.compressors.NoopCompressor",
-    "STYLESHEETS": {
-        "styles": {
-            "source_filenames": ("scss/styles.scss",),
-            "output_filename": "css/styles.css",
-            "extra_context": {
-                "media": "screen,projection",
-            },
-        },
-    },
-    "JAVASCRIPT": {
-        "mermaid": {
-            "source_filenames": ("js/mermaid.js",),
-            "output_filename": "mermaid.js",
-        }
-    },
+PIPELINE = get_pipeline_settings(extra_css=["scss/styles.scss"])
+
+PIPELINE["JAVASCRIPT"]["mermaid"] = {
+    "source_filenames": ("js/mermaid.js",),
+    "output_filename": "mermaid.js",
 }
 
 PIPELINE["SASS_ARGUMENTS"] = (
