@@ -24,6 +24,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "boto3==1.38.34",
     "faker==20.1.0",
     "djhtml==3.0.6",
     "pre-commit==3.5.0",
@@ -39,6 +40,7 @@ dev = [
     "pytest-socket==0.6.0",
     "ruff==0.1.6",
     "uvicorn==0.30.6",
+    "moto==5.0.5",
 ]
 
 [tool.uv.sources]

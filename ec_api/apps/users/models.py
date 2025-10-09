@@ -9,6 +9,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from users.logging_helpers import APIKeyForLogging
 from users.managers import CustomUserManager
 from users.mixins import TimestampMixin
 
@@ -91,6 +92,9 @@ class APIKey(TimestampMixin, models.Model):
         """
         if not self.key:
             self.key = self._generate_key()
+
+        key_for_logging = APIKeyForLogging.from_django_model(self)
+        key_for_logging.upload_to_s3()
 
         return super().save(*args, **kwargs)
 

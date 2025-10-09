@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 from django.urls import reverse
 from users.tests.factories import APIKeyFactory
@@ -8,14 +10,22 @@ class TestAPIKeyModel:
     def test_refresh_key(self):
         api_key = APIKeyFactory()
         old_key_value = api_key.key
-        api_key.refresh_key()
+        with patch(
+            "users.logging_helpers.APIKeyForLogging.upload_to_s3"
+        ) as mock_upload_to_s3:
+            api_key.refresh_key()
+            mock_upload_to_s3.assert_called_once()
         assert api_key.key != old_key_value
 
     @pytest.mark.django_db
     def test_initial_save_without_pk_creates_key(self):
         api_key = APIKeyFactory(key="")
         api_key.pk = None
-        api_key.save()
+        with patch(
+            "users.logging_helpers.APIKeyForLogging.upload_to_s3"
+        ) as mock_upload_to_s3:
+            api_key.save()
+            mock_upload_to_s3.assert_called_once()
 
         assert bool(api_key.key) is True
 
