@@ -8,7 +8,7 @@
 
 ## Installation
 
-This section assumes a working python 3.12 environment with Pipenv installed.
+This section assumes a working python 3.12 environment with uv installed.
 
 * `cp ec_api/settings/local.py.example ec_api/settings/local.py`
 * Install Python dependencies: `uv sync --all-groups --all-packages`
