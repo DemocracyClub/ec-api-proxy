@@ -23,19 +23,27 @@ else:
 def get_postcode_response(request: Request):
     postcode = request.path_params["postcode"]
 
-    # Log this request
-    entry = POSTCODE_LOGGER.entry_class(
-        postcode=postcode,
-        dc_product=POSTCODE_LOGGER.dc_product.ec_api,
-        calls_devs_dc_api=True,
-        api_key=request.scope["api_user"],
-    )
-    POSTCODE_LOGGER.log(entry)
-
     try:
         response = client.get_postcode_response(request, postcode)
     except DevsDCException as error:
         return JSONResponse(error.message, error.status)
+
+    if not response["addresses"]:
+        # Only log if we're not returning an addresspicker
+        has_ballot = any(
+            date.get("ballots") for date in response.get("dates", [])
+        )
+
+        POSTCODE_LOGGER.log(
+            POSTCODE_LOGGER.entry_class(
+                postcode=postcode,
+                dc_product=POSTCODE_LOGGER.dc_product.ec_api,
+                calls_devs_dc_api=True,
+                api_key=request.scope["api_user"],
+                had_election=has_ballot,
+            )
+        )
+
     return JSONResponse(response)
 
 
@@ -45,6 +53,23 @@ def get_address_response(request: Request):
         response = client.get_uprn_response(request, uprn)
     except DevsDCException as error:
         return JSONResponse(error.message, error.status)
+
+    has_ballot = any(date.get("ballots") for date in response.get("dates", []))
+
+    postcode_location = response.get("postcode_location", {})
+    properties = postcode_location.get("properties", {})
+    postcode = properties.get("postcode", None)
+
+    POSTCODE_LOGGER.log(
+        POSTCODE_LOGGER.entry_class(
+            postcode=postcode,
+            dc_product=POSTCODE_LOGGER.dc_product.ec_api,
+            calls_devs_dc_api=True,
+            api_key=request.scope["api_user"],
+            had_election=has_ballot,
+        )
+    )
+
     return JSONResponse(response)
 
 
