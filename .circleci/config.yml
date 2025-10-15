@@ -116,7 +116,7 @@ jobs:
         - v8-dependencies-default
     - install_uv
     - run: pip install aws-sam-cli
-
+    - setup_remote_docker
     - run: printenv DC_DEPLOY_NAME DJANGO_SETTINGS_MODULE SAM_CONFIG_FILE DC_ENVIRONMENT
     - run: printenv SECRET_KEY | md5sum
     - run: printenv AWS_ACCESS_KEY_ID | md5sum
