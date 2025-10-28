@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-dc-logging-utils = { git = "https://github.com/DemocracyClub/dc_logging.git", tag = "3.0.0" }
+dc-logging-utils = { git = "https://github.com/DemocracyClub/dc_logging.git", tag = "1.0.2" }
 
 [tool.uv]
 package = false
