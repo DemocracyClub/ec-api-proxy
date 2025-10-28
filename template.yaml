@@ -97,7 +97,7 @@ Resources:
       CompatibleRuntimes:
         - python3.12
     Metadata:
-      BuildMethod: makefile
+      BuildMethod: python3.12
     RetentionPolicy: Delete
 
   ECApiFunction:
@@ -217,8 +217,6 @@ Resources:
 
   V1VotingInformationFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: makefile
     Properties:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/ECApiLambdaExecutionRole"
       CodeUri: ./api_endpoints/v1_postcode_lookup/

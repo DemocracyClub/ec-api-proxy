@@ -25,8 +25,7 @@
 
 ## PostcodeLocation (object)
 + type: `Feature` (string)
-+ properties: (object)
-    + postcode: `SW1A 1AA` (string) - The postcode for which this point is the centroid
++ properties: (object, nullable)
 + geometry (Point)
 
 
