@@ -30,7 +30,7 @@
   <p>First, choose from the options below and hit ‘Generate’.</p>
   <form id="widget-options">
     <fieldset>
-      <legend>Lookup widget options</legend>
+      <legend>Language options</legend>
       <div class="ds-stack-smallest">
 
         <label for="no-lang" class="ds-field-radio">
@@ -45,6 +45,19 @@
         <label for="cy" class="ds-field-radio">
           <input type="radio" name="language" id="cy" value="cy">
           <span>With language toggle (Default Welsh)</span>
+        </label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Candidate options</legend>
+      <div class="ds-stack-smallest">
+        <label for="with-candidates" class="ds-field-radio">
+          <input type="radio" name="candidates" id="with-candidates" value="true" checked="checked">
+          <span>With candidates</span>
+        </label>
+        <label for="without-candidates" class="ds-field-radio">
+          <input type="radio" name="candidates" id="without-candidates" value="false">
+          <span>Without candidates</span>
         </label>
       </div>
     </fieldset>
@@ -78,7 +91,7 @@
 
     function handleWidgetOptions(event) {
       event.preventDefault();
-      createWidgetVersion(form.elements.language.value);
+      createWidgetVersion(form.elements.language.value, form.elements.candidates.value);
     }
 
     function getEmbedCode(customAttributes) {
@@ -93,19 +106,25 @@
       '</code></pre>\n';
     }
 
-    function makeAttributeList(language) {
+    function makeAttributeList(language, candidates) {
       var attrs = '';
       if ((language === 'en') || (language === 'cy')) {
         attrs = 'data-language="' + language + '" ';
       }
-      return attrs + 'aria-live="polite" role="region" data-candidates="true"';
+      if ((candidates === 'true') || (candidates === 'false')) {
+        attrs = attrs + ' data-candidates="' + candidates + '"';
+      }
+      return attrs + ' aria-live="polite" role="region"';
     }
 
-    function makeWidget(language) {
+    function makeWidget(language, candidates) {
       var div = document.createElement('div');
       div.setAttribute('id', 'dc_wdiv');
       if ((language === 'en') || (language === 'cy')) {
         div.setAttribute('data-language', language);
+      }
+      if ((candidates === 'true') || (candidates === 'false')) {
+        div.setAttribute('data-candidates', candidates);
       }
       div.setAttribute('aria-live', 'polite');
       div.setAttribute('role', 'region');
@@ -120,13 +139,12 @@
       return script;
     }
 
-    function createWidgetVersion(language) {
-      debugger
+    function createWidgetVersion(language, candidates) {
       var widgetArea = document.querySelector('#widget-area');
       var codeArea = document.querySelector('#code-area');
-      var widget = makeWidget(language);
+      var widget = makeWidget(language, candidates);
       var script = makeScript();
-      var embedCode = getEmbedCode(makeAttributeList(language));
+      var embedCode = getEmbedCode(makeAttributeList(language, candidates));
       widgetArea.innerHTML = '';
       widgetArea.appendChild(widget);
       widgetArea.appendChild(script);
