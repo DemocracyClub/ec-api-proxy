@@ -19,7 +19,7 @@
     postcode, bearing in mind that we add data in the run up to the polls.</p>
   <figure>
     <div id="widget-area">
-      <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-candidates="true">
+      <div id="dc_wdiv" data-language="en" aria-live="polite" role="region" data-elections="true">
       </div>
       <script type="text/javascript"
               src="{% url "widget_js" %}">
@@ -76,7 +76,7 @@
   &lt;/noscript&gt;
 
   &lt;div id="dc_wdiv" aria-live="polite" role="region"
-    data-candidates="true"&gt;
+    data-elections="true"&gt;
   &lt;/div&gt;
   &lt;script type="text/javascript" src="https://api.electoralcommission.org.uk/widget/widget.js"&gt;
   &lt;/script&gt;
@@ -112,7 +112,7 @@
         attrs = 'data-language="' + language + '" ';
       }
       if ((candidates === 'true') || (candidates === 'false')) {
-        attrs = attrs + ' data-candidates="' + candidates + '"';
+        attrs = attrs + ' data-elections="' + candidates + '"';
       }
       return attrs + ' aria-live="polite" role="region"';
     }
@@ -124,11 +124,11 @@
         div.setAttribute('data-language', language);
       }
       if ((candidates === 'true') || (candidates === 'false')) {
-        div.setAttribute('data-candidates', candidates);
+        div.setAttribute('data-elections', candidates);
       }
       div.setAttribute('aria-live', 'polite');
       div.setAttribute('role', 'region');
-      div.setAttribute('data-candidates', 'true');
+      div.setAttribute('data-elections', 'true');
       return div;
     }
 
