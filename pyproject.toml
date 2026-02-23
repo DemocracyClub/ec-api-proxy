@@ -13,7 +13,7 @@ dependencies = [
     "psycopg2-binary==2.9.10",
     "django-ses==3.5.0",
     "requests==2.32.4",
-    "django-apiblueprint-view==2.5.1",
+    "django-apiblueprint-view==3.0.1",
     "django-cors-headers==4.3.1",
     "setuptools==78.1.1",
     "aws-wsgi",
@@ -40,7 +40,7 @@ dev = [
     "pytest-socket==0.6.0",
     "ruff==0.1.6",
     "uvicorn==0.30.6",
-    "moto==5.0.5",
+    "moto==5.1.21",
 ]
 
 [tool.uv.sources]
