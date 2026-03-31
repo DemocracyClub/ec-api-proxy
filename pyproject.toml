@@ -12,7 +12,7 @@ dependencies = [
     "django-sesame==3.2.1",
     "psycopg2-binary==2.9.10",
     "django-ses==3.5.0",
-    "requests==2.32.4",
+    "requests==2.33.0",
     "django-apiblueprint-view==3.0.1",
     "django-cors-headers==4.3.1",
     "setuptools==78.1.1",
