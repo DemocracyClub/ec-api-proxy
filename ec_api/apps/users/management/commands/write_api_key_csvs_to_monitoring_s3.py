@@ -7,7 +7,11 @@ s3_client = boto3.client("s3")
 
 
 class Command(BaseCommand):
-    help = "Writes a one row csv per api key to S3"
+    help = (
+        "Writes a one row csv per api key to S3. "
+        "Run from your local machine with prod db settings "
+        "eg AWS_PROFILE=prod-ecapi-dc DC_ENVIRONMENT=production python manage.py write_api_key_csvs_to_monitoring_s3"
+    )
 
     def handle(self, **options):
         for key in APIKey.objects.all().select_related("user"):
