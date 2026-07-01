@@ -54,7 +54,6 @@ def s3_prod_bucket(s3_client):
 
 
 @pytest.fixture
-@pytest.mark.django_db
 def user_fixture():
     return UserFactory(
         email="test@example.com",
@@ -63,7 +62,6 @@ def user_fixture():
 
 
 @pytest.fixture
-@pytest.mark.django_db
 def api_key_fixture(user_fixture):
     return APIKeyFactory(
         name="Test API Key",
