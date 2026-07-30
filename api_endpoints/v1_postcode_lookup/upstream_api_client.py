@@ -2,6 +2,7 @@
 Consumes the devs.DC API and optionally cleans data for reuse
 
 """
+
 import os
 from json import JSONDecodeError
 

@@ -218,9 +218,7 @@ if is_local_dev():
 def is_running_tests():
     if os.environ.get("RUN_ENV") == "test":
         return True
-    if "CI" in os.environ:
-        return True
-    return False
+    return "CI" in os.environ
 
 
 if is_running_tests():

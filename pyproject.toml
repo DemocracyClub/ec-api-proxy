@@ -30,7 +30,7 @@ dev = [
     "pre-commit==3.5.0",
     "pytest==9.0.3",
     "pytest-django==4.7.0",
-    "pytest-ruff==0.2.1",
+    "pytest-ruff==0.5",
     "pytest-env==1.1.3",
     "coveralls==3.3.1",
     "pytest-cov==4.1.0",
@@ -38,7 +38,7 @@ dev = [
     "pytest-mock==3.12.0",
     "ipdb==0.13.13",
     "pytest-socket==0.6.0",
-    "ruff==0.1.6",
+    "ruff==0.15.22",
     "uvicorn==0.30.6",
     "moto==5.1.21",
 ]
@@ -68,8 +68,8 @@ FAIL_INVALID_TEMPLATE_VARS = "1"
 
 [tool.ruff]
 line-length = 80
-ignore = ["E501"]
-extend-select = [
+lint.ignore = ["E501"]
+lint.extend-select = [
     "I",
     "C4",
     "SIM",
