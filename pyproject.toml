@@ -15,7 +15,7 @@ dependencies = [
     "requests==2.33.0",
     "django-apiblueprint-view==3.0.1",
     "django-cors-headers==4.3.1",
-    "setuptools==83.0.0",
+    "setuptools==84.1.0",
     "aws-wsgi",
     "dc-design-system",
     "dc-django-utils",
